@@ -282,7 +282,7 @@ export default createGlobalStyle<Props>`
 
   main {
     margin: 0px auto 6rem;
-    max-width: 35rem;
+    max-width: 45rem;
 
     section {
       > :not(:last-child) {

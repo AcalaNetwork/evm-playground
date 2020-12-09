@@ -1,98 +1,57 @@
 // Copyright 2017-2020 @canvas-ui/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { AbiMessage } from '@polkadot/api-contract/types';
-import { BareProps } from '@canvas-ui/react-components/types';
-import { CodecArg } from '@polkadot/types/types';
-
-import React from 'react';
-import styled from 'styled-components';
-import { encodeTypeDef, TypeRegistry } from '@polkadot/types';
-
-import Icon from './Icon';
-import MessageArg from './MessageArg';
-import Tooltip from './Tooltip';
-import { useTranslation } from './translate';
-import { classes } from '@canvas-ui/react-util';
+import { BareProps } from "@canvas-ui/react-components/types";
+import { classes } from "@canvas-ui/react-util";
+import React from "react";
+import styled from "styled-components";
+import Icon from "./Icon";
+import MessageArg from "./MessageArg";
 
 export interface Props extends BareProps {
-  message: AbiMessage;
-  params?: CodecArg[];
-  registry: TypeRegistry;
+  message: any;
+  params?: any[];
+  isConstructor: boolean;
   withTooltip?: boolean;
 }
 
-function MessageSignature ({ className, message: { args, identifier, isConstructor, isMutating, isPayable, returnType }, params = [], registry, withTooltip = false }: Props): React.ReactElement<Props> {
-  const { t } = useTranslation();
-
+function MessageSignature({ className, isConstructor, message }: Props): React.ReactElement<Props> {
   return (
-    <div className={classes(className, isConstructor && 'isConstructor')}>
-      <span className='ui--MessageSignature-name'>
-        {identifier}
-      </span>
-      (
-      {args.map((arg, index): React.ReactNode => {
-        return (
-          <React.Fragment key={arg.name}>
-            <MessageArg
-              arg={arg}
-              param={params[index]}
-              registry={registry}
-            />
-            {index < args.length - 1 && ', '}
-          </React.Fragment>
-        );
-      })}
+    <div className={classes(className, isConstructor && "isConstructor")}>
+      <span className="ui--MessageSignature-name">{isConstructor ? "constructor" : message.name}</span>(
+      {message.inputs.map(
+        (arg: any, index: number): React.ReactNode => {
+          return (
+            <React.Fragment key={arg.name}>
+              <MessageArg arg={arg} />
+              {index < message.inputs.length - 1 && ", "}
+            </React.Fragment>
+          );
+        }
+      )}
       )
-      {(!isConstructor && returnType) && (
+      {!isConstructor && message.stateMutability === "view" && (
         <>
-          :
-          {' '}
-          <span className='ui--MessageSignature-returnType'>
-            {encodeTypeDef({
-              ...returnType,
-              ...(
-                (returnType.displayName || '').length > 0
-                  ? { displayName: returnType.displayName }
-                  : {}
-              )
-            })}
+          <span className="ui--MessageSignature-returnType">
+            {message.outputs.length ? ":" + " " + message.outputs[0].type : ""}
           </span>
         </>
       )}
-      {isMutating && (
+      {!isConstructor && message.stateMutability !== "view" && !message.payable && (
         <>
-          <Icon
-            className='ui--MessageSignature-icon'
-            data-for={`mutates-${identifier}`}
-            data-tip
-            name='database'
-          />
-          {withTooltip && (
-            <Tooltip
-              text={t<string>('Mutates contract state')}
-              trigger={`mutates-${identifier}`}
-            />
-          )}
+          <Icon className="ui--MessageSignature-icon" data-for={`mutates-${message.name}`} data-tip name="database" />
         </>
       )}
-      {isPayable && (
+      {!isConstructor && message.stateMutability !== "view" && message.payable && (
         <>
           <Icon
-            className='ui--MessageSignature-icon'
-            data-for={`payable-${identifier}`}
+            className="ui--MessageSignature-icon"
+            data-for={`payable-${message.name}`}
             data-tip
-            name='paper plane'
+            name="paper plane"
           />
-          {withTooltip && (
-            <Tooltip
-              text={t<string>('Payable')}
-              trigger={`payable-${identifier}`}
-            />
-          )}
         </>
       )}
-
     </div>
   );
 }

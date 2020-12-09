@@ -1,22 +1,17 @@
 // Copyright 2017-2020 @canvas-ui/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { BareProps } from '@canvas-ui/react-components/types';
-import { VoidFn } from '@canvas-ui/react-util/types';
-import { AbiMessage } from '@polkadot/api-contract/types';
-import { Registry } from '@polkadot/types/types';
-
-import React, { useMemo } from 'react';
-import Tippy from '@tippyjs/react';
-import { followCursor } from 'tippy.js';
-import styled from 'styled-components';
-import { classes } from '@canvas-ui/react-util';
-
-import { ELEV_3_CSS } from './styles/constants';
-import Button from './Button';
-import Docs from './Docs';
-import MessageSignature from './MessageSignature';
-import { useTranslation } from './translate';
+import { BareProps } from "@canvas-ui/react-components/types";
+import { classes } from "@canvas-ui/react-util";
+import { VoidFn } from "@canvas-ui/react-util/types";
+import { AbiMessage } from "@polkadot/api-contract/types";
+import { Registry } from "@polkadot/types/types";
+import React, { useMemo } from "react";
+import styled from "styled-components";
+import Button from "./Button";
+import MessageSignature from "./MessageSignature";
+import { ELEV_3_CSS } from "./styles/constants";
+import { useTranslation } from "./translate";
 
 export interface Props extends BareProps {
   isConstructor?: boolean;
@@ -25,64 +20,31 @@ export interface Props extends BareProps {
   registry: Registry;
 }
 
-// const Tooltip = styled(ReactTooltip)`
-//   background: transparent !important;
-//   opacity: 1 !important;
-//   padding: 0 !important;
-//   margin: 0 !important;
-// `;
-
-function Message ({ className, isConstructor, message, onSelect, registry }: Props): React.ReactElement<Props> {
+function Message({ className, isConstructor, message, onSelect, registry }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { docs, identifier } = message;
+  const { identifier } = message;
+  console.log(message);
 
   const signature = useMemo(
-    (): React.ReactNode => (
-      <MessageSignature
-        isConstructor={isConstructor}
-        message={message}
-        registry={registry}
-        withTooltip
-      />
-    ),
+    (): React.ReactNode => <MessageSignature isConstructor={isConstructor} message={message} />,
     [isConstructor, message, registry]
   );
 
   return (
-    <div
-      className={classes(className, !onSelect && 'exempt-hover', isConstructor && 'isConstructor')}
-      key={identifier}
-    >
-      <Tippy
-        animation='fade'
-        arrow={false}
-        content={
-          <Docs
-            docs={docs}
-            signature={signature}
-          />
-        }
-        interactive
-        offset={[30, 0]}
-        placement='bottom-start'
-        plugins={[followCursor]}
-        theme='transparent'
-        trigger='mouseenter'
-      >
-        <div style={{ height: '100%', padding: '0.5rem 1rem', width: '100%' }}>
-          {signature}
-          {!isConstructor && onSelect && (
-            <div className='accessory'>
-              <Button
-                className='execute'
-                icon={isConstructor ? 'cloud upload' : 'play'}
-                onClick={onSelect}
-                tooltip={t<string>(isConstructor ? 'Deploy with this constructor' : 'Call this message')}
-              />
-            </div>
-          )}
-        </div>
-      </Tippy>
+    <div className={classes(className, !onSelect && "exempt-hover", isConstructor && "isConstructor")} key={identifier}>
+      <div style={{ height: "100%", padding: "0.5rem 1rem", width: "100%" }}>
+        {signature}
+        {!isConstructor && onSelect && (
+          <div className="accessory">
+            <Button
+              className="execute"
+              icon={isConstructor ? "cloud upload" : "play"}
+              onClick={onSelect}
+              tooltip={t<string>(isConstructor ? "Deploy with this constructor" : "Call this message")}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
