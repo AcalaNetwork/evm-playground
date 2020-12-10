@@ -19,10 +19,11 @@ import { options } from "@acala-network/api";
 
 import uiSettings from "@polkadot/ui-settings";
 import ApiSigner from "@canvas-ui/react-signer/ApiSigner";
+import TestingSigner from "@canvas-ui/react-signer/TestingSigner";
 import { formatBalance, isTestChain } from "@polkadot/util";
 import { setSS58Format } from "@polkadot/util-crypto";
 import addressDefaults from "@polkadot/util-crypto/address/defaults";
-
+import { Provider } from "@acala-network/bodhi";
 import ApiContext from "./ApiContext";
 import registry from "./typeRegistry";
 
@@ -72,15 +73,15 @@ async function retrieve(api: ApiPromise): Promise<ChainData> {
     api.rpc.system.version(),
     injectedPromise
       .then(() => web3Accounts())
-      .then(accounts =>
+      .then((accounts) =>
         accounts.map(
           ({ address, meta }, whenCreated): InjectedAccountExt => ({
             address,
             meta: {
               ...meta,
               name: `${meta.name || "unknown"} (${meta.source === "polkadot-js" ? "extension" : meta.source})`,
-              whenCreated
-            }
+              whenCreated,
+            },
           })
         )
       )
@@ -88,7 +89,7 @@ async function retrieve(api: ApiPromise): Promise<ChainData> {
         console.error("web3Enable", error);
 
         return [];
-      })
+      }),
   ]);
 
   return {
@@ -97,7 +98,7 @@ async function retrieve(api: ApiPromise): Promise<ChainData> {
     systemChain: (systemChain || "<unknown>").toString(),
     systemChainType,
     systemName: systemName.toString(),
-    systemVersion: systemVersion.toString()
+    systemVersion: systemVersion.toString(),
   };
 }
 
@@ -120,7 +121,7 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
   // first setup the UI helpers
   formatBalance.setDefaults({
     decimals: tokenDecimals,
-    unit: tokenSymbol
+    unit: tokenSymbol,
   });
   TokenUnit.setAbbr(tokenSymbol);
 
@@ -131,7 +132,7 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
       isDevelopment,
       ss58Format,
       store,
-      type: "ed25519"
+      type: "ed25519",
     },
     injectedAccounts
   );
@@ -153,7 +154,7 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
     isSubstrateV2,
     systemChain,
     systemName,
-    systemVersion
+    systemVersion,
   };
 }
 
@@ -162,10 +163,19 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
   const [state, setState] = useState<ApiState>(({ isApiReady: false } as unknown) as ApiState);
   const [isApiConnected, setIsApiConnected] = useState(false);
   const [isApiInitialized, setIsApiInitialized] = useState(false);
+  const [evmProvider, setEvmProvider] = useState<Provider | null>(null);
   const [extensions, setExtensions] = useState<InjectedExtension[] | undefined>();
   const props = useMemo<ApiProps>(
-    () => ({ ...state, api, extensions, isApiConnected, isApiInitialized, isWaitingInjected: !extensions }),
-    [extensions, isApiConnected, isApiInitialized, state]
+    () => ({
+      ...state,
+      api,
+      extensions,
+      isApiConnected,
+      isApiInitialized,
+      evmProvider: evmProvider as Provider,
+      isWaitingInjected: !extensions,
+    }),
+    [extensions, isApiConnected, isApiInitialized, state, evmProvider]
   );
 
   // initial initialization
@@ -173,114 +183,15 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
     const provider = new WsProvider(url);
     const signer = new ApiSigner(queuePayload, queueSetTxStatus);
 
-    api = new ApiPromise(
-      options({
-        provider,
-        registry,
-        signer,
-        typesChain,
-        typesSpec,
-        typesAlias: {
-          evm: {
-            AccountInfo: "EvmAccountInfo"
-          }
-        },
-        types: {
-          EvmAccountInfo: {
-            nonce: "Index",
-            contractInfo: "Option<ContractInfo>"
-          },
-          ContractInfo: {
-            storageCount: "u32",
-            codeHash: "H256"
-          },
-          EvmAddress: "H160",
-          CallRequest: {
-            from: "Option<H160>",
-            to: "Option<H160>",
-            gasLimit: "Option<u32>",
-            value: "Option<U128>",
-            data: "Option<Bytes>"
-          },
-          ExitReason: {
-            _enum: {
-              Succeed: "ExitSucceed",
-              Error: "ExitError",
-              Revert: "ExitRevert",
-              Fatal: "ExitFatal"
-            }
-          },
-          ExitSucceed: {
-            _enum: ["Stopped", "Returned", "Suicided"]
-          },
-          ExitError: {
-            _enum: {
-              StackUnderflow: "Null",
-              StackOverflow: "Null",
-              InvalidJump: "Null",
-              InvalidRange: "Null",
-              DesignatedInvalid: "Null",
-              CallTooDeep: "Null",
-              CreateCollision: "Null",
-              CreateContractLimit: "Null",
-              OutOfOffset: "Null",
-              OutOfGas: "Null",
-              OutOfFund: "Null",
-              PCUnderflow: "Null",
-              CreateEmpty: "Null",
-              Other: "Text"
-            }
-          },
-          ExitRevert: {
-            _enum: ["Reverted"]
-          },
-          ExitFatal: {
-            _enum: {
-              NotSupported: "Null",
-              UnhandledInterrupt: "Null",
-              CallErrorAsFatal: "ExitError",
-              Other: "Text"
-            }
-          }
-        },
-        rpc: {
-          evm: {
-            call: {
-              description: "eth call",
-              params: [
-                {
-                  name: "data",
-                  type: "CallRequest"
-                },
-                {
-                  name: "at",
-                  type: "BlockHash",
-                  isHistoric: true,
-                  isOptional: true
-                }
-              ],
-              type: "Raw"
-            },
-            estimateGas: {
-              description: "eth estimateGas",
-              params: [
-                {
-                  name: "data",
-                  type: "CallRequest"
-                },
-                {
-                  name: "at",
-                  type: "BlockHash",
-                  isHistoric: true,
-                  isOptional: true
-                }
-              ],
-              type: "u128"
-            }
-          }
-        }
-      })
-    );
+    const apiOptions = options({
+      provider,
+      registry,
+      signer,
+      typesChain,
+      typesSpec,
+    });
+
+    api = new ApiPromise(apiOptions);
 
     api.on("connected", () => setIsApiConnected(true));
     api.on("disconnected", () => setIsApiConnected(false));
@@ -295,8 +206,17 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
       }
     );
 
-    injectedPromise.then(setExtensions).catch(error => console.error(error));
+    injectedPromise.then(setExtensions).catch((error) => console.error(error));
 
+    setEvmProvider(
+      new Provider(
+        options({
+          provider,
+          registry,
+          signer: new TestingSigner(registry),
+        })
+      )
+    );
     setIsApiInitialized(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

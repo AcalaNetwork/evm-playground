@@ -14,8 +14,6 @@ export default function useFormField<T>(
 
   const isValid = useMemo((): boolean => !!value && validate(value), [validate, value]);
   
-  console.log(value, (value && (value as any).length > 0), validate(value as any), isValid)
-  
   const setter = useCallback((value?: T | null) => {
     if (!isTouched.current) {
       isTouched.current = true;

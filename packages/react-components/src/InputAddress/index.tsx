@@ -279,6 +279,9 @@ function InputAddress ({ className = '', defaultValue, filter, help, hideAddress
     },
     [actualValue, filteredOptions, isDisabled, options]
   );
+
+  console.log('actualOptions', actualOptions)
+
   const _defaultValue = useMemo(
     () => (isMultiple || !isUndefined(value))
       ? undefined

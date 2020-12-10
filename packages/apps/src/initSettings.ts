@@ -56,8 +56,8 @@ console.log('WS endpoint=', apiUrl);
 try {
   const types = {
     ...store.get('types') as Record<string, Record<string, string>> || {},
-    Address: 'AccountId',
-    LookupSource: 'AccountId'
+    Address: 'GenericMultiAddress',
+    LookupSource: 'GenericMultiAddress'
   };
   const names = Object.keys(types);
 

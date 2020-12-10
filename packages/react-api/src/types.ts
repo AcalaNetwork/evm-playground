@@ -1,10 +1,10 @@
 // Copyright 2017-2020 @canvas-ui/react-api authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { InjectedExtension } from '@polkadot/extension-inject/types';
-import { SubmittableExtrinsicFunction } from '@polkadot/api/promise/types';
-
-import ApiPromise from '@polkadot/api/promise';
+import { Provider } from "@acala-network/bodhi";
+import { ApiPromise } from "@polkadot/api/promise";
+import { SubmittableExtrinsicFunction } from "@polkadot/api/promise/types";
+import { InjectedExtension } from "@polkadot/extension-inject/types";
 
 // helpers for HOC props
 export type OmitProps<T, K> = Pick<T, Exclude<keyof T, K>>;
@@ -28,6 +28,7 @@ export interface ApiState {
 
 export interface ApiProps extends ApiState {
   api: ApiPromise;
+  evmProvider: Provider;
   extensions?: InjectedExtension[];
   isApiConnected: boolean;
   isApiInitialized: boolean;
@@ -53,12 +54,14 @@ export interface CallState {
 
 export type CallProps = ApiProps & CallState;
 
-export type BaseProps<T> = BareProps & CallProps & ChangeProps & {
-  children?: React.ReactNode;
-  label?: string;
-  render?: (value?: T) => React.ReactNode;
-};
+export type BaseProps<T> = BareProps &
+  CallProps &
+  ChangeProps & {
+    children?: React.ReactNode;
+    label?: string;
+    render?: (value?: T) => React.ReactNode;
+  };
 
 export type Formatter = (value?: any) => string;
 
-export type Environment = 'web' | 'app';
+export type Environment = "web" | "app";

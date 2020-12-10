@@ -11,13 +11,10 @@ import { useTranslation } from "./translate";
 function Upload({ navigateTo }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const [name, setName, _, isNameError] = useNonEmptyString("");
-  const { abi, errorText, isAbiError, isAbiSupplied, isAbiValid, onChangeAbi, onRemoveAbi } = useAbi();
+  const { abi, bytecode, errorText, isAbiError, isAbiSupplied, isAbiValid, onChangeAbi, onRemoveAbi } = useAbi();
   const [abiFile, setAbiFile] = useFile({ onChange: onChangeAbi, onRemove: onRemoveAbi });
 
   const isSubmittable = useMemo((): boolean => !!name && isAbiValid, [name, isAbiValid]);
-
-  console.log("isAbiSupplied", isAbiSupplied);
-  console.log("isAbiValid", isAbiValid);
 
   const _onChangeName = useCallback(
     (name: string | null): void => {
@@ -28,7 +25,7 @@ function Upload({ navigateTo }: Props): React.ReactElement<Props> {
 
   const onUpload = useCallback((): void => {
     store
-      .saveCode({ abi: abi, name, tags: [] })
+      .saveCode({ abi: abi, bytecode, name, tags: [] })
       .then((id): void => navigateTo.uploadSuccess(id)())
       .catch((error: any): void => {
         console.error("Unable to save abi", error);
