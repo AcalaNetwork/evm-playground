@@ -1,12 +1,12 @@
 // Copyright 2017-2020 @canvas-ui/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { TypeDef } from '@polkadot/types/types';
-import { ComponentMap, RawParam, RawParams, RawParamOnChangeValue } from './types';
+import { TypeDef } from "@polkadot/types/types";
+import { ComponentMap, RawParam, RawParams, RawParamOnChangeValue } from "./types";
 
-import React, { useCallback } from 'react';
+import React, { useCallback } from "react";
 
-import Param from './Param';
+import Param from "./Param";
 
 interface Props {
   defaultValue: RawParam;
@@ -17,19 +17,25 @@ interface Props {
   onEnter?: () => void;
   onEscape?: () => void;
   overrides?: ComponentMap;
-  type: TypeDef;
+  type: string;
   values?: RawParams | null;
 }
 
-function ParamComp ({ defaultValue, index, isDisabled, name, onChange, onEnter, onEscape, overrides, type }: Props): React.ReactElement<Props> {
-  const _onChange = useCallback(
-    (value: RawParamOnChangeValue): void =>
-      onChange(index, value),
-    [index, onChange]
-  );
+function ParamComp({
+  defaultValue,
+  index,
+  isDisabled,
+  name,
+  onChange,
+  onEnter,
+  onEscape,
+  overrides,
+  type
+}: Props): React.ReactElement<Props> {
+  const _onChange = useCallback((value: RawParamOnChangeValue): void => onChange(index, value), [index, onChange]);
 
   return (
-    <div className='ui--Param-composite'>
+    <div className="ui--Param-composite">
       <Param
         defaultValue={defaultValue}
         isDisabled={isDisabled}

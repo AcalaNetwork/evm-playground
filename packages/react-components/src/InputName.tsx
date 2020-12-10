@@ -36,14 +36,14 @@ function InputName ({ className, isBusy, isContract, isError, onChange, onEnter,
       label={t(
         isContract
           ? 'Contract Name'
-          : 'Code Bundle Name'
+          : 'Abi Bundle Name'
       )}
       onChange={onChange}
       onEnter={onEnter}
       placeholder={t(
         isContract
           ? 'Give your contract a descriptive name'
-          : 'Give your code bundle a descriptive name'
+          : 'Give your abi bundle a descriptive name'
       )}
       value={value}
     />

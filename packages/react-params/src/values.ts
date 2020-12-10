@@ -1,14 +1,11 @@
 // Copyright 2017-2020 @canvas-ui/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { CodecArg, TypeDef } from '@polkadot/types/types';
-import { RawParam } from './types';
+import { isUndefined } from "@polkadot/util";
+import getInitValue from "./initValue";
+import { RawParam } from "./types";
 
-import { isUndefined } from '@polkadot/util';
-
-import getInitValue from './initValue';
-
-export function createValue (param: { type: TypeDef }): RawParam {
+export function createValue(param: { type: string }): RawParam {
   const value = getInitValue(param.type);
 
   return {
@@ -17,10 +14,10 @@ export function createValue (param: { type: TypeDef }): RawParam {
   };
 }
 
-export function extractValues (values: RawParam[]): CodecArg[] {
-  return values.map(({ value }) => value as CodecArg);
+export function extractValues(values: RawParam[]): string[] {
+  return values.map(({ value }) => value as string);
 }
 
-export default function createValues (params: { type: TypeDef }[]): RawParam[] {
+export default function createValues(params: { type: string }[]): RawParam[] {
   return params.map(createValue);
 }

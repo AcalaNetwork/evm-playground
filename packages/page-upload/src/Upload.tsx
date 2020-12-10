@@ -3,53 +3,25 @@
 
 import store from "@canvas-ui/apps/store";
 import { ComponentProps as Props } from "@canvas-ui/apps/types";
-import { Button, Input, InputABI, TxButton } from "@canvas-ui/react-components";
-import { useAbi, useAccountId, useApi, useFile, useNonEmptyString } from "@canvas-ui/react-hooks";
-import { FileState } from "@canvas-ui/react-hooks/types";
-import { SubmittableResult } from "@polkadot/api";
-import { isNull } from "@polkadot/util";
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Button, Input, InputABI } from "@canvas-ui/react-components";
+import { useAbi, useFile, useNonEmptyString } from "@canvas-ui/react-hooks";
+import React, { useCallback, useMemo } from "react";
 import { useTranslation } from "./translate";
 
-function Upload({ basePath, navigateTo }: Props): React.ReactElement<Props> {
+function Upload({ navigateTo }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { api } = useApi();
-  const [accountId, setAccountId] = useAccountId();
-  const [name, setName, isNameValid, isNameError] = useNonEmptyString();
-  const currentName = useRef(name);
-  const [wasmFromFile, setWasmFromFile, isWasmFromFileSupplied, isWasmFromFileValid] = useFile({
-    onChange: ({ name }: FileState): void => {
-      if (currentName.current === "") {
-        setName(name);
-      }
-    },
-    validate: (file: FileState) => file?.data.subarray(0, 4).toString() === "0,97,115,109"
-  });
+  const [name, setName, _, isNameError] = useNonEmptyString("");
   const { abi, errorText, isAbiError, isAbiSupplied, isAbiValid, onChangeAbi, onRemoveAbi } = useAbi();
   const [abiFile, setAbiFile] = useFile({ onChange: onChangeAbi, onRemove: onRemoveAbi });
 
-  const [[wasm, isWasmValid], setWasm] = useState<[Uint8Array | null, boolean]>([null, false]);
+  const isSubmittable = useMemo((): boolean => !!name && isAbiValid, [name, isAbiValid]);
 
-  useEffect((): void => {
-    if (abi) {
-      setWasm([abi.bytecode, true]);
-
-      return;
-    }
-
-    setWasm([null, false]);
-  }, [abi, wasmFromFile, isWasmFromFileValid, isWasmFromFileSupplied, setName]);
-
-  const isSubmittable = useMemo((): boolean => !isNull(name) && (!isAbiSupplied || isAbiValid), [
-    name,
-    isAbiSupplied,
-    isAbiValid
-  ]);
+  console.log("isAbiSupplied", isAbiSupplied);
+  console.log("isAbiValid", isAbiValid);
 
   const _onChangeName = useCallback(
     (name: string | null): void => {
       setName(name);
-      currentName.current = name;
     },
     [setName]
   );
@@ -76,7 +48,7 @@ function Upload({ basePath, navigateTo }: Props): React.ReactElement<Props> {
           label={t<string>("Name")}
           onChange={_onChangeName}
           placeholder={t<string>("Give your Contract a descriptive name")}
-          value={name}
+          value={name || ""}
         />
         <InputABI
           abi={abi}
@@ -89,12 +61,7 @@ function Upload({ basePath, navigateTo }: Props): React.ReactElement<Props> {
           withLabel
         />
         <Button.Group>
-          <Button
-            isDisabled={!isSubmittable}
-            label={t<string>("Upload")}
-            isPrimary={true}
-            onClick={() => onUpload()}
-          />
+          <Button isDisabled={!isSubmittable} label={t<string>("Upload")} isPrimary={true} onClick={() => onUpload()} />
         </Button.Group>
       </section>
     </>

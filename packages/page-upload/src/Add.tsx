@@ -71,7 +71,7 @@ function Add ({ className, navigateTo }: Props): React.ReactElement<Props> {
         .then((id): void => {
           showNotification({
             action: truncate(codeHash, 12),
-            message: t<string>('code bundle added'),
+            message: t<string>('abi bundle added'),
             status: 'success'
           });
 

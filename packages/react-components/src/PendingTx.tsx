@@ -75,7 +75,7 @@ function PendingTx ({ additionalDetails, children, className, currentItem, instr
                   withLabel={false}
                 />
               </Labelled>
-              <Labelled label={t<string>('Code Bundle Name')}>
+              <Labelled label={t<string>('Abi Bundle Name')}>
                 {additionalDetails.name}
               </Labelled>
               <Labelled

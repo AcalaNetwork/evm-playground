@@ -33,7 +33,7 @@ function CodeUploadABI ({ codeHash, label, onSave }: Props): React.ReactElement<
 
         showNotification({
           action: truncate(codeHash, 12),
-          message: t<string>('code bundle ABI updated'),
+          message: t<string>('abi bundle ABI updated'),
           status: 'success'
         });
         toggleIsOpen();

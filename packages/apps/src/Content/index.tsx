@@ -92,7 +92,7 @@ function Content ({ className }: Props): React.ReactElement<Props> {
             {!sawGuide && !isLoading && (
               <GuideModal onClose={setSawGuide} />
             )}
-            <HelpWidget />
+            {/* <HelpWidget /> */}
           </ErrorBoundary>
         </Suspense>
         <Status

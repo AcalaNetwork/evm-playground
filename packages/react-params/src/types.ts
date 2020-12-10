@@ -1,7 +1,7 @@
 // Copyright 2017-2020 @canvas-ui/react-params authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { TypeDef } from '@polkadot/types/types';
+import { TypeDef } from "@polkadot/types/types";
 
 // FIXME Ideally, we want these as Base from api-codec - as a stop-gap, any this until we have
 // params returning types extending Base (i.e. anything from api-codec)
@@ -42,18 +42,17 @@ export interface Props {
   onEscape?: RawParamOnEscape;
   // eslint-disable-next-line no-use-before-define
   overrides?: ComponentMap;
-  type: TypeDef & { withOptionActive?: boolean };
+  type: string;
   withLabel?: boolean;
 }
 
-export type Size = 'full' | 'large' | 'medium' | 'small';
+export type Size = "full" | "large" | "medium" | "small";
 
 export type ComponentMap = Record<string, React.ComponentType<Props>>;
 
 export interface ParamDef {
-  length?: number;
   name?: string;
-  type: TypeDef;
+  type: string;
 }
 
 export interface UseTxParams {

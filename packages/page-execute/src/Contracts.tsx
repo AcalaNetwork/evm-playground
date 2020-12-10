@@ -47,7 +47,7 @@ function Contracts ({ accounts, basePath, className, contracts: contractAddresse
                 </Link>
                 {`. ${t<string>('Or deploy from a')} `}
                 <Link to={'/deploy'}>
-                  {t<string>('code bundle')}
+                  {t<string>('abi bundle')}
                 </Link>
                 {'.'}
               </>

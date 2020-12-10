@@ -37,7 +37,7 @@ function Success ({ allCodes, basePath, navigateTo }: Props): React.ReactElement
       <header>
         <h1>{t<string>('Code successfully put on chain')}</h1>
         <div className='instructions'>
-          {t<string>('Your code bundle has been put succesfully in the chain’s storage. A unique code hash has been returned.')}
+          {t<string>('Your abi bundle has been put succesfully in the chain’s storage. A unique code hash has been returned.')}
         </div>
       </header>
       <section>
@@ -56,7 +56,7 @@ function Success ({ allCodes, basePath, navigateTo }: Props): React.ReactElement
             onClick={navigateTo.deployNew(id)}
           />
           <Button
-            label={t<string>('Upload Another Code Bundle')}
+            label={t<string>('Upload Another Abi Bundle')}
             onClick={navigateTo.upload}
           />
         </Button.Group>

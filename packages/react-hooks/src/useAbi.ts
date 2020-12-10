@@ -15,11 +15,7 @@ import { u8aToString } from "@polkadot/util";
 import { useTranslation } from "./translate";
 
 interface UseAbi {
-  abi: {
-    bytecode: any;
-    evm: any;
-    abi: any;
-  } | null;
+  abi: any[] | null;
   errorText: string | null;
   isAbiError: boolean;
   isAbiValid: boolean;
@@ -28,7 +24,7 @@ interface UseAbi {
   onRemoveAbi: VoidFn;
 }
 
-type State = [Abi | null, boolean, boolean];
+type State = [any | null, boolean, boolean];
 
 export default function useAbi(source: any | null = null, isRequired = false): UseAbi {
   const { api } = useApi();
