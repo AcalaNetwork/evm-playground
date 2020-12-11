@@ -15,6 +15,7 @@ import { StatusContext } from "@canvas-ui/react-components/Status";
 import { TokenUnit } from "@canvas-ui/react-components/InputNumber";
 import keyring from "@polkadot/ui-keyring";
 import * as defaults from "@polkadot/ui-keyring/defaults";
+import uiKeyringOptions from "@polkadot/ui-keyring/options";
 import { KeyringStore } from "@polkadot/ui-keyring/types";
 import { options } from "@acala-network/api";
 
@@ -157,6 +158,14 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
       }
     }
   });
+
+  injectedAccounts.forEach((account) => {
+    if ((keyring as any).allowGenesis(account)) {
+      (keyring as any).loadInjected(account.address, account.meta);
+    }
+  });
+
+  uiKeyringOptions.init(keyring as any);
 
   const defaultSection = Object.keys(api.tx)[0];
   const defaultMethod = Object.keys(api.tx[defaultSection])[0];

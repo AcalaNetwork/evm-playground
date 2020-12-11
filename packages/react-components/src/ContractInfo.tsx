@@ -1,15 +1,10 @@
-// Copyright 2017-2020 @canvas-ui/app-execute authors & contributors
-// SPDX-License-Identifier: Apache-2.0
-
-// import { PromiseContract as Contract } from '@polkadot/api-contract';
-// import { CodeStored } from '@canvas-ui/apps/types';
 import { BareProps } from "./types";
 
 import React from "react";
 import styled from "styled-components";
 import ItemInfo from "./ItemInfo";
 import { IdentityIcon } from "@canvas-ui/react-components";
-import { useAccountInfo } from "@canvas-ui/react-hooks";
+import { useContractAccountInfo } from "@canvas-ui/react-hooks";
 import { truncate } from "@canvas-ui/react-util";
 
 import CopyButton from "./CopyButton";
@@ -22,7 +17,7 @@ interface Props extends BareProps {
 }
 
 function ContractInfo({ address, children, className, isEditable }: Props): React.ReactElement<Props> {
-  const { isEditingName, name, onSaveName, setName, toggleIsEditingName } = useAccountInfo(address, true);
+  const { isEditingName, name, onSaveName, setName, toggleIsEditingName } = useContractAccountInfo(address, true);
 
   return (
     <ItemInfo

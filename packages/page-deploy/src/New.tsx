@@ -51,7 +51,6 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
 
   const args = useMemo(() => {
     const constructors = abi?.filter((x: any) => x.type === "constructor") || [];
-    console.log(constructors);
     const constructor = constructors[0];
     return constructor?.inputs || [];
   }, [abi]);
