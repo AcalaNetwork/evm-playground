@@ -2,6 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { ComponentProps as Props } from "@canvas-ui/apps/types";
+import { Wallet } from "@acala-network/bodhi/Signer";
+import { decodeAddress } from "@polkadot/util-crypto";
+
 import {
   Button,
   ContractParams,
@@ -12,7 +15,7 @@ import {
   MessageSignature,
   TxButton,
 } from "@canvas-ui/react-components";
-import { useAccountId, useApi, useContractAccountInfo, useGasWeight, useIntegerBn } from "@canvas-ui/react-hooks";
+import { useAccountId, useApi, useContractAccountInfo, useNotification, useIntegerBn } from "@canvas-ui/react-hooks";
 import { useTxParams } from "@canvas-ui/react-params";
 import { extractValues } from "@canvas-ui/react-params/values";
 import { getContractForAddress } from "@canvas-ui/react-util";
@@ -31,7 +34,6 @@ type Options = { key: string; text: React.ReactNode; value: number }[];
 const emptyArray: any = [];
 
 function getCallMessageOptions(callContract: Contract | null): Options {
-  console.log("哦哦哦");
   return callContract
     ? Object.keys(callContract.interface.functions).map((key, index): {
         key: string;
@@ -53,23 +55,22 @@ const GASLIMIT = new BN("300000000");
 
 function Call({ className, navigateTo }: Props): React.ReactElement<Props> | null {
   const pageParams: { address?: string; messageIndex?: string } = useParams();
-  const { api } = useApi();
+  const { api, evmProvider } = useApi();
   const { t } = useTranslation();
   const { name } = useContractAccountInfo(pageParams.address?.toString() || null, true);
 
   const [messageIndex, setMessageIndex] = useState(parseInt(pageParams.messageIndex || "0", 10));
   const [outcomes, setOutcomes] = useState<CallResult[]>([]);
-
-  const [contract, hasRpc] = useMemo((): [Contract | null, boolean] => {
+  const showNotification = useNotification();
+  const [contract] = useMemo((): [Contract | null] => {
     try {
       const contract = getContractForAddress(api, pageParams.address || null);
-      const hasRpc = contract?.hasRpcContractsCall || false;
 
-      return [contract, hasRpc];
+      return [contract];
     } catch (e) {
       console.error(e);
 
-      return [null, false];
+      return [null];
     }
   }, [api, pageParams.address]);
 
@@ -84,65 +85,85 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
 
   const [params, values = [], setValues] = useTxParams(txArgs as any);
 
-  const encoder = useCallback((): Uint8Array | null => {
-    return contract?.abi?.messages[messageIndex]
-      ? ((contract.abi.messages[messageIndex].toU8a(extractValues(values || [])) as unknown) as Uint8Array)
-      : null;
-  }, [contract?.abi?.messages, messageIndex, values]);
-
-  useEffect((): void => {
-    const newMessage = contract?.abi?.messages[messageIndex] || null;
-
-    if (hasRpc) {
-      if (!newMessage || newMessage.isMutating) {
-        setUseRpc(false);
-      } else {
-        setUseRpc(true);
-      }
-    }
-  }, [contract?.abi?.messages, hasRpc, messageIndex]);
-
   const [accountId, setAccountId] = useAccountId();
   const [payment, setPayment, isPaymentValid] = useIntegerBn(PAYMENT);
   const [gasLimit, setGasLimit, isGasLimitValid] = useIntegerBn(GASLIMIT);
 
-  const [useRpc, setUseRpc] = useState(hasRpc && !contract?.abi?.messages[messageIndex].isMutating);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const cmessage = useMemo(() => {
+    const messages =
+      Object.keys(contract?.interface.functions || []).map((x: any) => {
+        return contract?.interface.functions[x];
+      }) || emptyArray;
+
+    console.log(messages[messageIndex]?.stateMutability);
+    return messages[messageIndex];
+  }, [contract, messageIndex]);
+
+  const [useRpc, setUseRpc] = useState(cmessage ? cmessage.stateMutability === "view" : true);
 
   const messageOptions = useMemo((): Options => getCallMessageOptions(contract), [contract]);
+
+  useEffect(() => {
+    if (cmessage) {
+      setUseRpc(cmessage.stateMutability === "view");
+    }
+  }, [cmessage]);
 
   useEffect((): void => {
     setOutcomes([]);
   }, [contract]);
 
-  const _constructTx = useCallback((): any[] => {
-    const data = encoder();
-
-    if (!accountId || !data || !contract || !contract.address) {
-      return [];
-    }
-
-    return [contract.address.toString(), payment, gasLimit, data];
-  }, [accountId, contract, encoder, payment, gasLimit]);
-
-  const _onSubmitRpc = useCallback((): void => {
+  const _onSubmitRpc = useCallback(async () => {
     if (!accountId || !contract || !payment || !gasLimit) return;
+    const wallet = new Wallet(decodeAddress(accountId, true), evmProvider, accountId);
+    await wallet.claimEvmAccounts();
 
-    !!contract &&
-      contract
-        .read(messageIndex, 0, gasLimit, ...extractValues(values))
-        .send(accountId)
-        .then((result): void => {
-          setOutcomes([
-            {
-              ...result,
-              from: accountId,
-              message: contract.abi.messages[messageIndex],
-              params: extractValues(values),
-              when: new Date(),
-            },
-            ...outcomes,
-          ]);
-        });
+    const messages = contract.interface.functions;
+    const messageName = Object.keys(messages)[messageIndex];
+
+    const result = await contract.connect(wallet as any)[messageName](...values.map((x) => x.value));
+
+    setOutcomes([
+      {
+        result,
+        from: accountId,
+        message: messages[messageName],
+        params: extractValues(values),
+        when: new Date(),
+      } as any,
+      ...outcomes,
+    ]);
+  }, [accountId, contract, messageIndex, payment, gasLimit, outcomes, values]);
+
+  const _onSubmitExecute = useCallback(async () => {
+    if (!accountId || !contract || !payment || !gasLimit) return;
+    setIsLoading(true);
+    try {
+      const wallet = new Wallet(decodeAddress(accountId, true), evmProvider, accountId);
+      await wallet.claimEvmAccounts();
+
+      const messages = contract.interface.functions;
+      const messageName = Object.keys(messages)[messageIndex];
+
+      await contract.connect(wallet as any)[messageName](...values.map((x) => x.value), {
+        gasLimit: gasLimit.toString(),
+        value: payment.toString(),
+      });
+
+      showNotification({
+        action: messageName,
+        status: "success",
+      });
+    } catch {
+      showNotification({
+        action: "",
+        status: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }, [accountId, contract, messageIndex, payment, gasLimit, outcomes, values]);
 
   const _onClearOutcome = useCallback(
@@ -154,7 +175,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
 
   const isValid = useMemo(
     (): boolean =>
-      !!accountId && !!contract && !!contract.address && !!contract.abi && isGasLimitValid && isPaymentValid,
+      !!accountId && !!contract && !!contract.address && !!contract.interface && isGasLimitValid && isPaymentValid,
     [accountId, contract, isPaymentValid, isGasLimitValid]
   );
 
@@ -204,20 +225,6 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
               onChange={setGasLimit}
               value={gasLimit}
             />
-            <Dropdown
-              onChange={setUseRpc}
-              options={[
-                {
-                  text: t<string>("Send as RPC call"),
-                  value: true,
-                },
-                {
-                  text: t<string>("Send as transaction"),
-                  value: false,
-                },
-              ]}
-              value={useRpc}
-            />
           </>
         )}
         <Button.Group>
@@ -225,13 +232,12 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
           {useRpc ? (
             <Button isDisabled={!isValid} isPrimary label={t<string>("Call")} onClick={_onSubmitRpc} />
           ) : (
-            <TxButton
-              accountId={accountId}
+            <Button
+              isLoading={isLoading}
               isDisabled={!isValid}
               isPrimary
-              label={t<string>("Call")}
-              params={_constructTx}
-              tx="contracts.call"
+              label={t<string>("Execute")}
+              onClick={_onSubmitExecute}
             />
           )}
         </Button.Group>

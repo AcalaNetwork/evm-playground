@@ -1,18 +1,18 @@
 // Copyright 2017-2020 @canvas-ui/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Codec, TypeDef } from '@polkadot/types/types';
-import { BareProps } from './types';
+import { Codec, TypeDef } from "@polkadot/types/types";
+import { BareProps } from "./types";
 
-import React from 'react';
-import styled from 'styled-components';
-import { TypeRegistry } from '@polkadot/types';
+import React from "react";
+import styled from "styled-components";
+import { TypeRegistry } from "@polkadot/types";
 
-import CopyButton from './CopyButton';
-import Data from './Data';
-import Icon from './Icon';
-import Labelled from './Labelled';
-import { classes } from '@canvas-ui/react-util';
+import CopyButton from "./CopyButton";
+import Data from "./Data";
+import Icon from "./Icon";
+import Labelled from "./Labelled";
+import { classes } from "@canvas-ui/react-util";
 
 interface Props extends BareProps {
   children?: React.ReactNode;
@@ -30,39 +30,31 @@ interface Props extends BareProps {
   withLabel?: boolean;
 }
 
-function Output ({ children, className = '', help, isError, isFull, isHidden, isTrimmed, label, registry, type, value, withCopy = false, withLabel }: Props): React.ReactElement<Props> {
+function Output({
+  children,
+  className = "",
+  help,
+  isError,
+  isFull,
+  isHidden,
+  isTrimmed,
+  label,
+  registry,
+  type,
+  value,
+  withCopy = false,
+  withLabel,
+}: Props): React.ReactElement<Props> {
   return (
-    <Labelled
-      className={className}
-      help={help}
-      isFull={isFull}
-      isHidden={isHidden}
-      label={label}
-      withLabel={withLabel}
-    >
-      <div className={classes('ui--output', isError && 'error', 'monospace')}>
-        <Data
-          isTrimmed={isTrimmed}
-          registry={registry}
-          type={type}
-          value={value?.toJSON()}
-        />
+    <Labelled className={className} help={help} isFull={isFull} isHidden={isHidden} label={label} withLabel={withLabel}>
+      <div className={classes("ui--output", isError && "error", "monospace")}>
+        {value?.toString()}
         {children}
-        {withCopy
-          ? (
-            <CopyButton
-              className='copy-output'
-              value={value?.toString() || ''}
-              withButton={false}
-            >
-              <Icon
-                className='copy-output'
-                name='copy outline'
-              />
-            </CopyButton>
-          )
-          : null
-        }
+        {withCopy ? (
+          <CopyButton className="copy-output" value={value?.toString() || ""} withButton={false}>
+            <Icon className="copy-output" name="copy outline" />
+          </CopyButton>
+        ) : null}
       </div>
     </Labelled>
   );
@@ -77,7 +69,7 @@ export default React.memo(styled(Output)`
 
   .copy-output {
     float: right;
-  
+
     i.icon {
       font-size: 0.875rem;
       color: var(--grey60);

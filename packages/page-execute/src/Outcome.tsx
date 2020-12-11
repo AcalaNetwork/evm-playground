@@ -39,10 +39,8 @@ function Outcome ({ className, onClear, outcome: { from, message, output, params
         />
       </div>
       <Output
-        isError={!result.isOk}
-        registry={registry}
-        type={message.returnType}
-        value={output}
+        isError={!result}
+        value={result}
         withCopy
         withLabel={false}
       />
