@@ -11,11 +11,7 @@ import Messages from "./Messages";
 import { useTranslation } from "./translate";
 
 interface Props extends BareProps {
-  abi: {
-    bytecode: any;
-    evm: any;
-    abi: any;
-  };
+  abi: any[];
   withConstructors?: boolean;
 }
 

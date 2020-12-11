@@ -24,9 +24,10 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useTranslation } from "./translate";
 import { ComponentProps as Props } from "./types";
+import keyring from "@polkadot/ui-keyring";
 
-const ENDOWMENT = new BN(0);
-const GASLIMIT = new BN(0);
+const ENDOWMENT = new BN("0");
+const GASLIMIT = new BN("300000000");
 
 function defaultContractName(name?: string) {
   return name ? `${name}` : "";
@@ -78,22 +79,26 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
     setIsSending(true);
 
     try {
-      const wallet = new Wallet(decodeAddress(accountId, true), evmProvider);
+      const wallet = new Wallet(decodeAddress(accountId, true), evmProvider, accountId);
+      await wallet.claimEvmAccounts();
 
-      // const bytecode = contractJSON.evm.bytecode : contractJSON.bytecode;
-      // if (!hasByteCode(bytecode)) {
-      //     throw new Error('Cannot deploy contract with empty bytecode');
-      // }
       const factory = new ContractFactory(abi, bytecode, wallet as any);
-
-      const contract = await factory.deploy(...values, {
-        gasLimit: gasLimit,
-        value: endowment,
+      const contract = await factory.deploy(...values.map((x) => x.value), {
+        gasLimit: "3000000000",
       });
 
       await contract.deployed();
 
-      console.log(contract)
+      keyring.saveContract(contract.address, {
+        contract: {
+          abi: abi || undefined,
+          genesisHash: evmProvider.api.genesisHash.toHex(),
+        },
+        name,
+        tags: [],
+      });
+
+      navigateTo.execute();
     } finally {
       setIsSending(false);
     }

@@ -14,6 +14,7 @@ import { WsProvider } from "@polkadot/rpc-provider";
 import { StatusContext } from "@canvas-ui/react-components/Status";
 import { TokenUnit } from "@canvas-ui/react-components/InputNumber";
 import keyring from "@polkadot/ui-keyring";
+import * as defaults from "@polkadot/ui-keyring/defaults";
 import { KeyringStore } from "@polkadot/ui-keyring/types";
 import { options } from "@acala-network/api";
 
@@ -126,16 +127,36 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
   TokenUnit.setAbbr(tokenSymbol);
 
   // finally load the keyring
-  keyring.loadAll(
-    {
-      genesisHash: api.genesisHash,
-      isDevelopment,
-      ss58Format,
-      store,
-      type: "ed25519",
-    },
-    injectedAccounts
-  );
+  const options = {
+    genesisHash: api.genesisHash,
+    isDevelopment,
+    ss58Format,
+    store,
+    type: "ed25519",
+  };
+
+  const loadContract = (json: any, key: any) => {
+    const address = json.address;
+    const [, hexAddr] = key.split(":"); // move genesisHash to top-level (TODO Remove from contracts section?)
+
+    json.meta.genesisHash = json.meta.genesisHash || (json.meta.contract && json.meta.contract.genesisHash);
+    keyring.contracts.add((keyring as any)._store, address, json);
+    (keyring as any).rewriteKey(json, key, hexAddr, defaults.contractKey);
+  };
+
+  (keyring as any).initKeyring(options);
+
+  (keyring as any)._store.all((key: any, json: any) => {
+    if ((keyring as any).allowGenesis(json)) {
+      if (defaults.accountRegex.test(key)) {
+        (keyring as any).loadAccount(json, key);
+      } else if (defaults.addressRegex.test(key)) {
+        (keyring as any).loadAddress(json, key);
+      } else if (defaults.contractRegex.test(key)) {
+        loadContract(json, key);
+      }
+    }
+  });
 
   const defaultSection = Object.keys(api.tx)[0];
   const defaultMethod = Object.keys(api.tx[defaultSection])[0];

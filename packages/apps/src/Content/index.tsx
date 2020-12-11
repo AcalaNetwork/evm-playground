@@ -89,9 +89,9 @@ function Content ({ className }: Props): React.ReactElement<Props> {
               navigateTo={navigateTo}
               onStatusChange={queueAction}
             />
-            {!sawGuide && !isLoading && (
+            {/* {!sawGuide && !isLoading && (
               <GuideModal onClose={setSawGuide} />
-            )}
+            )} */}
             {/* <HelpWidget /> */}
           </ErrorBoundary>
         </Suspense>
