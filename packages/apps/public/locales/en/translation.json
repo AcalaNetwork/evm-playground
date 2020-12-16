@@ -138,6 +138,7 @@
   "Distinct stash and controller accounts are recommended to ensure fund security. You will be allowed to make the transaction, but take care to not tie up all funds, only use a portion of the available funds during this period.": "",
   "Do not include a tip for the block author": "",
   "Download": "",
+  "EVM Address: ": "",
   "Either approve or reject this call.": "",
   "Endorse": "",
   "Endorsements ({{count}})": "",

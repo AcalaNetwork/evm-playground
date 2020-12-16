@@ -9,6 +9,7 @@
   "Contract Address": "Contract Address",
   "Contract code successfully found at address": "Contract code successfully found at address",
   "Deployed Contracts": "Deployed Contracts",
+  "Execute": "Execute",
   "Execute {{name}}": "Execute {{name}}",
   "Maximum Gas Allowed": "Maximum Gas Allowed",
   "Message to Send": "Message to Send",
@@ -29,7 +30,10 @@
   "Value": "Value",
   "You can add an existing contract by": "You can add an existing contract by",
   "You have already added this contract address": "You have already added this contract address",
+  "abi bundle": "abi bundle",
   "adding its address": "adding its address",
   "code bundle": "code bundle",
-  "contract added": "contract added"
+  "contract added": "contract added",
+  "gasLimit": "gasLimit",
+  "value": "value"
 }
