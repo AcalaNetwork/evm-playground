@@ -38,10 +38,7 @@ function Contracts({
         .filter((contract: Contract | null): boolean => !!contract) as Contract[])
     );
   }, [accounts, api, contractAddresses]);
-
-  console.log(contracts, contractAddresses);
-  console.log(hasContracts);
-
+  
   return (
     <div className={className}>
       <header>

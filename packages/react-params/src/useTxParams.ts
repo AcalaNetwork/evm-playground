@@ -11,7 +11,6 @@ export default function useTxParams(source: { type: string }[]): UseTxParamsHook
   const [values, setValues] = useState<RawParams>(createValues(params));
 
   useEffect((): void => {
-    console.log("哈哈哈哈");
     setParams(source);
     setValues(createValues(source));
   }, [source]);

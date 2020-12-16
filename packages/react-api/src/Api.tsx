@@ -28,6 +28,7 @@ import addressDefaults from "@polkadot/util-crypto/address/defaults";
 import { Provider } from "@acala-network/bodhi";
 import ApiContext from "./ApiContext";
 import registry from "./typeRegistry";
+import ERC20 from "./ERC20";
 
 interface Props {
   children: React.ReactNode;
@@ -136,12 +137,39 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
     type: "ed25519",
   };
 
+  for (const { name, address } of [
+    {
+      name: "ACA",
+      address: "0x0000000000000000000000000000000000000800",
+    },
+    {
+      name: "AUSD",
+      address: "0x0000000000000000000000000000000000000801",
+    },
+    {
+      name: "DOT",
+      address: "0x0000000000000000000000000000000000000802",
+    },
+  ]) {
+    const json = {
+      contract: {
+        abi: ERC20,
+        genesisHash: "0x0000000000000000000000000000000000000000",
+      },
+      name,
+      tags: [],
+    };
+
+    keyring.saveContract(address, json);
+  }
+
   const loadContract = (json: any, key: any) => {
     const address = json.address;
     const [, hexAddr] = key.split(":"); // move genesisHash to top-level (TODO Remove from contracts section?)
 
     json.meta.genesisHash = json.meta.genesisHash || (json.meta.contract && json.meta.contract.genesisHash);
     keyring.contracts.add((keyring as any)._store, address, json);
+
     (keyring as any).rewriteKey(json, key, hexAddr, defaults.contractKey);
   };
 

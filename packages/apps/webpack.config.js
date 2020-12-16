@@ -20,7 +20,7 @@ module.exports = merge(
     devtool: false,
     plugins: [
       new HtmlWebpackPlugin({
-        PAGE_TITLE: 'Canvas',
+        PAGE_TITLE: 'Acala-EVM',
         inject: true,
         template: path.join(context, `${hasPublic ? 'public/' : ''}index.html`)
       })
