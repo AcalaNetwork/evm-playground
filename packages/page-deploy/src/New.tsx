@@ -5,17 +5,10 @@ import { Wallet } from "@acala-network/bodhi/Signer";
 import { Code } from "@canvas-ui/apps/types";
 import { Button, ContractParams, InputAddress, InputName, InputNumber, Labelled } from "@canvas-ui/react-components";
 import { ELEV_2_CSS } from "@canvas-ui/react-components/styles/constants";
-import {
-  useAbi,
-  useAccountId,
-  useApi,
-  useGasWeight,
-  useIntegerBn,
-  useNonEmptyString,
-  useNotification,
-} from "@canvas-ui/react-hooks";
+import { useAbi, useAccountId, useApi, useIntegerBn, useNonEmptyString } from "@canvas-ui/react-hooks";
 import { useTxParams } from "@canvas-ui/react-params";
 import { truncate } from "@canvas-ui/react-util";
+import keyring from "@polkadot/ui-keyring";
 import { decodeAddress } from "@polkadot/util-crypto";
 import BN from "bn.js";
 import { ContractFactory } from "ethers";
@@ -24,7 +17,6 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useTranslation } from "./translate";
 import { ComponentProps as Props } from "./types";
-import keyring from "@polkadot/ui-keyring";
 
 const ENDOWMENT = new BN("0");
 const GASLIMIT = new BN("300000000");
@@ -39,7 +31,6 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
   const code = useMemo((): Code | null => {
     return allCodes.find((code: Code) => id === code.id) || null;
   }, [allCodes, id]);
-  const useWeightHook = useGasWeight();
   const [accountId, setAccountId] = useAccountId();
   const [endowment, setEndowment, isEndowmentValid] = useIntegerBn(ENDOWMENT);
   const [gasLimit, setGasLimit, isGasLimitValid] = useIntegerBn(GASLIMIT);
@@ -47,7 +38,6 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
   const { abi, bytecode } = useAbi(code);
   const { evmProvider, api } = useApi();
   const [isSending, setIsSending] = useState(false);
-  const showNotification = useNotification();
 
   const args = useMemo(() => {
     const constructors = abi?.filter((x: any) => x.type === "constructor") || [];
@@ -73,7 +63,6 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
   }, [abi, navigateTo]);
 
   const deploy = async () => {
-    console.log(accountId, bytecode);
     if (!accountId || !bytecode || !abi) return;
     setIsSending(true);
 

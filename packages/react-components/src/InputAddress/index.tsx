@@ -188,6 +188,10 @@ function InputAddress({
     return filteredOptions.length ? filteredOptions[filteredOptions.length - 1] : undefined;
   }, [filteredOptions]);
 
+  const firstOption = useMemo((): KeyringSectionOption | undefined => {
+    return filteredOptions.length ? filteredOptions[0] : undefined;
+  }, [filteredOptions]);
+
   const hasValue = useCallback(
     (test?: Uint8Array | string | null): boolean => {
       return filteredOptions.some(({ value }) => test === value);
@@ -271,9 +275,9 @@ function InputAddress({
           ? defaultValue
           : hasValue(lastValue)
           ? lastValue
-          : lastOption && lastOption.value
+          : firstOption && firstOption.value
       ),
-    [defaultValue, hasValue, isDisabled, lastOption, lastValue]
+    [defaultValue, hasValue, isDisabled, firstOption, lastValue]
   );
 
   const actualOptions = useMemo((): Option[] => {
