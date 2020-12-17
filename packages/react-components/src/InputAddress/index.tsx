@@ -291,7 +291,7 @@ function InputAddress({
   };
 
   useEffect(() => {
-    if (value) {
+    if (value && evmProvider && evmProvider.api) {
       evmProvider.api.isReady.then(() => {
         evmProvider.api.query.evmAccounts.evmAddresses(value).then((result) => {
           if (result.isEmpty) {
