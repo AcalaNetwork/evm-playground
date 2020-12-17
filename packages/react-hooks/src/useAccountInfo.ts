@@ -104,7 +104,7 @@ export default function useAccountInfo(value: string | null, isContract = false)
       setFlags(
         (flags): AddressFlags => ({
           ...flags,
-          isDevelopment: accountOrAddress?.meta.isTesting || false,
+          isDevelopment: true,
           isEditable:
             !!(
               !identity?.display &&

@@ -1,10 +1,10 @@
 // Copyright 2017-2020 @canvas-ui/react-hooks authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { useEffect, useState } from 'react';
-import contractObservable from '@polkadot/ui-keyring/observable/contracts';
+import { useEffect, useState } from "react";
+import { contracts } from "@polkadot/ui-keyring/observable/contracts";
 
-import useIsMountedRef from './useIsMountedRef';
+import useIsMountedRef from "./useIsMountedRef";
 
 interface UseContracts {
   allContracts: string[];
@@ -13,12 +13,17 @@ interface UseContracts {
   isReady: boolean;
 }
 
-export default function useContracts (): UseContracts {
+export default function useContracts(): UseContracts {
   const mountedRef = useIsMountedRef();
-  const [state, setState] = useState<UseContracts>({ allContracts: [], hasContracts: false, isContract: () => false, isReady: false });
+  const [state, setState] = useState<UseContracts>({
+    allContracts: [],
+    hasContracts: false,
+    isContract: () => false,
+    isReady: false,
+  });
 
-  useEffect((): () => void => {
-    const subscription = contractObservable.subject.subscribe((contracts): void => {
+  useEffect((): (() => void) => {
+    const subscription = contracts.subject.subscribe((contracts): void => {
       if (mountedRef.current) {
         const allContracts = contracts ? Object.keys(contracts) : [];
         const hasContracts = allContracts.length !== 0;

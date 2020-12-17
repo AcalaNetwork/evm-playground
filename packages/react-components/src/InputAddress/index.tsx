@@ -1,37 +1,35 @@
 // Copyright 2017-2020 @canvas-ui/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { Wallet } from "@acala-network/bodhi/Signer";
+import { availableExtensions } from "@canvas-ui/apps-config/extensions";
+import { withMulti, withObservable } from "@canvas-ui/react-api/hoc";
+import { useApi, useNotification } from "@canvas-ui/react-hooks";
+import { classes, getAddressName, toAddress as addressToAddress } from "@canvas-ui/react-util";
 import { StringOrNull } from "@canvas-ui/react-util/types";
+import keyring from "@polkadot/ui-keyring";
+import { createOptionItem } from "@polkadot/ui-keyring/options/item";
+import { Button } from "@canvas-ui/react-components";
 import {
+  KeyringOption$Type,
   KeyringOptions,
   KeyringSectionOption,
   KeyringSectionOptions,
-  KeyringOption$Type,
 } from "@polkadot/ui-keyring/options/types";
-import { BareProps } from "../types";
-import { Option } from "./types";
-import { Wallet } from "@acala-network/bodhi/Signer";
+import { isNull, isUndefined } from "@polkadot/util";
 import { decodeAddress } from "@polkadot/util-crypto";
-
 import { detect } from "detect-browser";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useEffect, useState } from "react";
 import store from "store";
 import styled from "styled-components";
-import { availableExtensions } from "@canvas-ui/apps-config/extensions";
-import { withMulti, withObservable } from "@canvas-ui/react-api/hoc";
-import { useApi } from "@canvas-ui/react-hooks";
-import { classes, getAddressName, toAddress as addressToAddress } from "@canvas-ui/react-util";
-import keyring from "@polkadot/ui-keyring";
-import keyringOption from "@polkadot/ui-keyring/options";
-import createKeyringItem from "@polkadot/ui-keyring/options/item";
-import { isNull, isUndefined } from "@polkadot/util";
-
-import { useTranslation } from "../translate";
 import Dropdown from "../Dropdown";
 import InputStatus from "../InputStatus";
+import { useTranslation } from "../translate";
+import { BareProps } from "../types";
 import createHeader from "./createHeader";
 import createItem from "./createItem";
 import { NoAccount } from "./KeyPair";
+import { Option } from "./types";
 
 interface Props extends BareProps {
   defaultValue?: Uint8Array | string | null;
@@ -113,7 +111,7 @@ function createOption(address: string): Option {
     }
   }
 
-  return createItem(createKeyringItem(address, name), !isRecent);
+  return createItem(createOptionItem(address, name), !isRecent);
 }
 
 function readOptions(): Record<string, Record<string, string>> {
@@ -199,6 +197,10 @@ function InputAddress({
     [filteredOptions]
   );
 
+  const [evmAddress, setEvmAddress] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const showNotification = useNotification();
+
   const onChange = useCallback(
     (address: string): void => {
       !filter && setLastValue(type, address);
@@ -262,10 +264,47 @@ function InputAddress({
     [isInput]
   );
 
-  const evmAddress = useMemo(() => {
-    if (!value) return "";
-    const wallet = new Wallet(decodeAddress(value as string, true), evmProvider);
-    return wallet.address;
+  const claimEVMAccount = async () => {
+    if (!value || evmAddress || !evmProvider) {
+      setIsSending(false);
+      return;
+    }
+
+    const wallet = new Wallet(decodeAddress(value as string, true), evmProvider, value);
+
+    try {
+      setIsSending(true);
+      await wallet.claimEvmAccounts();
+      showNotification({
+        action: "Claim Evm Account",
+        status: "success",
+      });
+      setEvmAddress(wallet.address)
+    } catch (error) {
+      showNotification({
+        action: error,
+        status: "error",
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  useEffect(() => {
+    if (value) {
+      evmProvider.api.isReady.then(() => {
+        evmProvider.api.query.evmAccounts.evmAddresses(value).then((result) => {
+          if (result.isEmpty) {
+            setEvmAddress("");
+          } else {
+            const wallet = new Wallet(decodeAddress(value as string, true), evmProvider);
+            setEvmAddress(wallet.address);
+          }
+        });
+      });
+    } else {
+      setEvmAddress("");
+    }
   }, [value]);
 
   const actualValue = useMemo(
@@ -362,14 +401,25 @@ function InputAddress({
           text={<>{t("Please reload this app with the Polkadot extension to show available accounts.")}</>}
         />
       )}
-      <InputStatus
-        text={
-          <>
-            {t("EVM Address: ")}
-            {evmAddress}
-          </>
-        }
-      />
+      {evmAddress ? (
+        <InputStatus
+          text={
+            <>
+              {t("EVM Address: ")}
+              {evmAddress}
+            </>
+          }
+        />
+      ) : (
+        <Button
+          className="claimButton"
+          isLoading={isSending}
+          isDisabled={isSending}
+          isPrimary
+          onClick={() => claimEVMAccount()}
+          label={t<string>("Claim Evm Account")}
+        />
+      )}
     </Dropdown>
   );
 }
@@ -378,6 +428,10 @@ const ExportedComponent = withMulti(
   styled(InputAddress)`
     .ui.dropdown .text {
       width: 100%;
+    }
+
+    .claimButton {
+      margin-top: 0.5rem;
     }
 
     .ui.disabled.search {
@@ -409,7 +463,7 @@ const ExportedComponent = withMulti(
       max-width: 0;
     }
   `,
-  withObservable(keyringOption.optionsSubject, {
+  withObservable(keyring.keyringOption.optionsSubject, {
     propName: "optionsAll",
     transform: (optionsAll: KeyringOptions): Record<string, (Option | React.ReactNode)[]> =>
       Object.entries(optionsAll).reduce((result: Record<string, (Option | React.ReactNode)[]>, [type, options]): Record<

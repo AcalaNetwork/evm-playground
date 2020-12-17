@@ -68,7 +68,12 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
 
     try {
       const wallet = new Wallet(decodeAddress(accountId, true), evmProvider, accountId);
-      await wallet.claimEvmAccounts();
+
+      const hasEvm = await api.query.evmAccounts.evmAddresses(accountId);
+
+      if (hasEvm.isEmpty) {
+        await wallet.claimEvmAccounts();
+      }
 
       const factory = new ContractFactory(abi, bytecode, wallet as any);
       const contract = await factory.deploy(...values.map((x) => x.value), {
@@ -112,7 +117,7 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
           isInput={false}
           label={t<string>("deployment account")}
           onChange={setAccountId}
-          type="testing"
+          type="allPlus"
           value={accountId}
         />
         <InputName isContract isError={isNameError} onChange={setName} value={name || ""} />

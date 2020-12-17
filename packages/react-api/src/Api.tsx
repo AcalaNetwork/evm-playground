@@ -15,7 +15,6 @@ import { StatusContext } from "@canvas-ui/react-components/Status";
 import { TokenUnit } from "@canvas-ui/react-components/InputNumber";
 import keyring from "@polkadot/ui-keyring";
 import * as defaults from "@polkadot/ui-keyring/defaults";
-import uiKeyringOptions from "@polkadot/ui-keyring/options";
 import { KeyringStore } from "@polkadot/ui-keyring/types";
 import { options } from "@acala-network/api";
 
@@ -24,7 +23,7 @@ import ApiSigner from "@canvas-ui/react-signer/ApiSigner";
 import TestingSigner from "@canvas-ui/react-signer/TestingSigner";
 import { formatBalance, isTestChain } from "@polkadot/util";
 import { setSS58Format } from "@polkadot/util-crypto";
-import addressDefaults from "@polkadot/util-crypto/address/defaults";
+import { defaults as addressDefaults } from "@polkadot/util-crypto/address/defaults";
 import { Provider } from "@acala-network/bodhi";
 import ApiContext from "./ApiContext";
 import registry from "./typeRegistry";
@@ -113,8 +112,6 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
   const tokenDecimals = properties.tokenDecimals.unwrapOr(DEFAULT_DECIMALS).toNumber();
   const isDevelopment = systemChainType.isDevelopment || systemChainType.isLocal || isTestChain(systemChain);
 
-  console.log(`chain: ${systemChain} (${systemChainType.toString()}), ${JSON.stringify(properties)}`);
-
   // explicitly override the ss58Format as specified
   registry.setChainProperties(registry.createType("ChainProperties", { ...properties, ss58Format }));
 
@@ -136,6 +133,8 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
     store,
     type: "ed25519",
   };
+
+  (keyring as any).initKeyring(options);
 
   for (const { name, address } of [
     {
@@ -193,7 +192,7 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
     }
   });
 
-  uiKeyringOptions.init(keyring as any);
+  keyring.keyringOption.init(keyring);
 
   const defaultSection = Object.keys(api.tx)[0];
   const defaultMethod = Object.keys(api.tx[defaultSection])[0];
@@ -264,17 +263,22 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
       }
     );
 
-    injectedPromise.then(setExtensions).catch((error) => console.error(error));
+    injectedPromise
+      .then((extensions) => {
+        setExtensions(extensions);
 
-    setEvmProvider(
-      new Provider(
-        options({
-          provider,
-          registry,
-          signer: new TestingSigner(registry),
-        })
-      )
-    );
+        setEvmProvider(
+          new Provider(
+            options({
+              provider,
+              registry,
+              signer: new TestingSigner(registry, extensions[0].signer as any),
+            })
+          )
+        );
+      })
+      .catch((error) => console.error(error));
+
     setIsApiInitialized(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

@@ -117,24 +117,37 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
 
   const _onSubmitRpc = useCallback(async () => {
     if (!accountId || !contract || !payment || !gasLimit) return;
+
     const wallet = new Wallet(decodeAddress(accountId, true), evmProvider, accountId);
-    await wallet.claimEvmAccounts();
 
-    const messages = contract.interface.functions;
-    const messageName = Object.keys(messages)[messageIndex];
+    try {
+      const hasEvm = await api.query.evmAccounts.evmAddresses(accountId);
 
-    const result = await contract.connect(wallet as any)[messageName](...values.map((x) => x.value));
+      if (hasEvm.isEmpty) {
+        await wallet.claimEvmAccounts();
+      }
 
-    setOutcomes([
-      {
-        result,
-        from: accountId,
-        message: messages[messageName],
-        params: extractValues(values),
-        when: new Date(),
-      } as any,
-      ...outcomes,
-    ]);
+      const messages = contract.interface.functions;
+      const messageName = Object.keys(messages)[messageIndex];
+
+      const result = await contract.connect(wallet as any)[messageName](...values.map((x) => x.value));
+
+      setOutcomes([
+        {
+          result,
+          from: accountId,
+          message: messages[messageName],
+          params: extractValues(values),
+          when: new Date(),
+        } as any,
+        ...outcomes,
+      ]);
+    } catch (error) {
+      showNotification({
+        action: error,
+        status: "error",
+      });
+    }
   }, [accountId, contract, messageIndex, payment, gasLimit, outcomes, values]);
 
   const _onSubmitExecute = useCallback(async () => {
@@ -142,7 +155,12 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
     setIsLoading(true);
     try {
       const wallet = new Wallet(decodeAddress(accountId, true), evmProvider, accountId);
-      await wallet.claimEvmAccounts();
+
+      const hasEvm = await api.query.evmAccounts.evmAddresses(accountId);
+
+      if (hasEvm.isEmpty) {
+        await wallet.claimEvmAccounts();
+      }
 
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];
@@ -203,7 +221,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
               )}
               label={t<string>("Call from Account")}
               onChange={setAccountId}
-              type="testing"
+              // type="allPlus"
               value={accountId}
             />
             <Dropdown
