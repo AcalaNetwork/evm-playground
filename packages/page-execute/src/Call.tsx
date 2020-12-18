@@ -97,7 +97,6 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
         return contract?.interface.functions[x];
       }) || emptyArray;
 
-    console.log(messages[messageIndex]?.stateMutability);
     return messages[messageIndex];
   }, [contract, messageIndex]);
 
