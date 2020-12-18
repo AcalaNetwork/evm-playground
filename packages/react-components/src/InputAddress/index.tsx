@@ -279,10 +279,10 @@ function InputAddress({
         action: "Claim Evm Account",
         status: "success",
       });
-      setEvmAddress(wallet.address)
+      setEvmAddress(wallet.address);
     } catch (error) {
       showNotification({
-        action: error,
+        action: typeof error === "string" ? error : error && error.message ? error.message : "",
         status: "error",
       });
     } finally {

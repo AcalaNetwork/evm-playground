@@ -143,7 +143,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
       ]);
     } catch (error) {
       showNotification({
-        action: error,
+        action: typeof error === "string" ? error : error && error.message ? error.message : "",
         status: "error",
       });
     }
@@ -173,9 +173,9 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
         action: messageName,
         status: "success",
       });
-    } catch {
+    } catch (error) {
       showNotification({
-        action: "",
+        action: typeof error === "string" ? error : error && error.message ? error.message : "",
         status: "error",
       });
     } finally {
