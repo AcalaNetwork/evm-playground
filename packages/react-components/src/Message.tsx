@@ -23,7 +23,6 @@ export interface Props extends BareProps {
 function Message({ className, isConstructor, message, onSelect, registry }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { identifier } = message;
-  console.log(message);
 
   const signature = useMemo(
     (): React.ReactNode => <MessageSignature isConstructor={isConstructor} message={message} />,

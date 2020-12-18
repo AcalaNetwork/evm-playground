@@ -47,7 +47,7 @@ export default function useAbi(source: any | null = null, isRequired = false): U
       try {
         const source = JSON.parse(json) as any;
 
-        if (source.data.bytecode.object) {
+        if (source?.data?.bytecode?.object) {
           source.bytecode = source.data.bytecode.object;
         }
 
