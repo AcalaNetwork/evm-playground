@@ -21,7 +21,10 @@ export default class TestingSigner implements Signer {
     });
 
     if (!account) {
-      return (this.signer as any).signPayload(payload) as any;
+      if (this.signer) {
+        return (this.signer as any).signPayload(payload) as any;
+      }
+      return Promise.reject(new Error('No Signer'));
     } else {
       return new Promise((resolve, reject): void => {
         try {
