@@ -272,7 +272,7 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
             options({
               provider,
               registry,
-              signer: new TestingSigner(registry, extensions[0].signer as any),
+              signer: new TestingSigner(registry, extensions?.[0]?.signer as any),
             })
           )
         );
