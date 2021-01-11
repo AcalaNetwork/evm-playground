@@ -40,6 +40,7 @@ export { default as IdentityIcon } from './IdentityIcon';
 export { default as Input } from './Input';
 export { default as InputABI } from './InputABI';
 export { default as InputAddress } from './InputAddress';
+export { default as InputEvmAddress } from './InputEvmAddress';
 export { default as InputAddressSimple } from './InputAddressSimple';
 export { default as InputBalance } from './InputBalance';
 export { default as InputExtrinsic } from './InputExtrinsic';

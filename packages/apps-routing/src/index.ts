@@ -5,11 +5,13 @@ import { Routes } from './types';
 
 import deploy from './deploy';
 import execute from './execute';
+import evmAccount from './evmAccount';
 import upload from './upload';
 import settings from './settings';
 
 export default function create (t: <T = string> (key: string, text: string, options: { ns: string }) => T): Routes {
   return [
+    evmAccount(t),
     upload(t),
     deploy(t),
     execute(t),

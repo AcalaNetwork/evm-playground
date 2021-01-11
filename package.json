@@ -42,7 +42,8 @@
     "@polkadot/types": "^3.0.1",
     "@polkadot/util": "^5.0.1",
     "@polkadot/util-crypto": "^5.0.1",
-    "babel-core": "^7.0.0-bridge.0"
+    "babel-core": "^7.0.0-bridge.0",
+    "canvas-ui": "portal:/home/nt/workspace/canvas-ui"
   },
   "scripts": {
     "analyze": "yarn run build && yarn source-map-explorer packages/apps/build/main.*.js",

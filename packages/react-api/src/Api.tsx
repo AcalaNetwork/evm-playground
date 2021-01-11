@@ -28,6 +28,7 @@ import { Provider } from "@acala-network/bodhi";
 import ApiContext from "./ApiContext";
 import registry from "./typeRegistry";
 import ERC20 from "./ERC20";
+import { setEvmAccounts } from "./util/getEvmAccounts";
 
 interface Props {
   children: React.ReactNode;
@@ -51,6 +52,7 @@ interface ChainData {
   systemChainType: ChainType;
   systemName: string;
   systemVersion: string;
+  evmAccounts: any;
 }
 
 // const injectedPromise = new Promise<InjectedExtension[]>((resolve): void => {
@@ -67,7 +69,15 @@ let api: ApiPromise;
 export { api };
 
 async function retrieve(api: ApiPromise): Promise<ChainData> {
-  const [properties, systemChain, systemChainType, systemName, systemVersion, injectedAccounts] = await Promise.all([
+  const [
+    properties,
+    systemChain,
+    systemChainType,
+    systemName,
+    systemVersion,
+    injectedAccounts,
+    evmAccounts,
+  ] = await Promise.all([
     api.rpc.system.properties(),
     api.rpc.system.chain(),
     api.rpc.system.chainType ? api.rpc.system.chainType() : Promise.resolve(registry.createType("ChainType", "Live")),
@@ -92,6 +102,15 @@ async function retrieve(api: ApiPromise): Promise<ChainData> {
 
         return [];
       }),
+    injectedPromise
+      //@ts-ignore
+      .then((data) => data[0].accounts.get(true))
+      .then((data) => data.filter((i: any) => i.type === "ethereum"))
+      .catch((error): InjectedAccountExt[] => {
+        console.error("web3Enable", error);
+
+        return [];
+      }),
   ]);
 
   return {
@@ -101,11 +120,22 @@ async function retrieve(api: ApiPromise): Promise<ChainData> {
     systemChainType,
     systemName: systemName.toString(),
     systemVersion: systemVersion.toString(),
+    evmAccounts,
   };
 }
 
 async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiState> {
-  const { injectedAccounts, properties, systemChain, systemChainType, systemName, systemVersion } = await retrieve(api);
+  const {
+    injectedAccounts,
+    properties,
+    systemChain,
+    systemChainType,
+    systemName,
+    systemVersion,
+    evmAccounts,
+  } = await retrieve(api);
+
+  setEvmAccounts(evmAccounts || []);
   const ss58Format =
     uiSettings.prefix === -1 ? properties.ss58Format.unwrapOr(DEFAULT_SS58).toNumber() : uiSettings.prefix;
   const tokenSymbol = properties.tokenSymbol.unwrapOr(undefined)?.toString();

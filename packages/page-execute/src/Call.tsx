@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { ComponentProps as Props } from "@canvas-ui/apps/types";
-import { Wallet } from "@acala-network/bodhi/Signer";
+import { ExtensionSigner } from "@acala-network/bodhi/ExtensionSigner";
 import { decodeAddress } from "@polkadot/util-crypto";
 
 import {
@@ -117,15 +117,9 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
   const _onSubmitRpc = useCallback(async () => {
     if (!accountId || !contract || !payment || !gasLimit) return;
 
-    const wallet = new Wallet(decodeAddress(accountId, true), evmProvider, accountId);
+    const wallet = new ExtensionSigner(evmProvider, accountId);
 
     try {
-      const hasEvm = await api.query.evmAccounts.evmAddresses(accountId);
-
-      if (hasEvm.isEmpty) {
-        await wallet.claimEvmAccounts();
-      }
-
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];
 
@@ -153,13 +147,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
     if (!accountId || !contract || !payment || !gasLimit) return;
     setIsLoading(true);
     try {
-      const wallet = new Wallet(decodeAddress(accountId, true), evmProvider, accountId);
-
-      const hasEvm = await api.query.evmAccounts.evmAddresses(accountId);
-
-      if (hasEvm.isEmpty) {
-        await wallet.claimEvmAccounts();
-      }
+      const wallet = new ExtensionSigner(evmProvider, accountId);
 
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];

@@ -1,7 +1,7 @@
 // Copyright 2017-2020 @canvas-ui/app-execute authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Wallet } from "@acala-network/bodhi/Signer";
+import { ExtensionSigner } from "@acala-network/bodhi/ExtensionSigner";
 import { Code } from "@canvas-ui/apps/types";
 import { Button, ContractParams, InputAddress, InputName, InputNumber, Labelled } from "@canvas-ui/react-components";
 import { ELEV_2_CSS } from "@canvas-ui/react-components/styles/constants";
@@ -67,13 +67,7 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
     setIsSending(true);
 
     try {
-      const wallet = new Wallet(decodeAddress(accountId, true), evmProvider, accountId);
-
-      const hasEvm = await api.query.evmAccounts.evmAddresses(accountId);
-
-      if (hasEvm.isEmpty) {
-        await wallet.claimEvmAccounts();
-      }
+      const wallet = new ExtensionSigner(evmProvider, accountId);
 
       const factory = new ContractFactory(abi, bytecode, wallet as any);
       const contract = await factory.deploy(...values.map((x) => x.value), {
