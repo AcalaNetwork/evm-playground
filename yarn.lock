@@ -64,16 +64,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@acala-network/bodhi@npm:0.1.2-17":
-  version: 0.1.2-17
-  resolution: "@acala-network/bodhi@npm:0.1.2-17"
+"@acala-network/bodhi@npm:0.2.2-3":
+  version: 0.2.2-3
+  resolution: "@acala-network/bodhi@npm:0.2.2-3"
   dependencies:
     "@acala-network/api": ^0.6.2-4
     "@open-web3/dev-config": ^0.1.10
     "@open-web3/indexer": ^0.8.2-5
     "@open-web3/scanner": ^0.8.2-5
+    "@types/chai": ^4.2.14
     ethers: ^5.0.21
-  checksum: 288180dbab5d890e9750f7bb8c03290bdc5e2c660d6aab53da99b90bbbaca68b3da8636fbacb98937a660de6c0f68666a139fcd7353e512ba1e4be69d3b3d996
+  checksum: 48444e90436365135e7c0dd9ddc99ffc72afa5d51359a63394d066734abafcd12e5982114818a1f4e296023782832b8e8f0638159faf7c5b1d7d18e28fd75625
   languageName: node
   linkType: hard
 
@@ -1792,7 +1793,7 @@ __metadata:
   resolution: "@canvas-ui/react-api@workspace:packages/react-api"
   dependencies:
     "@acala-network/api": ^0.6.1
-    "@acala-network/bodhi": 0.1.2-17
+    "@acala-network/bodhi": 0.2.2-3
     "@babel/runtime": ^7.10.2
     "@polkadot/api": ^3.0.1
     "@polkadot/extension-dapp": ^0.26.0-beta.26
@@ -3753,6 +3754,13 @@ __metadata:
   dependencies:
     "@types/node": "*"
   checksum: 0f6cbfb3d12f6b5cce62922c57b4704583307961e9d09ae07e1aab2a41f815e27417bd022c8f48bba545c2bb27ee23e1035ca53500b2081e037e749ec27b88b8
+  languageName: node
+  linkType: hard
+
+"@types/chai@npm:^4.2.14":
+  version: 4.2.14
+  resolution: "@types/chai@npm:4.2.14"
+  checksum: d226f4549a3144924b55ed5f6bdc60aed22d8c50fb87a28bc7619864d960caf46ba5e6372926cf23aea003778d339a7eb9a9e64e5c9241e22c1df537631d0264
   languageName: node
   linkType: hard
 

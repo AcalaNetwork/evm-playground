@@ -36,7 +36,7 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
   const [gasLimit, setGasLimit, isGasLimitValid] = useIntegerBn(GASLIMIT);
   const [name, setName, isNameValid, isNameError] = useNonEmptyString(t(defaultContractName(code?.name)));
   const { abi, bytecode } = useAbi(code);
-  const { evmProvider, api } = useApi();
+  const { evmProvider, evmSigner, api } = useApi();
   const [isSending, setIsSending] = useState(false);
 
   const args = useMemo(() => {
@@ -67,7 +67,7 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
     setIsSending(true);
 
     try {
-      const wallet = new ExtensionSigner(evmProvider, accountId);
+      const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
 
       const factory = new ContractFactory(abi, bytecode, wallet as any);
       const contract = await factory.deploy(...values.map((x) => x.value), {

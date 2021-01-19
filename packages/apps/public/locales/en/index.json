@@ -6,6 +6,7 @@
   "app-council.json",
   "app-democracy.json",
   "app-deploy.json",
+  "app-evmAccount.json",
   "app-execute.json",
   "app-explorer.json",
   "app-extrinsics.json",

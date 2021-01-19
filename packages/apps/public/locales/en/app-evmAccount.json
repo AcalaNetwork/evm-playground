@@ -1,0 +1,9 @@
+{
+  "Bind Evm Account": "Bind Evm Account",
+  "Claim": "Claim",
+  "Evm Account": "Evm Account",
+  "Specify the substrate account that is bound to the evm account": "Specify the substrate account that is bound to the evm account",
+  "Substrate Account": "Substrate Account",
+  "The evm account that needs to be bound": "The evm account that needs to be bound",
+  "You can specify an evm account that is bound to your substrate account.": "You can specify an evm account that is bound to your substrate account."
+}

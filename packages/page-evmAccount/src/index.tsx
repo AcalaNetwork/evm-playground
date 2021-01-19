@@ -1,7 +1,6 @@
 // Copyright 2017-2020 @canvas-ui/app-execute authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Wallet } from "@acala-network/bodhi/Signer";
 import { ExtensionSigner } from "@acala-network/bodhi/ExtensionSigner";
 import { ComponentProps as Props } from "@canvas-ui/apps/types";
 import { Button, InputAddress, InputEvmAddress } from "@canvas-ui/react-components";
@@ -9,6 +8,7 @@ import { useAccountId, useApi, useNotification } from "@canvas-ui/react-hooks";
 import { decodeAddress } from "@polkadot/util-crypto";
 import { default as React, useEffect, useReducer, useState } from "react";
 import { useTranslation } from "./translate";
+import { SigningKey } from "@ethersproject/signing-key";
 
 const testAccount = [
   {
@@ -38,8 +38,8 @@ function EvmAccount({ navigateTo }: Props): React.ReactElement<Props> {
   const [isSending, setIsSending] = useState(false);
   const [isClaimed, setIsClaimed] = useState(false);
   const [isClaimedEvm, setIsClaimedEvm] = useState(false);
-  const [i, update] = useReducer(x => x + 1, 0);
-  const { hasInjectedAccounts, evmProvider } = useApi();
+  const [i, update] = useReducer((x) => x + 1, 0);
+  const { hasInjectedAccounts, evmProvider, evmSigner } = useApi();
   const showNotification = useNotification();
 
   useEffect(() => {
@@ -80,13 +80,20 @@ function EvmAccount({ navigateTo }: Props): React.ReactElement<Props> {
       return;
     }
 
-    const test = testAccount.find(({ value }) => value.toLowerCase() === accountEvmId.toLowerCase())
+    const test = testAccount.find(({ value }) => value.toLowerCase() === accountEvmId.toLowerCase());
     if (test) {
-      const wallet = new Wallet(test.pk, evmProvider, accountId);
+      const evmSigner = {
+        async signRaw({ address, data }: any) {
+          const signingKey = new SigningKey(test.pk);
+          return signingKey.signDigest(data) as any;
+        },
+      };
+
+      const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
 
       try {
         setIsSending(true);
-        await wallet.claimEvmAccounts();
+        await wallet.bindAccount(accountEvmId);
         showNotification({
           action: "Claim Evm Account",
           status: "success",
@@ -97,12 +104,12 @@ function EvmAccount({ navigateTo }: Props): React.ReactElement<Props> {
           status: "error",
         });
       } finally {
-        update()
+        update();
         setIsSending(false);
       }
     } else {
       try {
-        const wallet = new ExtensionSigner(evmProvider, accountId);
+        const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
         setIsSending(true);
 
         await wallet.bindAccount(accountEvmId);
@@ -116,7 +123,7 @@ function EvmAccount({ navigateTo }: Props): React.ReactElement<Props> {
           status: "error",
         });
       } finally {
-        update()
+        update();
         setIsSending(false);
       }
     }

@@ -1,7 +1,6 @@
 // Copyright 2017-2020 @canvas-ui/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Wallet } from "@acala-network/bodhi/Signer";
 import { availableExtensions } from "@canvas-ui/apps-config/extensions";
 import { withMulti, withObservable } from "@canvas-ui/react-api/hoc";
 import { useApi, useNotification } from "@canvas-ui/react-hooks";
@@ -9,8 +8,6 @@ import { classes, getAddressName, toAddress as addressToAddress } from "@canvas-
 import { StringOrNull } from "@canvas-ui/react-util/types";
 import keyring from "@polkadot/ui-keyring";
 import { createOptionItem } from "@polkadot/ui-keyring/options/item";
-import { Button } from "@canvas-ui/react-components";
-import { Link } from "react-router-dom";
 import {
   KeyringOption$Type,
   KeyringOptions,
@@ -18,9 +15,9 @@ import {
   KeyringSectionOptions,
 } from "@polkadot/ui-keyring/options/types";
 import { isNull, isUndefined } from "@polkadot/util";
-import { decodeAddress } from "@polkadot/util-crypto";
 import { detect } from "detect-browser";
-import React, { useCallback, useMemo, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { Link } from "react-router-dom";
 import store from "store";
 import styled from "styled-components";
 import Dropdown from "../Dropdown";

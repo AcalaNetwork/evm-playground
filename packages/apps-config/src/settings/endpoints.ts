@@ -30,7 +30,7 @@ function createLive(t: TFunction): LinkOption[] {
         ns: "apps-config",
         replace: { host: "Acala" },
       }),
-      value: "wss://node-6745169053623078912.rz.onfinality.io/ws?apikey=60ea18c1-40e9-4e4c-807e-ffb20b61ed1f",
+      value: "wss://node-6757141250775003136.rz.onfinality.io/ws?apikey=086df60c-6a2d-414e-add2-cc0b74b6d00b",
     },
   ];
 }

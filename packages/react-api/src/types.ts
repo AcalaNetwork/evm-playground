@@ -5,6 +5,7 @@ import { Provider } from "@acala-network/bodhi";
 import { ApiPromise } from "@polkadot/api/promise";
 import { SubmittableExtrinsicFunction } from "@polkadot/api/promise/types";
 import { InjectedExtension } from "@polkadot/extension-inject/types";
+import { Signer as InjectedSigner } from "@polkadot/api/types";
 
 // helpers for HOC props
 export type OmitProps<T, K> = Pick<T, Exclude<keyof T, K>>;
@@ -29,6 +30,7 @@ export interface ApiState {
 export interface ApiProps extends ApiState {
   api: ApiPromise;
   evmProvider: Provider;
+  evmSigner: any;
   extensions?: InjectedExtension[];
   isApiConnected: boolean;
   isApiInitialized: boolean;

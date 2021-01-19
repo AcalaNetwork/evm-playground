@@ -7,6 +7,7 @@
   "Account": "Account",
   "After having tested and built your contract, you’re ready to upload the generated WebAssembly file on the Canvas chain. In the upload section you can also add the generated metadata.json file as an ABI.": "After having tested and built your contract, you’re ready to upload the generated WebAssembly file on the Canvas chain. In the upload section you can also add the generated metadata.json file as an ABI.",
   "Aye, I approve": "Aye, I approve",
+  "Bind a evm account": "Bind a evm account",
   "Call this message": "Call this message",
   "Cancel": "Cancel",
   "Claim Evm Account": "Claim Evm Account",

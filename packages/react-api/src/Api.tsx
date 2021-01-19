@@ -251,11 +251,13 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
   const [isApiConnected, setIsApiConnected] = useState(false);
   const [isApiInitialized, setIsApiInitialized] = useState(false);
   const [evmProvider, setEvmProvider] = useState<Provider | null>(null);
+  const [evmSigner, setEvmSigner] = useState<any>(null);
   const [extensions, setExtensions] = useState<InjectedExtension[] | undefined>();
   const props = useMemo<ApiProps>(
     () => ({
       ...state,
       api,
+      evmSigner,
       extensions,
       isApiConnected,
       isApiInitialized,
@@ -296,7 +298,7 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
     injectedPromise
       .then((extensions) => {
         setExtensions(extensions);
-
+        setEvmSigner(extensions[0].signer)
         setEvmProvider(
           new Provider(
             options({

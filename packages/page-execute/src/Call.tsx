@@ -55,7 +55,7 @@ const GASLIMIT = new BN("300000000");
 
 function Call({ className, navigateTo }: Props): React.ReactElement<Props> | null {
   const pageParams: { address?: string; messageIndex?: string } = useParams();
-  const { api, evmProvider } = useApi();
+  const { api, evmProvider, evmSigner } = useApi();
   const { t } = useTranslation();
   const { name } = useContractAccountInfo(pageParams.address?.toString() || null, true);
 
@@ -117,7 +117,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
   const _onSubmitRpc = useCallback(async () => {
     if (!accountId || !contract || !payment || !gasLimit) return;
 
-    const wallet = new ExtensionSigner(evmProvider, accountId);
+    const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
 
     try {
       const messages = contract.interface.functions;
@@ -147,7 +147,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
     if (!accountId || !contract || !payment || !gasLimit) return;
     setIsLoading(true);
     try {
-      const wallet = new ExtensionSigner(evmProvider, accountId);
+      const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
 
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];
