@@ -4,33 +4,12 @@
 import { ExtensionSigner } from "@acala-network/bodhi/ExtensionSigner";
 import { ComponentProps as Props } from "@canvas-ui/apps/types";
 import { Button, InputAddress, InputEvmAddress } from "@canvas-ui/react-components";
+import { testAccount } from "@canvas-ui/react-components/InputEvmAddress/testAccount";
 import { useAccountId, useApi, useNotification } from "@canvas-ui/react-hooks";
-import { decodeAddress } from "@polkadot/util-crypto";
+import { keccak256 } from "@ethersproject/keccak256";
+import { SigningKey } from "@ethersproject/signing-key";
 import { default as React, useEffect, useReducer, useState } from "react";
 import { useTranslation } from "./translate";
-import { SigningKey } from "@ethersproject/signing-key";
-import { keccak256 } from '@ethersproject/keccak256'
-
-const testAccount = [
-  {
-    key: "0xdF3AeDF6cA6f52eF366584A29E71EfDC0BD22DA6",
-    name: "evm-test-account-1",
-    value: "0xdF3AeDF6cA6f52eF366584A29E71EfDC0BD22DA6",
-    pk: "0x98319d4ff8a9508c4bb0cf0b5a78d760a0b2082c02775e6e82370816fedfff48",
-  },
-  {
-    key: "0x1F7a1Bb6ccF988b07db54155B272C06FFAA2D46B",
-    name: "evm-test-account-2",
-    value: "0x1F7a1Bb6ccF988b07db54155B272C06FFAA2D46B",
-    pk: "0x081ff694633e255136bdb456c20a5fc8fed21f8b964c11bb17ff534ce80ebd59",
-  },
-  {
-    key: "0x7D2E6917C9c29d6D8A9819736481F9ed8fE1f30E",
-    name: "evm-test-account-3",
-    value: "0x7D2E6917C9c29d6D8A9819736481F9ed8fE1f30E",
-    pk: "0xa8f2d83016052e5d6d77b2f6fd5d59418922a09024cda701b3c34369ec43a766",
-  },
-];
 
 function EvmAccount({ navigateTo }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
@@ -85,17 +64,16 @@ function EvmAccount({ navigateTo }: Props): React.ReactElement<Props> {
     if (test) {
       const evmSigner = {
         async signRaw({ address, data }: any) {
-          const hashData = keccak256(data)
+          const hashData = keccak256(data);
           const signingKey = new SigningKey(test.pk);
-          console.log(address)
           return {
-            signature: signingKey.signDigest(hashData) as any
-          }
+            signature: signingKey.signDigest(hashData) as any,
+          };
         },
       };
 
       const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
-      console.log('accountEvmId', accountEvmId)
+      console.log("accountEvmId", accountEvmId);
       try {
         setIsSending(true);
         await wallet.bindAccount(accountEvmId);

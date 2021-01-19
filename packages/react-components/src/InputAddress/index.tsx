@@ -464,7 +464,6 @@ const ExportedComponent = withMulti(
         string,
         (Option | React.ReactNode)[]
       > => {
-        console.log(options, type);
         result[type] = options.map((option): Option | React.ReactNode =>
           option.value === null ? createHeader(option) : createItem(option)
         );

@@ -104,7 +104,10 @@ async function retrieve(api: ApiPromise): Promise<ChainData> {
       }),
     injectedPromise
       //@ts-ignore
-      .then((data) => data[0].accounts.get(true))
+      .then((data) => {
+        //@ts-ignore
+        return data[0]?.accounts.get(true) || []
+      })
       .then((data) => data.filter((i: any) => i.type === "ethereum"))
       .catch((error): InjectedAccountExt[] => {
         console.error("web3Enable", error);
@@ -298,13 +301,13 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
     injectedPromise
       .then((extensions) => {
         setExtensions(extensions);
-        setEvmSigner(extensions[0].signer)
+        setEvmSigner(extensions[0]?.signer)
         setEvmProvider(
           new Provider(
             options({
               provider,
               registry,
-              signer: new TestingSigner(registry, extensions?.[0]?.signer as any),
+              signer: new TestingSigner(registry, extensions[0]?.signer as any),
             })
           )
         );

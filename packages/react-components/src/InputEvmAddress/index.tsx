@@ -28,7 +28,7 @@ import createHeader from "./createHeader";
 import createItem from "./createItem";
 import { NoAccount } from "./KeyPair";
 import { Option } from "./types";
-
+import { testAccount } from "./testAccount";
 interface Props extends BareProps {
   defaultValue?: Uint8Array | string | null;
   filter?: string[];
@@ -78,27 +78,6 @@ function transformToAddress(value?: string | Uint8Array | null): string | null {
 
 function getEvmOptions() {
   const evmAccounts = getEvmAccounts();
-
-  const testAccount = [
-    {
-      key: "0xdF3AeDF6cA6f52eF366584A29E71EfDC0BD22DA6",
-      name: "evm-test-account-1",
-      value: "0xdF3AeDF6cA6f52eF366584A29E71EfDC0BD22DA6",
-      pk: "0x98319d4ff8a9508c4bb0cf0b5a78d760a0b2082c02775e6e82370816fedfff48",
-    },
-    {
-      key: "0x1F7a1Bb6ccF988b07db54155B272C06FFAA2D46B",
-      name: "evm-test-account-2",
-      value: "0x1F7a1Bb6ccF988b07db54155B272C06FFAA2D46B",
-      pk: "0x081ff694633e255136bdb456c20a5fc8fed21f8b964c11bb17ff534ce80ebd59",
-    },
-    {
-      key: "0x7D2E6917C9c29d6D8A9819736481F9ed8fE1f30E",
-      name: "evm-test-account-3",
-      value: "0x7D2E6917C9c29d6D8A9819736481F9ed8fE1f30E",
-      pk: "0xa8f2d83016052e5d6d77b2f6fd5d59418922a09024cda701b3c34369ec43a766",
-    },
-  ];
 
   // for (const t of testAccount) {
   //   const pair = keyring.keyring.createFromUri(t.pk, {}, "ethereum")
