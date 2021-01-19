@@ -9,6 +9,7 @@ import { decodeAddress } from "@polkadot/util-crypto";
 import { default as React, useEffect, useReducer, useState } from "react";
 import { useTranslation } from "./translate";
 import { SigningKey } from "@ethersproject/signing-key";
+import { keccak256 } from '@ethersproject/keccak256'
 
 const testAccount = [
   {
@@ -84,13 +85,17 @@ function EvmAccount({ navigateTo }: Props): React.ReactElement<Props> {
     if (test) {
       const evmSigner = {
         async signRaw({ address, data }: any) {
+          const hashData = keccak256(data)
           const signingKey = new SigningKey(test.pk);
-          return signingKey.signDigest(data) as any;
+          console.log(address)
+          return {
+            signature: signingKey.signDigest(hashData) as any
+          }
         },
       };
 
       const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
-
+      console.log('accountEvmId', accountEvmId)
       try {
         setIsSending(true);
         await wallet.bindAccount(accountEvmId);
