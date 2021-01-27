@@ -106,7 +106,7 @@ async function retrieve(api: ApiPromise): Promise<ChainData> {
       //@ts-ignore
       .then((data) => {
         //@ts-ignore
-        return data[0]?.accounts.get(true) || []
+        return data[0]?.accounts.get(true) || [];
       })
       .then((data) => data.filter((i: any) => i.type === "ethereum"))
       .catch((error): InjectedAccountExt[] => {
@@ -254,13 +254,14 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
   const [isApiConnected, setIsApiConnected] = useState(false);
   const [isApiInitialized, setIsApiInitialized] = useState(false);
   const [evmProvider, setEvmProvider] = useState<Provider | null>(null);
-  const [evmSigner, setEvmSigner] = useState<any>(null);
+  const [accountSigner, setAccountSigner] = useState<any>(null);
   const [extensions, setExtensions] = useState<InjectedExtension[] | undefined>();
+  
   const props = useMemo<ApiProps>(
     () => ({
       ...state,
       api,
-      evmSigner,
+      accountSigner,
       extensions,
       isApiConnected,
       isApiInitialized,
@@ -301,7 +302,7 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
     injectedPromise
       .then((extensions) => {
         setExtensions(extensions);
-        setEvmSigner(extensions[0]?.signer)
+        setAccountSigner(extensions[0]?.signer);
         setEvmProvider(
           new Provider(
             options({

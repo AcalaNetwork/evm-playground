@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { ComponentProps as Props } from "@canvas-ui/apps/types";
-import { ExtensionSigner } from "@acala-network/bodhi/ExtensionSigner";
+import { Signer as EvmSigner } from "@acala-network/bodhi";
 import { decodeAddress } from "@polkadot/util-crypto";
-
+import { keyring } from "@polkadot/ui-keyring";
 import {
   Button,
   ContractParams,
@@ -19,6 +19,7 @@ import { useAccountId, useApi, useContractAccountInfo, useNotification, useInteg
 import { useTxParams } from "@canvas-ui/react-params";
 import { extractValues } from "@canvas-ui/react-params/values";
 import { getContractForAddress } from "@canvas-ui/react-util";
+import { TestingSigner } from "@canvas-ui/react-api/TestingSigner";
 import { isNull } from "@polkadot/util";
 import BN from "bn.js";
 import { Contract } from "ethers";
@@ -55,7 +56,7 @@ const GASLIMIT = new BN("300000000");
 
 function Call({ className, navigateTo }: Props): React.ReactElement<Props> | null {
   const pageParams: { address?: string; messageIndex?: string } = useParams();
-  const { api, evmProvider, evmSigner } = useApi();
+  const { api, evmProvider, accountSigner } = useApi();
   const { t } = useTranslation();
   const { name } = useContractAccountInfo(pageParams.address?.toString() || null, true);
 
@@ -117,7 +118,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
   const _onSubmitRpc = useCallback(async () => {
     if (!accountId || !contract || !payment || !gasLimit) return;
 
-    const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
+    const wallet = new EvmSigner(evmProvider, accountId, accountSigner);
 
     try {
       const messages = contract.interface.functions;
@@ -147,7 +148,21 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
     if (!accountId || !contract || !payment || !gasLimit) return;
     setIsLoading(true);
     try {
-      const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
+      const pair = keyring.getPair(accountId);
+
+      const {
+        meta: { isInjected },
+      } = pair;
+
+      let signer: any;
+
+      if (isInjected) {
+        signer = accountSigner;
+      } else {
+        signer = new TestingSigner(api.registry, pair);
+      }
+
+      const wallet = new EvmSigner(evmProvider, accountId, signer);
 
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];

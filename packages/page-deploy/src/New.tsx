@@ -1,11 +1,11 @@
 // Copyright 2017-2020 @canvas-ui/app-execute authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { ExtensionSigner } from "@acala-network/bodhi/ExtensionSigner";
+import { Signer as EvmSigner } from "@acala-network/bodhi";
 import { Code } from "@canvas-ui/apps/types";
 import { Button, ContractParams, InputAddress, InputName, InputNumber, Labelled } from "@canvas-ui/react-components";
 import { ELEV_2_CSS } from "@canvas-ui/react-components/styles/constants";
-import { useAbi, useAccountId, useApi, useIntegerBn, useNonEmptyString } from "@canvas-ui/react-hooks";
+import { useAbi, useAccountId, useApi, useIntegerBn, useNonEmptyString, useNotification } from "@canvas-ui/react-hooks";
 import { useTxParams } from "@canvas-ui/react-params";
 import { truncate } from "@canvas-ui/react-util";
 import keyring from "@polkadot/ui-keyring";
@@ -17,6 +17,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useTranslation } from "./translate";
 import { ComponentProps as Props } from "./types";
+import { TestingSigner } from "@canvas-ui/react-api/TestingSigner";
 
 const ENDOWMENT = new BN("0");
 const GASLIMIT = new BN("300000000");
@@ -36,8 +37,9 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
   const [gasLimit, setGasLimit, isGasLimitValid] = useIntegerBn(GASLIMIT);
   const [name, setName, isNameValid, isNameError] = useNonEmptyString(t(defaultContractName(code?.name)));
   const { abi, bytecode } = useAbi(code);
-  const { evmProvider, evmSigner, api } = useApi();
+  const { evmProvider, accountSigner, api } = useApi();
   const [isSending, setIsSending] = useState(false);
+  const showNotification = useNotification();
 
   const args = useMemo(() => {
     const constructors = abi?.filter((x: any) => x.type === "constructor") || [];
@@ -67,9 +69,23 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
     setIsSending(true);
 
     try {
-      const wallet = new ExtensionSigner(evmProvider, accountId, evmSigner);
+      const pair = keyring.getPair(accountId);
 
-      const factory = new ContractFactory(abi, bytecode, wallet as any);
+      const {
+        meta: { isInjected },
+      } = pair;
+
+      let signer: any;
+
+      if (isInjected) {
+        signer = accountSigner;
+      } else {
+        signer = new TestingSigner(api.registry, pair);
+      }
+      
+      const wallet = new EvmSigner(evmProvider, accountId, signer);
+
+      const factory = new ContractFactory(abi, bytecode, wallet);
       const contract = await factory.deploy(...values.map((x) => x.value), {
         gasLimit: "3000000000",
       });
@@ -85,7 +101,17 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
         tags: [],
       });
 
+      showNotification({
+        action: 'Deploy Contract',
+        status: "success",
+      });
+
       navigateTo.execute();
+    } catch (error) {
+      showNotification({
+        action: typeof error === "string" ? error : error && error.message ? error.message : "",
+        status: "error",
+      });
     } finally {
       setIsSending(false);
     }

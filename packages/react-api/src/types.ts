@@ -30,7 +30,7 @@ export interface ApiState {
 export interface ApiProps extends ApiState {
   api: ApiPromise;
   evmProvider: Provider;
-  evmSigner: any;
+  accountSigner: InjectedSigner;
   extensions?: InjectedExtension[];
   isApiConnected: boolean;
   isApiInitialized: boolean;
