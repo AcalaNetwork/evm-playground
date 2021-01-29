@@ -26,6 +26,7 @@ import { useTranslation } from "../translate";
 import { BareProps } from "../types";
 import createHeader from "./createHeader";
 import createItem from "./createItem";
+import CopyButton from "../CopyButton";
 import { NoAccount } from "./KeyPair";
 import { Option } from "./types";
 
@@ -410,6 +411,7 @@ function InputAddress({
             <>
               {t("EVM Address: ")}
               {evmAddress}
+              <CopyButton style={{ position: "relative", top: "-3px" }} isAddress value={evmAddress} />
             </>
           }
         />
