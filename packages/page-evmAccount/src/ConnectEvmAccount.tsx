@@ -194,15 +194,25 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
           </div>
         )}
         {!isDefault && (
-          <InputEvmAddress
-            defaultValue={accountEvmId}
-            help={t<string>("The evm account that needs to be bound")}
-            label={<div>{t<string>("Evm Account")}</div>}
-            onChange={(value) => setAccountEvmId(value)}
-            helpText={isClaimedEvm ? "An substrate account already exists to bind to this account" : ""}
-            type="evm"
-            value={accountEvmId}
-          />
+          <div>
+            <h3 style={{ marginBottom: "1.5em" }}>Step 3: Bind an existing EVM address</h3>
+            <span>
+              This feature is coming soon, read how it works{" "}
+              <a
+                href="https://app.gitbook.com/@acala/s/wiki/learn/basics/acala-evm/acala-evm-composable-defi-stack/evm-account#2-bind-an-existing-ethereum-account"
+                target="_blank"
+              >
+                here
+              </a>.
+            </span>
+            <InputEvmAddress
+              defaultValue={accountEvmId}
+              onChange={(value) => setAccountEvmId(value)}
+              helpText={isClaimedEvm ? "An substrate account already exists to bind to this account" : ""}
+              type="evm"
+              value={accountEvmId}
+            />
+          </div>
         )}
 
         <Button.Group>
