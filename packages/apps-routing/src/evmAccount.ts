@@ -12,7 +12,7 @@ export default function create (t: <T = string> (key: string, text: string, opti
       needsAccounts: true,
       needsApi: []
     },
-    name: 'evmAccount',
-    text: t<string>('nav.evmAccount', 'EvmAccount', { ns: 'apps-routing' })
+    name: 'Setup EVM Account',
+    text: t<string>('nav.evmAccount', 'Setup EVM Account', { ns: 'apps-routing' })
   };
 }

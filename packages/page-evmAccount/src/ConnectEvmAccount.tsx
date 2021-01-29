@@ -3,16 +3,17 @@
 
 import { Signer as EvmSigner } from "@acala-network/bodhi";
 import { ComponentProps as Props } from "@canvas-ui/apps/types";
-import { Button, InputAddress, Toggle, InputEvmAddress } from "@canvas-ui/react-components";
+import { Button, InputAddress, Input, Toggle, InputEvmAddress } from "@canvas-ui/react-components";
 import { testAccount } from "@canvas-ui/react-components/InputEvmAddress/testAccount";
 import { useAccountId, useApi, useNotification } from "@canvas-ui/react-hooks";
 import { keccak256 } from "@ethersproject/keccak256";
 import { SigningKey } from "@ethersproject/signing-key";
-import { default as React, useEffect, useReducer, useState } from "react";
+import { default as React, useEffect, useMemo, useReducer, useState } from "react";
 import { useTranslation } from "./translate";
 import { Link } from "react-router-dom";
 import { keyring } from "@polkadot/ui-keyring";
 import { TestingSigner } from "@canvas-ui/react-api/TestingSigner";
+import { Form, Radio } from "semantic-ui-react";
 
 export default React.memo(function EvmAccount({ navigateTo }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
@@ -40,7 +41,7 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
     } else {
       setIsClaimed(false);
     }
-  }, [accountId, i]);
+  }, [evmProvider, accountId, i]);
 
   useEffect(() => {
     if (accountEvmId && evmProvider && evmProvider.api) {
@@ -56,7 +57,15 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
     } else {
       setIsClaimedEvm(false);
     }
-  }, [accountEvmId, i]);
+  }, [evmProvider, accountEvmId, i]);
+
+  const defaultAddress = useMemo(() => {
+    if (!accountId || !evmProvider) {
+      return "";
+    }
+    const wallet = new EvmSigner(evmProvider, accountId, accountSigner);
+    return wallet.computeDefaultEvmAddress();
+  }, [accountId, evmProvider, accountSigner]);
 
   const claimEVMAccount = async () => {
     if (!accountId || !evmProvider || (!isDefault && !accountEvmId)) {
@@ -107,30 +116,83 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
   return (
     <main className="upload--App">
       <header>
-        <h1>{t<string>("Bind Evm Account")}</h1>
+        <h1>{t<string>("Setup EVM Account")}</h1>
         <div className="instructions">
-          {t<string>("You can specify an evm account that is bound to your substrate account. ")}
-          <Link to={"/evmAccount/new"}>Generate an new evm account</Link>
+          {t<string>(
+            "Bind an EVM account to your Substrate account, so that you can use a single account for any transactions on Acala."
+          )}
+          <a
+            target="_blank"
+            href={"https://wiki.acala.network/learn/basics/acala-evm/acala-evm-composable-defi-stack/evm-account"}
+          >
+            {" "}
+            Read more.
+          </a>
         </div>
       </header>
       <section>
-        <InputAddress
-          defaultValue={accountId}
-          help={t<string>("Specify the substrate account that is bound to the evm account")}
-          label={t<string>("Substrate Account")}
-          onChange={setAccountId}
-          // type="allPlus"
-          withoutEvm={true}
-          helpText={isClaimed ? "An evm account already exists to bind to this account" : ""}
-          value={accountId}
-        />
+        <div>
+          <h3 style={{ marginBottom: "1.5em" }}>Step 1: Select a Substrate Account.</h3>
+          <span>
+            Note: if you have not yet installed {"polkadot{js}"} browser extension and set up a Substrate, please follow
+            <a
+              href="https://wiki.polkadot.network/docs/en/learn-account-generation#polkadotjs-browser-plugin"
+              target="_blank"
+            >
+              instructions here
+            </a>{" "}
+            before proceeding.
+          </span>
+          <InputAddress
+            defaultValue={accountId}
+            // help={t<string>("Specify the substrate account that is bound to the evm account")}
+            // label={t<string>("Substrate Account")}
+            onChange={setAccountId}
+            // type="allPlus"
+            withoutEvm={true}
+            isErrorStatus={isClaimed}
+            helpText={isClaimed ? "An evm account already exists to bind to this account" : ""}
+            value={accountId}
+          />
+        </div>
+        <div>
+          <h3 style={{ marginBottom: "1.5em" }}>Step 2: Bind an EVM to the selected Substrate Account</h3>
+          <span style={{ marginBottom: "20px", display: "inline-block" }}>
+            You can bind an auto-generated EVM address or an existing EVM account. Read more{" "}
+            <a
+              href="https://app.gitbook.com/@acala/s/wiki/learn/basics/acala-evm/acala-evm-composable-defi-stack/single-account"
+              target="_blank"
+            >
+              here
+            </a>
+            .
+          </span>
 
-        <Toggle
-          label={t<string>(isDefault ? "Bind default evm Account" : "Bind existing evm address")}
-          onChange={setIsDefault}
-          value={isDefault}
-        />
-
+          <Form.Field style={{ marginBottom: "16px" }}>
+            <Radio
+              label="Bind an auto-generated EVM address"
+              name="radioGroup"
+              value="this"
+              checked={isDefault}
+              onChange={() => setIsDefault(true)}
+            />
+          </Form.Field>
+          <Form.Field>
+            <Radio
+              label="Bind an existing EVM address (Coming soon)"
+              name="radioGroup"
+              value="that"
+              checked={!isDefault}
+              onChange={() => setIsDefault(false)}
+            />
+          </Form.Field>
+        </div>
+        {isDefault && (
+          <div>
+            <h3 style={{ marginBottom: "0" }}>Step 3: Bind an auto-generated EVM address</h3>
+            <Input isDisabled={true} value={`Generated EVM address: ${defaultAddress}`} />
+          </div>
+        )}
         {!isDefault && (
           <InputEvmAddress
             defaultValue={accountEvmId}
@@ -149,7 +211,7 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
             isDisabled={isSending || isClaimed || (!isDefault && isClaimedEvm)}
             isPrimary
             onClick={() => claimEVMAccount()}
-            label={t<string>("Claim")}
+            label={t<string>("Bind")}
           />
         </Button.Group>
       </section>

@@ -1,48 +1,51 @@
 // Copyright 2017-2020 @canvas-ui/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { BareProps as Props } from '@canvas-ui/react-components/types';
+import { BareProps as Props } from "@canvas-ui/react-components/types";
 
-import React from 'react';
-import { NavLink } from 'react-router-dom';
-import styled from 'styled-components';
-import { Dropdown, Icon, Tooltip } from '@canvas-ui/react-components';
-import { useEndpointOptions } from '@canvas-ui/react-util';
-import { ELEV_4_CSS } from '@canvas-ui/react-components/styles/constants';
-import { useEndpoints, useSettings } from '@canvas-ui/react-hooks';
+import React from "react";
+import { NavLink } from "react-router-dom";
+import styled from "styled-components";
+import { Dropdown, Icon, Tooltip } from "@canvas-ui/react-components";
+import { useEndpointOptions } from "@canvas-ui/react-util";
+import { ELEV_4_CSS } from "@canvas-ui/react-components/styles/constants";
+import { useEndpoints, useSettings } from "@canvas-ui/react-hooks";
 
-import { useTranslation } from '../translate';
+import { useTranslation } from "../translate";
 
-function Settings ({ className }: Props): React.ReactElement<Props> {
+function Settings({ className }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { onChangeKey } = useSettings(true);
-  const endpointState = useEndpoints(onChangeKey('apiUrl'));
+  const endpointState = useEndpoints(onChangeKey("apiUrl"));
   const endpointOptions = useEndpointOptions(endpointState, t, true);
 
   const { onChangeUrl, url } = endpointState;
 
   return (
-    <div className={`apps--SideBar-settings ${className || ''}`}>
-      <Dropdown
-        className='chain-dropdown'
-        defaultValue={url}
-        onChange={onChangeUrl}
-        options={endpointOptions}
-        withLabel={false}
-      />
-      <NavLink
-        className='settings-link'
-        data-for='settings-link'
-        data-tip
-        to='/settings'
-      >
-        <Icon name='setting' />
-      </NavLink>
-      <Tooltip
-        place='top'
-        text={t<string>('Settings')}
-        trigger='settings-link'
-      />
+    <div>
+      <div style={{ position: "fixed", bottom: "95px", left: "20px" }}>
+        <a href="https://wiki.acala.network/learn/basics/acala-evm" target="_blank">
+          Docs
+        </a>
+      </div>
+      <div style={{ position: "fixed", bottom: "65px", left: "20px" }}>
+        <a href="https://wiki.acala.network/learn/basics/acala-evm" target="_blank">
+          Support Discord
+        </a>
+      </div>
+      <div className={`apps--SideBar-settings ${className || ""}`}>
+        <Dropdown
+          className="chain-dropdown"
+          defaultValue={url}
+          onChange={onChangeUrl}
+          options={endpointOptions}
+          withLabel={false}
+        />
+        <NavLink className="settings-link" data-for="settings-link" data-tip to="/settings">
+          <Icon name="setting" />
+        </NavLink>
+        <Tooltip place="top" text={t<string>("Settings")} trigger="settings-link" />
+      </div>
     </div>
   );
 }
@@ -99,7 +102,7 @@ export default React.memo(styled(Settings)`
               }
 
               &:after {
-                content: '\f00c';
+                content: "\f00c";
                 font-family: Icons;
                 font-size: 1rem;
               }
@@ -124,7 +127,8 @@ export default React.memo(styled(Settings)`
     height: 32px;
     margin-left: 0.75rem;
 
-    &, &:hover {
+    &,
+    &:hover {
       color: var(--grey50);
     }
 

@@ -36,6 +36,7 @@ interface Props extends BareProps {
   hideAddress?: boolean;
   isDisabled?: boolean;
   isError?: boolean;
+  isErrorStatus?: boolean;
   isInput?: boolean;
   isMultiple?: boolean;
   label?: React.ReactNode;
@@ -174,6 +175,7 @@ function InputAddress({
   hideAddress = false,
   isDisabled = false,
   isError,
+  isErrorStatus,
   isInput,
   isMultiple,
   label,
@@ -378,7 +380,7 @@ function InputAddress({
           text={<>{t("Please reload this app with the Polkadot extension to show available accounts.")}</>}
         />
       )}
-      {helpText ? <InputStatus text={helpText} /> : null}
+      {helpText ? <InputStatus isError={isErrorStatus} text={helpText} /> : null}
     </Dropdown>
   );
 }

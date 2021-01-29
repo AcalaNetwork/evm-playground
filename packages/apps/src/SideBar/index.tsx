@@ -1,17 +1,17 @@
 // Copyright 2017-2020 @canvas-ui/apps authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Routes } from '@canvas-ui/apps-routing/types';
+import { Routes } from "@canvas-ui/apps-routing/types";
 
-import React, { useMemo } from 'react';
-import styled from 'styled-components';
-import { Responsive } from 'semantic-ui-react';
-import createRoutes from '@canvas-ui/apps-routing';
-import { Menu, media } from '@canvas-ui/react-components';
+import React, { useMemo } from "react";
+import styled from "styled-components";
+import { Responsive } from "semantic-ui-react";
+import createRoutes from "@canvas-ui/apps-routing";
+import { Menu, media } from "@canvas-ui/react-components";
 
-import { useTranslation } from '../translate';
-import Item from './Item';
-import Settings from './Settings';
+import { useTranslation } from "../translate";
+import Item from "./Item";
+import Settings from "./Settings";
 
 interface Props {
   className?: string;
@@ -22,42 +22,27 @@ interface Props {
   toggleMenu: () => void;
 }
 
-function SideBar ({ className = '', handleResize, isCollapsed }: Props): React.ReactElement<Props> {
+function SideBar({ className = "", handleResize, isCollapsed }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
 
-  const routing = useMemo<Routes>(
-    () => createRoutes(t),
-    [t]
-  );
+  const routing = useMemo<Routes>(() => createRoutes(t), [t]);
 
   return (
     <Responsive
-      className={`apps--SideBar-Wrapper ${className} ${isCollapsed ? 'collapsed' : 'expanded'}`}
+      className={`apps--SideBar-Wrapper ${className} ${isCollapsed ? "collapsed" : "expanded"}`}
       onUpdate={handleResize}
     >
-      <div className='apps--SideBar'>
-        <Menu
-          secondary
-          vertical
-        >
-          <div className='apps--SideBar-Scroll'>
-            {routing.map((route, index): React.ReactNode => (
-              route
-                ? (
-                  <Item
-                    isCollapsed={isCollapsed}
-                    key={route.name}
-                    onClick={handleResize}
-                    route={route}
-                  />
+      <div className="apps--SideBar">
+        <Menu secondary vertical>
+          <div className="apps--SideBar-Scroll">
+            {routing.map(
+              (route, index): React.ReactNode =>
+                route ? (
+                  <Item isCollapsed={isCollapsed} key={route.name} onClick={handleResize} route={route} />
+                ) : (
+                  <Menu.Divider hidden key={index} />
                 )
-                : (
-                  <Menu.Divider
-                    hidden
-                    key={index}
-                  />
-                )
-            ))}
+            )}
           </div>
         </Menu>
         <Settings />
@@ -66,7 +51,7 @@ function SideBar ({ className = '', handleResize, isCollapsed }: Props): React.R
   );
 }
 
-const sideBorderWidth = '0.65rem';
+const sideBorderWidth = "0.65rem";
 
 export default React.memo(styled(SideBar)`
   display: flex;
@@ -145,7 +130,7 @@ export default React.memo(styled(SideBar)`
     .apps--SideBar-collapse {
       bottom: 0;
       left: 0;
-      padding: 0.75rem 0 .75rem 0.65rem;
+      padding: 0.75rem 0 0.75rem 0.65rem;
       position: sticky;
       right: 0;
       text-align: left;
@@ -169,7 +154,7 @@ export default React.memo(styled(SideBar)`
       width: 6px;
 
       &:hover {
-        background: rgba(255,255,255,0.15);
+        background: rgba(255, 255, 255, 0.15);
         cursor: pointer;
       }
     }

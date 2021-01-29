@@ -1,10 +1,24 @@
 // Copyright 2017-2020 @canvas-ui/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { css } from 'styled-components';
-import { ELEV_2_CSS, ELEV_4_CSS } from './constants';
+import { css } from "styled-components";
+import { ELEV_2_CSS, ELEV_4_CSS } from "./constants";
 
 export default css`
+  .ui.checkbox label,
+  .ui.checkbox + label {
+    color: var(--grey80);
+  }
+
+  .ui.checkbox label:hover,
+  .ui.checkbox + label:hover {
+    color: var(--grey80);
+  }
+  
+  .ui.checkbox input:focus ~ label {
+    color: var(--grey80);
+  }
+
   .ui--output {
     ${ELEV_4_CSS}
     color: var(--grey80);
@@ -91,7 +105,7 @@ export default css`
         background: rgba(230, 230, 230, 0.8) !important;
         border: 0 !important;
         border-radius: 0 !important;
-        box-shadow: 0 3px 3px rgba(0,0,0,.2);
+        box-shadow: 0 3px 3px rgba(0, 0, 0, 0.2);
       }
     }
 
