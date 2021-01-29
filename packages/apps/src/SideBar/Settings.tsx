@@ -29,7 +29,7 @@ function Settings({ className }: Props): React.ReactElement<Props> {
         </a>
       </div>
       <div style={{ position: "fixed", bottom: "65px", left: "20px" }}>
-        <a href="https://wiki.acala.network/learn/basics/acala-evm" target="_blank">
+        <a href="https://discord.com/invite/vdbFVCH" target="_blank">
           Support Discord
         </a>
       </div>
