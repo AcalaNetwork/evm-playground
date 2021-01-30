@@ -30,7 +30,7 @@ function createLive(t: TFunction): LinkOption[] {
         ns: "apps-config",
         replace: { host: "Acala" },
       }),
-      value: "wss://node-6760489407477948416.rz.onfinality.io/ws?apikey=5a55647a-540a-401b-9ceb-631c80d28946",
+      value: "wss://mandala.laminar.codes/ws",
     },
   ];
 }
