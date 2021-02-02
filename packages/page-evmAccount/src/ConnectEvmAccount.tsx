@@ -20,6 +20,7 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
   const [accountId, setAccountId] = useAccountId();
   const [accountEvmId, setAccountEvmId] = useState<string | null>();
   const [isSending, setIsSending] = useState(false);
+  const [isSendingFaucet, setIsSendingFaucet] = useState(false);
   const [isDefault, setIsDefault] = useState(true);
   const [isClaimed, setIsClaimed] = useState(false);
   const [isClaimedEvm, setIsClaimedEvm] = useState(false);
@@ -67,6 +68,47 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
     return wallet.computeDefaultEvmAddress();
   }, [accountId, evmProvider, accountSigner]);
 
+  const faucet = () => {
+    if (!accountId) return;
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    setIsSendingFaucet(true);
+    window
+      .fetch("https://api.polkawallet.io/v2/faucet-tc6/faucet", {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({
+          account: accountId,
+          address: accountId,
+          strategy: "normal",
+        }),
+      })
+      .then((response: any) => response.json())
+      .then((result: any) => {
+        if (result.code !== 200) {
+          showNotification({
+            action: "Faucet",
+            message: result.message,
+            status: "error",
+          });
+        } else {
+          showNotification({
+            action: "Faucet",
+            status: "success",
+          });
+        }
+      })
+      .catch((error: any) => {
+        showNotification({
+          action: "Faucet",
+          message: error.message,
+          status: "error",
+        });
+      })
+      .finally(() => {
+        setIsSendingFaucet(false);
+      });
+  };
   const claimEVMAccount = async () => {
     if (!accountId || !evmProvider || (!isDefault && !accountEvmId)) {
       setIsSending(false);
@@ -154,6 +196,18 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
             helpText={isClaimed ? "An evm account already exists to bind to this account" : ""}
             value={accountId}
           />
+          <div style={{ display: "flex", marginTop: "16px", alignItems: "center" }}>
+            <div style={{ marginRight: "16px" }}>
+              <Button
+                isLoading={isSendingFaucet}
+                isDisabled={!accountId}
+                isPrimary
+                onClick={() => faucet()}
+                label={t<string>("Faucet")}
+              />
+            </div>
+            <div>Fund the account by using the faucet</div>
+          </div>
         </div>
         <div>
           <h3 style={{ marginBottom: "1.5em" }}>Step 2: Bind an EVM to the selected Substrate Account</h3>
@@ -203,7 +257,8 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
                 target="_blank"
               >
                 here
-              </a>.
+              </a>
+              .
             </span>
             <InputEvmAddress
               defaultValue={accountEvmId}
