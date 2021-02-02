@@ -195,10 +195,6 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
       address: "0x0000000000000000000000000000000000000805",
     },
     {
-      name: "State Rent",
-      address: "0x0000000000000000000000000000000000000806",
-    },
-    {
       name: "Oracle Price Feed",
       address: "0x0000000000000000000000000000000000000807",
     },
