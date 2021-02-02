@@ -268,7 +268,7 @@ function Api({ children, store, url }: Props): React.ReactElement<Props> | null 
   const [evmProvider, setEvmProvider] = useState<Provider | null>(null);
   const [accountSigner, setAccountSigner] = useState<any>(null);
   const [extensions, setExtensions] = useState<InjectedExtension[] | undefined>();
-  
+
   const props = useMemo<ApiProps>(
     () => ({
       ...state,
