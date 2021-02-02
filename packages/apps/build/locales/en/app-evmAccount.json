@@ -1,0 +1,22 @@
+{
+  "Account name": "Account name",
+  "Bind": "Bind",
+  "Bind Evm Account": "Bind Evm Account",
+  "Bind an EVM account to your Substrate account, so that you can use a single account for any transactions on Acala.": "Bind an EVM account to your Substrate account, so that you can use a single account for any transactions on Acala.",
+  "Claim": "Claim",
+  "Download Keystore": "Download Keystore",
+  "Evm Account": "Evm Account",
+  "Generate a new evm account": "Generate a new evm account",
+  "Password for keystore": "Password for keystore",
+  "Private key of evm account": "Private key of evm account",
+  "Setup EVM Account": "Setup EVM Account",
+  "Specify the substrate account that is bound to the evm account": "Specify the substrate account that is bound to the evm account",
+  "Substrate Account": "Substrate Account",
+  "The evm account that needs to be bound": "The evm account that needs to be bound",
+  "You can specify an evm account that is bound to your substrate account.": "You can specify an evm account that is bound to your substrate account.",
+  "You can specify an evm account that is bound to your substrate account. ": "You can specify an evm account that is bound to your substrate account. ",
+  "ethereum private key": "ethereum private key",
+  "name": "name",
+  "new account": "new account",
+  "password": "password"
+}
