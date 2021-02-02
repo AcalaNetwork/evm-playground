@@ -194,6 +194,18 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
       name: "RENBTC",
       address: "0x0000000000000000000000000000000000000805",
     },
+    {
+      name: "State Rent",
+      address: "0x0000000000000000000000000000000000000806",
+    },
+    {
+      name: "Oracle Price Feed",
+      address: "0x0000000000000000000000000000000000000807",
+    },
+    {
+      name: "On-chain Automatic Scheduler",
+      address: "0x0000000000000000000000000000000000000808",
+    },
   ]) {
     const json = {
       contract: {
