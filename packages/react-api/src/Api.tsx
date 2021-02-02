@@ -28,6 +28,8 @@ import { Provider } from "@acala-network/bodhi";
 import ApiContext from "./ApiContext";
 import registry from "./typeRegistry";
 import ERC20 from "./ERC20";
+import Oracle from "./Oracle";
+import ScheduleCall from "./ScheduleCall";
 import { setEvmAccounts } from "./util/getEvmAccounts";
 
 interface Props {
@@ -169,7 +171,7 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
 
   (keyring as any).initKeyring(options);
 
-  for (const { name, address } of [
+  for (const { name, address, abi } of [
     {
       name: "ACA",
       address: "0x0000000000000000000000000000000000000800",
@@ -197,15 +199,17 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
     {
       name: "Oracle Price Feed",
       address: "0x0000000000000000000000000000000000000807",
+      abi: Oracle,
     },
     {
       name: "On-chain Automatic Scheduler",
       address: "0x0000000000000000000000000000000000000808",
+      abi: ScheduleCall,
     },
   ]) {
     const json = {
       contract: {
-        abi: ERC20,
+        abi: abi || ERC20,
         genesisHash: "0x0000000000000000000000000000000000000000",
       },
       name,
