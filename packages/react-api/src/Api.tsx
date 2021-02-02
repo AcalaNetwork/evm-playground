@@ -182,6 +182,18 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
       name: "DOT",
       address: "0x0000000000000000000000000000000000000802",
     },
+    {
+      name: "XBTC",
+      address: "0x0000000000000000000000000000000000000803",
+    },
+    {
+      name: "LDOT",
+      address: "0x0000000000000000000000000000000000000804",
+    },
+    {
+      name: "RENBTC",
+      address: "0x0000000000000000000000000000000000000805",
+    },
   ]) {
     const json = {
       contract: {
