@@ -135,9 +135,9 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
             "Specify the user account to use for this deployment. Any fees will be deducted from this account."
           )}
           isInput={false}
-          label={t<string>("deployment account")}
+          label={t<string>("Deployment account")}
           onChange={setAccountId}
-          type="allPlus"
+          // type="allPlus"
           value={accountId}
         />
         <InputName isContract isError={isNameError} onChange={setName} value={name || ""} />

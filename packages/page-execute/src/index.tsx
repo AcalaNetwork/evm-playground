@@ -18,6 +18,8 @@ function ExecuteApp ({ basePath, className, navigateTo }: Props): React.ReactEle
   const { allAccounts, isReady: isAccountsReady } = useAccounts();
   const { allContracts, hasContracts, isContract, isReady: isContractsReady } = useContracts();
 
+  console.log(allContracts)
+  
   const componentProps = useMemo(
     (): ComponentProps => ({
       accounts: allAccounts,

@@ -22,10 +22,10 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
   const [isSending, setIsSending] = useState(false);
   const [isSendingFaucet, setIsSendingFaucet] = useState(false);
   const [isDefault, setIsDefault] = useState(true);
-  const [isClaimed, setIsClaimed] = useState(false);
-  const [isClaimedEvm, setIsClaimedEvm] = useState(false);
+  const [isClaimed, setIsClaimed] = useState("");
+  const [isClaimedEvm, setIsClaimedEvm] = useState("");
   const [i, update] = useReducer((x) => x + 1, 0);
-  const { hasInjectedAccounts, evmProvider, accountSigner, api } = useApi();
+  const { hasInjectedAccounts, evmProvider, accountSigner, api, systemChain } = useApi();
   const showNotification = useNotification();
 
   useEffect(() => {
@@ -33,14 +33,14 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
       evmProvider.api.isReady.then(() => {
         evmProvider.api.query.evmAccounts.evmAddresses(accountId).then((result) => {
           if (result.isEmpty) {
-            setIsClaimed(false);
+            setIsClaimed("");
           } else {
-            setIsClaimed(true);
+            setIsClaimed(result.toString());
           }
         });
       });
     } else {
-      setIsClaimed(false);
+      setIsClaimed("");
     }
   }, [evmProvider, accountId, i]);
 
@@ -49,14 +49,14 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
       evmProvider.api.isReady.then(() => {
         evmProvider.api.query.evmAccounts.accounts(accountEvmId).then((result) => {
           if (result.isEmpty) {
-            setIsClaimedEvm(false);
+            setIsClaimedEvm("");
           } else {
-            setIsClaimedEvm(true);
+            setIsClaimedEvm(result.toString());
           }
         });
       });
     } else {
-      setIsClaimedEvm(false);
+      setIsClaimedEvm("");
     }
   }, [evmProvider, accountEvmId, i]);
 
@@ -144,6 +144,8 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
         action: "Claim Evm Account",
         status: "success",
       });
+
+      navigateTo.bindSuccess(accountId)();
     } catch (error) {
       showNotification({
         action: typeof error === "string" ? error : error && error.message ? error.message : "",
@@ -161,7 +163,7 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
         <h1>{t<string>("Setup EVM Account")}</h1>
         <div className="instructions">
           {t<string>(
-            "Bind an EVM account to your Substrate account, so that you can use a single account for any transactions on Acala."
+            "Bind an EVM account to your Substrate account, so that you can use a single account for any transactions on Acala. "
           )}
           <a
             target="_blank"
@@ -176,7 +178,7 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
         <div>
           <h3 style={{ marginBottom: "1.5em" }}>Step 1: Select a Substrate Account.</h3>
           <span>
-            Note: if you have not yet installed {"polkadot{js}"} browser extension and set up a Substrate, please follow
+            Note: if you have not yet installed {"polkadot{js}"} browser extension and set up a Substrate, please follow{" "}
             <a
               href="https://wiki.polkadot.network/docs/en/learn-account-generation#polkadotjs-browser-plugin"
               target="_blank"
@@ -192,22 +194,24 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
             onChange={setAccountId}
             // type="allPlus"
             withoutEvm={true}
-            isErrorStatus={isClaimed}
-            helpText={isClaimed ? "An evm account already exists to bind to this account" : ""}
+            isErrorStatus={!!isClaimed}
+            helpText={!!isClaimed ? `${isClaimed} is already bound to this account` : ""}
             value={accountId}
           />
-          <div style={{ display: "flex", marginTop: "16px", alignItems: "center" }}>
-            <div style={{ marginRight: "16px" }}>
-              <Button
-                isLoading={isSendingFaucet}
-                isDisabled={!accountId}
-                isPrimary
-                onClick={() => faucet()}
-                label={t<string>("Faucet")}
-              />
+          {systemChain === "Acala Mandala TC6" ? (
+            <div style={{ display: "flex", marginTop: "16px", alignItems: "center" }}>
+              <div style={{ marginRight: "16px" }}>
+                <Button
+                  isLoading={isSendingFaucet}
+                  isDisabled={!accountId}
+                  isPrimary
+                  onClick={() => faucet()}
+                  label={t<string>("Faucet")}
+                />
+              </div>
+              <div>Fund the account by using the faucet</div>
             </div>
-            <div>Fund the account by using the faucet</div>
-          </div>
+          ) : null}
         </div>
         <div>
           <h3 style={{ marginBottom: "1.5em" }}>Step 2: Bind an EVM to the selected Substrate Account</h3>
@@ -263,7 +267,7 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
             <InputEvmAddress
               defaultValue={accountEvmId}
               onChange={(value) => setAccountEvmId(value)}
-              helpText={isClaimedEvm ? "An substrate account already exists to bind to this account" : ""}
+              helpText={!!isClaimedEvm ? `${isClaimedEvm} is already bound to this account` : ""}
               type="evm"
               value={accountEvmId}
             />
@@ -273,7 +277,7 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
         <Button.Group>
           <Button
             isLoading={isSending}
-            isDisabled={isSending || isClaimed || (!isDefault && isClaimedEvm)}
+            isDisabled={isSending || !!isClaimed || (!isDefault && !!isClaimedEvm)}
             isPrimary
             onClick={() => claimEVMAccount()}
             label={t<string>("Bind")}

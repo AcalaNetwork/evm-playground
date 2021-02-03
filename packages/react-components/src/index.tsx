@@ -5,6 +5,7 @@ export { default as Abi } from './Abi';
 export { default as AccountIndex } from './AccountIndex';
 export { default as AccountName } from './AccountName';
 export { default as AddressMini } from './AddressMini';
+export { default as AddressSmall } from './AddressSmall';
 export { default as Badge } from './Badge';
 export { default as Balance } from './Balance';
 export { default as Bonded } from './Bonded';

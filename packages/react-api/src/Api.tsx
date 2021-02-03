@@ -206,7 +206,7 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
       address: "0x0000000000000000000000000000000000000808",
       abi: ScheduleCall,
     },
-  ]) {
+  ].reverse()) {
     const json = {
       contract: {
         abi: abi || ERC20,

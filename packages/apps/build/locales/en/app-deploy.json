@@ -13,6 +13,7 @@
   "Deploy Another Contract": "Deploy Another Contract",
   "Deploy {{contractName}}": "Deploy {{contractName}}",
   "Deployment Constructor": "Deployment Constructor",
+  "Deployment account": "Deployment account",
   "Execute Contract": "Execute Contract",
   "Sign and submit to instantiate this contract derived from the code hash.": "Sign and submit to instantiate this contract derived from the code hash.",
   "Sign and submite to instantiate this contract derived from the code hash.": "Sign and submite to instantiate this contract derived from the code hash.",

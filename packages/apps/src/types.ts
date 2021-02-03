@@ -8,8 +8,10 @@ import { AnyJson } from '@polkadot/types/types';
 
 export interface AppNavigation {
   deploy: VoidFn;
+  newEvmAccount: VoidFn;
   deployNew: (_: string, __?: number) => VoidFn;
   deploySuccess: (_: string) => VoidFn;
+  bindSuccess: (_: string) => VoidFn;
   execute: VoidFn;
   executeAdd: VoidFn;
   executeCall: (_: string, __?: number) => VoidFn;

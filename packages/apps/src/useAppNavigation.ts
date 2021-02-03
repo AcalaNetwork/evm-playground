@@ -11,7 +11,7 @@ export default function useAppNavigation(): AppNavigation {
 
   const navigator = useCallback(
     (path: string): (() => void) => {
-      return function(): void {
+      return function (): void {
         history.push(path);
       };
     },
@@ -20,6 +20,7 @@ export default function useAppNavigation(): AppNavigation {
 
   return {
     deploy: navigator("/deploy"),
+    newEvmAccount: navigator("/evmAccount"),
     deployNew: useCallback(
       (id: string, constructorIndex = 0): (() => void) => {
         return navigator(`/deploy/new/${id}/${constructorIndex}`);
@@ -29,6 +30,12 @@ export default function useAppNavigation(): AppNavigation {
     deploySuccess: useCallback(
       (address: string): (() => void) => {
         return navigator(`/deploy/success/${address}`);
+      },
+      [navigator]
+    ),
+    bindSuccess: useCallback(
+      (address: string): (() => void) => {
+        return navigator(`/evmAccount/success/${address}`);
       },
       [navigator]
     ),
@@ -47,6 +54,6 @@ export default function useAppNavigation(): AppNavigation {
         return navigator(`/deploy`);
       },
       [navigator]
-    )
+    ),
   };
 }

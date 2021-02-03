@@ -34,11 +34,12 @@ function Contracts({
       accounts &&
       contractAddresses &&
       (contractAddresses
+        .reverse()
         .map((address): Contract | null => getContractForAddress(api, address))
         .filter((contract: Contract | null): boolean => !!contract) as Contract[])
     );
   }, [accounts, api, contractAddresses]);
-  
+
   return (
     <div className={className}>
       <header>
