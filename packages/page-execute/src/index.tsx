@@ -17,8 +17,6 @@ import Contracts from './Contracts';
 function ExecuteApp ({ basePath, className, navigateTo }: Props): React.ReactElement<Props> {
   const { allAccounts, isReady: isAccountsReady } = useAccounts();
   const { allContracts, hasContracts, isContract, isReady: isContractsReady } = useContracts();
-
-  console.log(allContracts)
   
   const componentProps = useMemo(
     (): ComponentProps => ({

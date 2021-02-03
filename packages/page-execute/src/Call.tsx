@@ -124,7 +124,18 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];
 
-      const result = await contract.connect(wallet as any)[messageName](...values.map((x) => x.value));
+      const result = await contract.connect(wallet as any)[messageName](
+        ...values.map((x, index) => {
+          if (params[index] && (params as any)[index].baseType && (params as any)[index].baseType === "array") {
+            try {
+              return JSON.parse(x.value as any);
+            } catch {
+              return (x as any).value.split(",").map((s: any) => s.trim());
+            }
+          }
+          return x.value;
+        })
+      );
 
       setOutcomes([
         {
@@ -167,10 +178,22 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];
 
-      await contract.connect(wallet as any)[messageName](...values.map((x) => x.value), {
-        gasLimit: gasLimit.toString(),
-        value: payment.toString(),
-      });
+      await contract.connect(wallet as any)[messageName](
+        ...values.map((x, index) => {
+          if (params[index] && (params as any)[index].baseType && (params as any)[index].baseType === "array") {
+            try {
+              return JSON.parse(x.value as any);
+            } catch {
+              return (x as any).value.split(",").map((s: any) => s.trim());
+            }
+          }
+          return x.value;
+        }),
+        {
+          gasLimit: gasLimit.toString(),
+          value: payment.toString(),
+        }
+      );
 
       showNotification({
         action: messageName,
