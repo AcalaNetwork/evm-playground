@@ -261,7 +261,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
               value={messageIndex}
             />
             <ContractParams onChange={setValues} params={params} values={values} />
-            <InputNumber isError={!isPaymentValid} label={t<string>("value")} onChange={setPayment} value={payment} />
+            <InputNumber bitLength={128} isError={!isPaymentValid} label={t<string>("value")} onChange={setPayment} value={payment} />
             <InputNumber
               isError={!isGasLimitValid}
               label={t<string>("gasLimit")}
