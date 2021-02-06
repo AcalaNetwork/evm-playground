@@ -82,12 +82,13 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
       } else {
         signer = new TestingSigner(api.registry, pair);
       }
-      
+
       const wallet = new EvmSigner(evmProvider, accountId, signer);
 
       const factory = new ContractFactory(abi, bytecode, wallet);
       const contract = await factory.deploy(...values.map((x) => x.value), {
         gasLimit: "3000000000",
+        value: endowment?.toString()
       });
 
       await contract.deployed();
@@ -148,7 +149,7 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
           </div>
         </Labelled>
         <ContractParams onChange={setValues} params={params || []} values={values} />
-        <InputNumber isError={!isEndowmentValid} label={t<string>("value")} onChange={setEndowment} value={endowment} />
+        <InputNumber bitLength={128} isError={!isEndowmentValid} label={t<string>("value")} onChange={setEndowment} value={endowment} />
         <InputNumber isError={!isGasLimitValid} label={t<string>("gasLimit")} onChange={setGasLimit} value={gasLimit} />
         <Button.Group>
           <Button
