@@ -76,10 +76,16 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
   }, [api, pageParams.address]);
 
   const txArgs = useMemo(() => {
-    const messages =
+    const messages = (
       Object.keys(contract?.interface.functions || []).map((x: any) => {
         return contract?.interface.functions[x].inputs;
-      }) || emptyArray;
+      }) || emptyArray
+    ).map((params, index) =>
+      params?.map((values) => ({
+        ...values,
+        messageIndex: index,
+      }))
+    );
 
     return messages[messageIndex];
   }, [contract, messageIndex]);
@@ -261,7 +267,13 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
               value={messageIndex}
             />
             <ContractParams onChange={setValues} params={params} values={values} />
-            <InputNumber bitLength={128} isError={!isPaymentValid} label={t<string>("value")} onChange={setPayment} value={payment} />
+            <InputNumber
+              bitLength={128}
+              isError={!isPaymentValid}
+              label={t<string>("value")}
+              onChange={setPayment}
+              value={payment}
+            />
             <InputNumber
               isError={!isGasLimitValid}
               label={t<string>("gasLimit")}

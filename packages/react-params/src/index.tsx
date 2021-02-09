@@ -91,12 +91,12 @@ class Params extends React.PureComponent<Props, State> {
       >
         <ErrorBoundary onError={this.onRenderError}>
           <div className='ui--Params-Content'>
-            {values && params.map(({ name, type }: ParamDef, index: number): React.ReactNode => (
+            {values && params.map(({ name, type, messageIndex }: any, index: number): React.ReactNode => (
               <ParamComp
                 defaultValue={values[index]}
                 index={index}
                 isDisabled={isDisabled}
-                key={`${name || ''}:${type.toString()}:${index}`}
+                key={`${messageIndex}:${name || ''}:${type.toString()}:${index}`}
                 name={name}
                 onChange={this.onChangeParam}
                 onEnter={onEnter}
