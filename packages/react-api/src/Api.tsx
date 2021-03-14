@@ -144,7 +144,7 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
   const ss58Format =
     uiSettings.prefix === -1 ? properties.ss58Format.unwrapOr(DEFAULT_SS58).toNumber() : uiSettings.prefix;
   const tokenSymbol = properties.tokenSymbol.unwrapOr(undefined)?.toString();
-  const tokenDecimals = properties.tokenDecimals.unwrapOr(DEFAULT_DECIMALS).toNumber();
+  const tokenDecimals = properties.tokenDecimals.unwrapOr(DEFAULT_DECIMALS).toArray()[0];
   const isDevelopment = systemChainType.isDevelopment || systemChainType.isLocal || isTestChain(systemChain);
 
   // explicitly override the ss58Format as specified
@@ -174,36 +174,36 @@ async function loadOnReady(api: ApiPromise, store?: KeyringStore): Promise<ApiSt
   for (const { name, address, abi } of [
     {
       name: "ACA",
-      address: "0x0000000000000000000000000000000000000800",
+      address: "0x0000000000000000000000000000000001000000",
     },
     {
       name: "AUSD",
-      address: "0x0000000000000000000000000000000000000801",
+      address: "0x0000000000000000000000000000000001000001",
     },
     {
       name: "DOT",
-      address: "0x0000000000000000000000000000000000000802",
-    },
-    {
-      name: "XBTC",
-      address: "0x0000000000000000000000000000000000000803",
+      address: "0x0000000000000000000000000000000001000002",
     },
     {
       name: "LDOT",
-      address: "0x0000000000000000000000000000000000000804",
+      address: "0x0000000000000000000000000000000001000003",
+    },
+    {
+      name: "XBTC",
+      address: "0x0000000000000000000000000000000001000004",
     },
     {
       name: "RENBTC",
-      address: "0x0000000000000000000000000000000000000805",
+      address: "0x0000000000000000000000000000000001000005",
     },
     {
       name: "Oracle Price Feed",
-      address: "0x0000000000000000000000000000000000000807",
+      address: "0x0000000000000000000000000000000000000801",
       abi: Oracle,
     },
     {
       name: "On-chain Automatic Scheduler",
-      address: "0x0000000000000000000000000000000000000808",
+      address: "0x0000000000000000000000000000000000000802",
       abi: ScheduleCall,
     },
   ].reverse()) {
