@@ -30,7 +30,7 @@ function createLive(t: TFunction): LinkOption[] {
         ns: "apps-config",
         replace: { host: "Acala" },
       }),
-      value: "wss://mandala.laminar.codes/ws",
+      value: "wss://mandala6.laminar.codes",
     },
   ];
 }
