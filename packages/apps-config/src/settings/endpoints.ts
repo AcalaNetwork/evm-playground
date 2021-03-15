@@ -25,7 +25,7 @@ function createLive(t: TFunction): LinkOption[] {
     {
       dnslink: "acala",
       info: "acala",
-      shortText: t<string>("Acala Evm Test", { ns: "apps-config" }),
+      shortText: t<string>("Mandala TC6", { ns: "apps-config" }),
       text: t<string>("rpc.hosted.by", "Acala", {
         ns: "apps-config",
         replace: { host: "Acala" },
