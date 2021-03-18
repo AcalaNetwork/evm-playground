@@ -201,15 +201,15 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
           {systemChain === "Acala Mandala TC6" ? (
             <div style={{ display: "flex", marginTop: "16px", alignItems: "center" }}>
               <div style={{ marginRight: "16px" }}>
-                <a href="https://discord.gg/CmqXvMP" target="_blank">
+                {/* <a href="https://discord.gg/CmqXvMP" target="_blank"> */}
                   <Button
                     isLoading={isSendingFaucet}
                     isDisabled={!accountId}
                     isPrimary
-                    // onClick={() => faucet()}
+                    onClick={() => faucet()}
                     label={t<string>("Faucet")}
                   />
-                </a>
+                {/* </a> */}
               </div>
               <div>Fund the account by using the faucet</div>
             </div>
