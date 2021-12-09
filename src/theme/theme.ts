@@ -8,7 +8,9 @@ export const theme = {
     header: '#010409',
     body: '#0d1117',
     bodrerColor1: '#30363d',
+    card: '#161b22',
     font: {
+      card: '#c9d1d9',
       body: '#c9d1d9',
       nav: '#8b949e',
       navActive: '#ffffff'
