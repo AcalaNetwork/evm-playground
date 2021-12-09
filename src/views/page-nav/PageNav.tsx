@@ -1,4 +1,4 @@
-import { Box, BoxProps, Flex, Grid } from '../../components';
+import { Box, BoxProps, Flex, Grid, Link } from '../../components';
 import styled from '@emotion/styled';
 import { GithubIcon } from '../../assets/icons';
 import { css } from '@emotion/react';
@@ -12,7 +12,7 @@ const PageNavContainer = styled(Box)`
   align-items: center;
 `;
 
-const NavItem = styled(Box)`
+const NavItem = styled(Link)`
   margin-left: 16px;
 `;
 
@@ -25,8 +25,8 @@ export const PageNav = ({ ...rest }: BoxProps) => {
           grid-gap: 80px;
         `}
       >
-        <NavItem>Contracts</NavItem>
-        <NavItem>Run</NavItem>
+        <NavItem href="/contracts">Contracts</NavItem>
+        <NavItem href="/run">Run</NavItem>
       </Grid>
       <Flex
         css={css`
