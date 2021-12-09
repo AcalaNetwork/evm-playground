@@ -7,7 +7,7 @@ import React from 'react';
 
 export type LinkProps = Omit<CLinkProps, 'href'> &
   NextLinkProps & {
-    variant?: 'count';
+    variant?: 'icon';
     disabled?: boolean;
     isExternal?: boolean;
   };
@@ -51,6 +51,11 @@ export const Link = styled(
             &:focus {
               box-shadow: none;
             }
+
+            ${variant === 'icon' &&
+            css`
+              line-height: 0;
+            `}
           `}
           ref={ref}
           rel={isExternal ? 'noopener noreferrer' : undefined}

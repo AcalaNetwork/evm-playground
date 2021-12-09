@@ -23,7 +23,7 @@ export const Header = () => {
   return (
     <HeaderContainer as="header">
       <HeaderContent>
-        <Link display="flex" href="/">
+        <Link variant="icon" href="/">
           <PageLogo height="40px" />
         </Link>
         <PageNav />

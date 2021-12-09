@@ -33,7 +33,9 @@ export const PageNav = ({ ...rest }: BoxProps) => {
           margin-left: auto;
         `}
       >
-        <GithubIcon />
+        <Link variant="icon" isExternal={true} href="https://github.com/AcalaNetwork/evm-playground">
+          <GithubIcon />
+        </Link>
       </Flex>
     </PageNavContainer>
   );
