@@ -11,13 +11,17 @@ export const globalCSS = css`
   input,
   select {
     font-family: 'Montserrat', sans-serif;
+    height: 100%;
   }
 
   body {
     font-size: 14px;
     font-weight: 400;
-    color: var(--colors-body);
-    background-color: var(--colors-bodyBg);
+    position: relative;
+    min-height: 100%;
+    height: 100%;
+    color: var(--colors-font-body);
+    background-color: var(--colors-body);
     min-width: fit-content;
     line-height: var(--lineHeights-normal);
   }
