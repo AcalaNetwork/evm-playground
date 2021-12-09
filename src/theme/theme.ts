@@ -9,7 +9,9 @@ export const theme = {
     body: '#0d1117',
     bodrerColor1: '#30363d',
     font: {
-      body: '#c9d1d9'
+      body: '#c9d1d9',
+      nav: '#8b949e',
+      navActive: '#ffffff'
     }
   },
   sizes: {

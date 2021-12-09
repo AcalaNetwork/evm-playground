@@ -7,7 +7,7 @@ import React from 'react';
 
 export type LinkProps = Omit<CLinkProps, 'href'> &
   NextLinkProps & {
-    variant?: 'icon';
+    variant?: 'icon' | string;
     disabled?: boolean;
     isExternal?: boolean;
   };
