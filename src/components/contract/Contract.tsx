@@ -3,7 +3,9 @@ import styled from '@emotion/styled';
 
 const ContractContainer = styled(Box)`
   border-radius: 20px;
-  background: var(--colors-card);
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.13);
   color: var(--colors-font-card);
 `;
 
