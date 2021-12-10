@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { css } from '@emotion/react';
 import { useTranslation } from 'next-i18next';
-import { Box, MainButton } from '../../components';
+import { Box, MainButton, Grid } from '../../components';
 
 const HomeHeaderContainer = styled(Box)`
   border-bottom: 1px solid var(--colors-bodrerColor2);
@@ -30,13 +30,16 @@ export const HomeHeader = () => {
     <HomeHeaderContainer>
       <HomeHeaderContent>
         <PageTitle>{t('Contracts')}</PageTitle>
-        <Box
+        <Grid
           css={css`
             margin-left: auto;
+            grid-template-columns: repeat(2, auto);
+            grid-gap: 32px;
           `}
         >
-          <MainButton>Add Contract</MainButton>
-        </Box>
+          <MainButton>Deploy Contract</MainButton>
+          <MainButton>Load Contract</MainButton>
+        </Grid>
       </HomeHeaderContent>
     </HomeHeaderContainer>
   );
