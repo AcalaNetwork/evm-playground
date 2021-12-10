@@ -3,6 +3,7 @@ import styled from '@emotion/styled';
 import { GithubIcon } from '../../assets/icons';
 import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
+import { useTranslation } from 'next-i18next';
 
 const PageNavContainer = styled(Box)`
   margin-left: 120px;
@@ -31,24 +32,34 @@ const NavItem = styled(Link)`
 
 export const PageNav = ({ ...rest }: BoxProps) => {
   const router = useRouter();
+  const { t } = useTranslation();
+
+  const navConfig = [
+    {
+      name: t('Contracts'),
+      path: '/'
+    },
+    {
+      name: t('Accounts'),
+      path: '/accounts'
+    }
+  ];
 
   return (
     <PageNavContainer {...rest}>
       <Grid
         css={css`
-          grid-template-columns: repeat(3, auto);
+          grid-template-columns: repeat(${navConfig.length}, auto);
           grid-gap: 80px;
         `}
       >
-        <NavItem href="/" variant={router.asPath === '/' ? 'isActive' : ''}>
-          Contracts
-        </NavItem>
-        <NavItem href="/run" variant={router.asPath === '/run' ? 'isActive' : ''}>
-          Run
-        </NavItem>
-        <NavItem href="/accounts" variant={router.asPath === '/accounts' ? 'isActive' : ''}>
-          Accounts
-        </NavItem>
+        {navConfig.map((config) => {
+          return (
+            <NavItem key={config.path} href={config.path} variant={router.asPath === config.path ? 'isActive' : ''}>
+              {config.name}
+            </NavItem>
+          );
+        })}
       </Grid>
       <Flex
         css={css`

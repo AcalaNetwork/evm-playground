@@ -11,6 +11,7 @@ export default {
   }
 } as ComponentMeta<typeof Contract>;
 
+//@ts-ignore
 const Template: ComponentStory<typeof Contract> = (args) => <Contract {...args} />;
 
 export const Default = Template.bind({});

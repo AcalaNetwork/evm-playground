@@ -1,3 +1,1 @@
-export const Home = () => {
-  return null;
-};
+export * from './Home';
