@@ -1,21 +1,55 @@
 import { css } from '@emotion/react';
-import { Box, BaseInput, BaseSelect, LinkButton, NavHeader } from '../../components';
+import styled from '@emotion/styled';
+import { useTranslation } from 'next-i18next';
+import { useState } from 'react';
+import { Box, BaseInput, BaseSelect, LinkButton, NavHeader, FormControl, FormLabel } from '../../components';
+
+const Container = styled(Box)`
+  ${FormControl} {
+    margin-top: 20px;
+  }
+`;
+
+enum ENVIRONMENT {
+  Metamask = 'Metamask',
+  PolkadotExtension = 'Polkadot Extension'
+}
 
 export const Setting = () => {
-  return (
-    <Box
-      css={css`
-        padding-top: 56px;
-      `}
-    >
-      <BaseSelect>
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-        <option value="option3">Option 3</option>
-      </BaseSelect>
+  const { t } = useTranslation();
+  const [env, setEnv] = useState(ENVIRONMENT.Metamask);
 
-      
-      <BaseInput placeholder="large size" size="lg" />
-    </Box>
+  return (
+    <Container>
+      <FormControl>
+        <FormLabel>{t('environment')}</FormLabel>
+        <BaseSelect value={env} onChange={(event) => setEnv(event.target.value as ENVIRONMENT)}>
+          <option value={ENVIRONMENT.Metamask}>{t(ENVIRONMENT.Metamask)}</option>
+          <option value={ENVIRONMENT.PolkadotExtension}>{t(ENVIRONMENT.PolkadotExtension)}</option>
+        </BaseSelect>
+      </FormControl>
+      {env === ENVIRONMENT.PolkadotExtension && (
+        <FormControl>
+          <FormLabel>{t('endpoint')}</FormLabel>
+          <BaseInput placeholder="custom endpoint" />
+        </FormControl>
+      )}
+      <FormControl>
+        <FormLabel>{t('account')}</FormLabel>
+        <BaseSelect></BaseSelect>
+      </FormControl>
+      <FormControl>
+        <FormLabel>{t('gas limit')}</FormLabel>
+        <BaseInput placeholder="custom endpoint" />
+      </FormControl>
+      <FormControl>
+        <FormLabel>{t('storage limit')}</FormLabel>
+        <BaseInput placeholder="custom endpoint" />
+      </FormControl>
+      <FormControl>
+        <FormLabel>{t('value')}</FormLabel>
+        <BaseInput placeholder="custom endpoint" />
+      </FormControl>
+    </Container>
   );
 };

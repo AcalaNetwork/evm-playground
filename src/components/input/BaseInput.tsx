@@ -8,9 +8,9 @@ export const BaseInput = styled(Input)`
   color: var(--colors-font-input);
   border-color: var(--colors-borderColor1);
   border-radius: 10px;
-  height: 40px;
-  font-size: 16px;
-  padding: 0px 16px;
+  height: 32px;
+  font-size: 14px;
+  padding: 0px 12px;
 
   width: 100%;
   min-width: 0px;

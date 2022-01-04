@@ -8,7 +8,10 @@ import styled from '@emotion/styled';
 
 export const FormControl = styled(ChakraFormControl)``;
 
-export const FormLabel = styled(ChakraFormLabel)``;
+export const FormLabel = styled(ChakraFormLabel)`
+  font-size: 12px;
+  text-transform: uppercase;
+`;
 
 export const FormErrorMessage = styled(ChakraFormErrorMessage)``;
 
