@@ -2,24 +2,21 @@ import styled from '@emotion/styled';
 import React from 'react';
 import { Box, Grid } from '../layout';
 import { css } from '@emotion/react';
+import { Container } from './Container';
 
 export const NavHeaderTitle = styled(Box)`
   font-size: 32px;
   color: var(--colors-font-title);
 `;
 
-export const NavHeaderContent = styled(Box)`
+export const NavHeaderContent = styled(Container)`
   height: 112px;
-  max-width: var(--sizes-container);
-  margin: 0 auto;
   display: flex;
   align-items: center;
-  padding-left: 16px;
-  padding-right: 16px;
 `;
 
 export const NavHeaderWrapper = styled(Box)`
-  border-bottom: 1px solid var(--colors-bodrerColor2);
+  border-bottom: 1px solid var(--colors-borderColor2);
 `;
 
 export const NavHeader = ({

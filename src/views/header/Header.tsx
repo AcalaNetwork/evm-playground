@@ -6,7 +6,7 @@ import { PageNav } from '../page-nav';
 
 const HeaderContainer = styled(Box)`
   background-color: var(--colors-header);
-  border-bottom: 1px solid var(--colors-bodrerColor1);
+  border-bottom: 1px solid var(--colors-borderColor1);
 `;
 
 const HeaderContent = styled(Box)`

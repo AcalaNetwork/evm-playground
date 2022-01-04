@@ -7,11 +7,14 @@ export const theme = {
   colors: {
     header: '#171b21',
     body: '#0d1117',
-    bodrerColor1: '#30363d',
-    bodrerColor2: '#3c3c3c',
+    inputBg: '#232426',
+    borderFocus: '#1f6feb',
+    borderColor1: '#30363d',
+    borderColor2: '#3c3c3c',
     card: '#161b22',
     mainButton: '#1d69e0',
     font: {
+      input: '#c9d1d9',
       button: '#ffffff',
       title: '#ffffff',
       card: '#c9d1d9',
