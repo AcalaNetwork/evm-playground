@@ -24,11 +24,11 @@ export const Setting = () => {
       </FormControl>
       <FormControl>
         <FormLabel>{t('storage limit')}</FormLabel>
-        <BaseInput placeholder="custom endpoint" />
+        <BaseInput placeholder="storage limit" />
       </FormControl>
       <FormControl>
         <FormLabel>{t('value')}</FormLabel>
-        <BaseInput placeholder="custom endpoint" />
+        <BaseInput placeholder="value" />
       </FormControl>
     </Container>
   );
