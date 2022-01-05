@@ -1,9 +1,18 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useTranslation } from 'next-i18next';
-import { BaseSelect, Flex, Box, FormControl, FormLabel, MainButton, SelectButton, SelectModal } from '../../components';
-import { useToggle } from '../../hooks';
-import { currentEnv, useAppDispatch, useAppSelector, ENVIRONMENT, setEnv } from '../../state';
+import { useState } from 'react';
+import { BaseInput, Box, Flex, FormControl, FormLabel, MainButton, SelectButton, SelectModal } from '../../components';
+import {
+  currentEnv,
+  ENVIRONMENT,
+  setAccounts,
+  setEnv,
+  setEnvModalOpen,
+  setEthereum,
+  useAppDispatch,
+  useAppSelector
+} from '../../state';
 
 const OptionCard = styled(Box)`
   background: var(--colors-modalCard);
@@ -22,20 +31,25 @@ const EnvWrapper = styled(Box)`
   }
 `;
 
+const CustomEndpointInput = styled(BaseInput)`
+  margin-top: 8px;
+`;
+
 export const EnvSelect = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [isOpen, , setOpen] = useToggle();
 
+  const [isLoading, setIsLoading] = useState(false);
   const env = useAppSelector(currentEnv);
+  const isOpen = useAppSelector((state) => state.global.envModalOpen);
 
   return (
     <FormControl>
       <FormLabel>{t('environment')}</FormLabel>
-      <SelectButton onClick={() => setOpen(true)} variant="selected">
+      <SelectButton onClick={() => dispatch(setEnvModalOpen(true))} variant={env ? 'selected' : undefined}>
         {env || t('Select an environment')}
       </SelectButton>
-      <SelectModal title={t('Select an environment')} isOpen={isOpen} onClose={() => setOpen(false)}>
+      <SelectModal title={t('Select an environment')} isOpen={isOpen} onClose={() => dispatch(setEnvModalOpen(false))}>
         <EnvWrapper>
           <OptionCard>
             <Flex
@@ -45,11 +59,83 @@ export const EnvSelect = () => {
               `}
             >
               <Box>{t('Metamask')}</Box>
-              <MainButton>{t('Connect')}</MainButton>
+              <MainButton
+                isLoading={isLoading}
+                onClick={async () => {
+                  setIsLoading(true);
+                  dispatch(setEnv(ENVIRONMENT.Metamask));
+                  const ethereum = (window as any).ethereum;
+                  try {
+                    if (ethereum) {
+                      dispatch(setEthereum(ethereum));
+                      const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                      if (accounts.length) {
+                        dispatch(setAccounts(accounts.map((addr: string) => ({ evmAddress: addr }))));
+                        dispatch(setEnvModalOpen(false));
+                      }
+                    }
+                  } finally {
+                    setIsLoading(false);
+                  }
+                }}
+              >
+                {t('Connect')}
+              </MainButton>
             </Flex>
           </OptionCard>
-          <OptionCard></OptionCard>
-          <OptionCard></OptionCard>
+          <OptionCard>
+            <Flex
+              css={css`
+                justify-content: space-between;
+                align-items: center;
+              `}
+            >
+              <Box>{t('Polkadot Extension(testnet)')}</Box>
+              <MainButton
+                isLoading={isLoading}
+                onClick={() => {
+                  dispatch(setEnv(ENVIRONMENT.PolkadotExtension));
+                  dispatch(setEnvModalOpen(false));
+                }}
+              >
+                {t('Connect')}
+              </MainButton>
+            </Flex>
+          </OptionCard>
+          <OptionCard>
+            <Flex
+              css={css`
+                justify-content: space-between;
+                align-items: center;
+              `}
+            >
+              <Box
+                css={css`
+                  width: 100%;
+                  margin-right: 64px;
+                `}
+              >
+                <Box
+                  css={css`
+                    font-size: 16px;
+                  `}
+                >
+                  {t('Polkadot Extension(custom endpoint)')}
+                </Box>
+                <CustomEndpointInput placeholder="custom endpoint" />
+              </Box>
+
+              <MainButton
+                isLoading={isLoading}
+                onClick={() => {
+                  dispatch(setEnv(ENVIRONMENT.PolkadotExtension));
+                  dispatch(setEnvModalOpen(false));
+                }}
+              >
+                {t('Connect')}
+              </MainButton>
+            </Flex>
+          </OptionCard>
         </EnvWrapper>
       </SelectModal>
     </FormControl>

@@ -5,7 +5,11 @@ import globalReducer from './global/slice';
 
 export function makeStore() {
   return configureStore({
-    reducer: { global: globalReducer }
+    reducer: { global: globalReducer },
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware({
+        serializableCheck: false
+      })
   });
 }
 

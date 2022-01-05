@@ -1,7 +1,9 @@
 import styled from '@emotion/styled';
 import { useTranslation } from 'next-i18next';
-import { BaseInput, BaseSelect, Box, FormControl, FormLabel } from '../../components';
+import { BaseInput, BaseSelect, Box, FormControl, FormLabel, SelectButton } from '../../components';
+import { selectedAccount, useAppSelector } from '../../state';
 import { EnvSelect } from './EnvSelect';
+import { AccountSelect } from './AccountSelect';
 const Container = styled(Box)`
   ${FormControl} {
     margin-top: 20px;
@@ -10,14 +12,12 @@ const Container = styled(Box)`
 
 export const Setting = () => {
   const { t } = useTranslation();
+  const acc = useAppSelector(selectedAccount);
 
   return (
     <Container>
       <EnvSelect />
-      <FormControl>
-        <FormLabel>{t('account')}</FormLabel>
-        <BaseSelect></BaseSelect>
-      </FormControl>
+      <AccountSelect />
       <FormControl>
         <FormLabel>{t('gas limit')}</FormLabel>
         <BaseInput placeholder="custom endpoint" />
