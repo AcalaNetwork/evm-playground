@@ -8,6 +8,7 @@ export const theme = {
     header: '#171b21',
     body: '#0d1117',
     inputBg: '#232426',
+    modalCard: '#6e768e',
     borderFocus: '#1f6feb',
     borderColor1: '#30363d',
     borderColor2: '#3c3c3c',

@@ -6,3 +6,4 @@ export * from './container';
 export * from './input';
 export * from './select';
 export * from './form';
+export * from './modal';

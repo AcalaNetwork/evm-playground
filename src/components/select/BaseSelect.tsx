@@ -1,4 +1,5 @@
 import { Select, SelectProps } from '@chakra-ui/react';
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 export type BaseSelectProps = SelectProps;
@@ -42,4 +43,11 @@ export const BaseSelect = styled(Select)`
     top: 50%;
     transform: translateY(-50%);
   }
+
+  ${(props) =>
+    props.variant === 'unselected' &&
+    css`
+      color: var(--colors-font-button);
+      background: var(--colors-mainButton);
+    `}
 `;

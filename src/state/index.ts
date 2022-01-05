@@ -23,5 +23,6 @@ export const useAppSelector: TypedUseSelectorHook<AppState> = useSelector;
 
 export * from './global/selectors';
 export * from './global/slice';
+export * from './global/types';
 
 export default store;

@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 import { Api } from '../chain-api';
 import store from '../state';
 import { Updater as GlobalUpdater } from '../state/global/updater';
-import { globalCSS, theme } from '../theme';
+import { globalCSS, theme, presetCSS } from '../theme';
 import { LayoutWrapper } from '../views';
 import { ENDPOINTS, TITLE } from '../config';
 
@@ -24,6 +24,7 @@ function App(props: AppProps) {
       <Provider store={store}>
         <ThemeProvider theme={theme}>
           <Global styles={globalCSS} />
+          <Global styles={presetCSS} />
           <Api endpoints={ENDPOINTS}>
             <LayoutWrapper>
               <GlobalUpdater />

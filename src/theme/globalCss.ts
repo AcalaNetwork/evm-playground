@@ -2,6 +2,8 @@ import { css } from '@emotion/react';
 
 export const globalCSS = css`
   * {
+    border-width: 0px;
+    border-width: 0px;
     box-sizing: border-box;
   }
 
