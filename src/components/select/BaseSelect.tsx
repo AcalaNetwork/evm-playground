@@ -7,7 +7,7 @@ export const BaseSelect = styled(Select)`
   background: var(--colors-inputBg);
   color: var(--colors-font-input);
   border-color: var(--colors-borderColor1);
-  border-radius: 10px;
+  border-radius: 8px;
   height: 32px;
   font-size: 14px;
   padding: 0px 12px;
