@@ -1,23 +1,22 @@
 // Copyright 2017-2020 @canvas-ui/react-components authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { IdentityProps as Props } from '@polkadot/react-identicon/types';
+import { IdentityProps as Props } from "@polkadot/react-identicon/types";
 
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
-import { getSystemIcon } from '@canvas-ui/apps-config/ui';
-import { useApi, useNotification } from '@canvas-ui/react-hooks';
-import BaseIdentityIcon from '@polkadot/react-identicon';
-import uiSettings from '@polkadot/ui-settings';
-import { ValidatorsContext } from '@canvas-ui/react-query';
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import styled from "styled-components";
+import { useApi, useNotification } from "@canvas-ui/react-hooks";
+import BaseIdentityIcon from "@polkadot/react-identicon";
+import uiSettings from "@polkadot/ui-settings";
+import { ValidatorsContext } from "@canvas-ui/react-query";
 
-import { useTranslation } from './translate';
+import { useTranslation } from "./translate";
 
-export function getIdentityTheme (systemName: string): 'substrate' {
-  return ((uiSettings.icon === 'default' && getSystemIcon(systemName)) || uiSettings.icon) as 'substrate';
+export function getIdentityTheme(systemName: string): "substrate" {
+  return uiSettings.icon as "substrate";
 }
 
-function IdentityIcon ({ className = '', onCopy, prefix, size = 24, theme, value }: Props): React.ReactElement<Props> {
+function IdentityIcon({ className = "", onCopy, prefix, size = 24, theme, value }: Props): React.ReactElement<Props> {
   const { systemName } = useApi();
   const { t } = useTranslation();
   const showNotification = useNotification();
@@ -27,9 +26,7 @@ function IdentityIcon ({ className = '', onCopy, prefix, size = 24, theme, value
   const thisTheme = theme || getIdentityTheme(systemName);
 
   useEffect((): void => {
-    value && setIsValidator(
-      validators.includes(value.toString())
-    );
+    value && setIsValidator(validators.includes(value.toString()));
     value && setAddress(value.toString());
   }, [value, validators]);
 
@@ -38,9 +35,9 @@ function IdentityIcon ({ className = '', onCopy, prefix, size = 24, theme, value
       onCopy && onCopy(account);
       showNotification({
         account,
-        action: 'clipboard',
-        message: t<string>('address copied to clipboard'),
-        status: 'queued'
+        action: "clipboard",
+        message: t<string>("address copied to clipboard"),
+        status: "queued"
       });
     },
     [onCopy, showNotification, t]
@@ -53,7 +50,7 @@ function IdentityIcon ({ className = '', onCopy, prefix, size = 24, theme, value
         onCopy={_onCopy}
         prefix={prefix}
         size={size}
-        theme={thisTheme as 'substrate'}
+        theme={thisTheme as "substrate"}
         value={address}
       />
     </div>

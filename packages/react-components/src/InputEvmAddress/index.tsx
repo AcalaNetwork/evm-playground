@@ -13,7 +13,7 @@ import {
   KeyringOption$Type,
   KeyringOptions,
   KeyringSectionOption,
-  KeyringSectionOptions,
+  KeyringSectionOptions
 } from "@polkadot/ui-keyring/options/types";
 import { isNull, isUndefined } from "@polkadot/util";
 import { detect } from "detect-browser";
@@ -29,6 +29,7 @@ import createItem from "./createItem";
 import { NoAccount } from "./KeyPair";
 import { Option } from "./types";
 import { testAccount } from "./testAccount";
+import Button from "../Button/Button";
 interface Props extends BareProps {
   defaultValue?: Uint8Array | string | null;
   filter?: string[];
@@ -92,19 +93,19 @@ function getEvmOptions() {
       {
         key: "header-accounts",
         name: "Accounts",
-        value: null,
+        value: null
       },
       ...evmAccounts.map((s: any) => ({
         key: s.address,
         name: s.name,
-        value: s.address,
+        value: s.address
       })),
       {
         key: "header-development",
         name: "Development",
-        value: null,
+        value: null
       },
-      ...testAccount,
+      ...testAccount
     ];
   }
 
@@ -189,7 +190,7 @@ function InputAddress({
   value: propsValue,
   withEllipsis,
   withLabel,
-  helpText,
+  helpText
 }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { hasInjectedAccounts } = useApi();
@@ -309,7 +310,7 @@ function InputAddress({
   const _defaultValue = useMemo(() => (isMultiple || !isUndefined(value) ? undefined : actualValue), [
     actualValue,
     isMultiple,
-    value,
+    value
   ]);
 
   if (!hasOptions) {
@@ -329,8 +330,8 @@ function InputAddress({
             key: "none",
             name: "none",
             text: <NoAccount />,
-            value: "none",
-          },
+            value: "none"
+          }
         ]}
         placeholder={placeholder}
         renderLabel={isMultiple ? renderLabel : undefined}
@@ -339,18 +340,9 @@ function InputAddress({
         withLabel={withLabel}
       >
         {!hasInjectedAccounts && browserName && isSupported && (
-          <InputStatus
-            text={
-              <>
-                {t("Please reload this app with the")}{" "}
-                <a href={availableExtensions[browserName][0].link} rel="noopener noreferrer" target="_blank">
-                  {t("Polkadot extension")}
-                </a>{" "}
-                {t("to show available accounts")}
-                {"."}
-              </>
-            }
-          />
+          <div style={{ marginTop: 16 }}>
+            <Button>Connect Metamask</Button>
+          </div>
         )}
       </Dropdown>
     );
@@ -376,9 +368,9 @@ function InputAddress({
       withLabel={withLabel}
     >
       {!hasInjectedAccounts && actualOptions.length === 0 && (
-        <InputStatus
-          text={<>{t("Please reload this app with the Polkadot extension to show available accounts.")}</>}
-        />
+        <div style={{ marginTop: 16 }}>
+          <Button>Connect Metamask</Button>
+        </div>
       )}
       {helpText ? <InputStatus isError={isErrorStatus} text={helpText} /> : null}
     </Dropdown>
@@ -442,7 +434,7 @@ const ExportedComponent = withMulti(
         );
 
         return result;
-      }, {}),
+      }, {})
   })
 ) as ExportedType;
 

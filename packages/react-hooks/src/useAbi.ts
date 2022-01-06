@@ -23,7 +23,6 @@ interface UseAbi {
 type State = [any | null, boolean, boolean, string | null];
 
 export default function useAbi(source: any | null = null, isRequired = false): UseAbi {
-  const { api } = useApi();
   const { t } = useTranslation();
 
   const initialState: State = source
@@ -38,7 +37,7 @@ export default function useAbi(source: any | null = null, isRequired = false): U
     if (!!source?.abi) {
       setAbi([source.abi, !!source.abi, !isRequired || !!source.bytecode, source.bytecode]);
     }
-  }, [abi, api.registry, source, isRequired]);
+  }, [abi, source, isRequired]);
 
   const onChangeAbi = useCallback(
     ({ data }: FileState): void => {
@@ -58,14 +57,14 @@ export default function useAbi(source: any | null = null, isRequired = false): U
         setAbi([source.abi, true, true, source.bytecode]);
         setError([false, null]);
         source?.id && store.saveCode({ abi: source }, source.id);
-      } catch (error) {
+      } catch (error: any) {
         console.error(error);
 
         setAbi([null, false, false, source.bytecode]);
         setError([true, error]);
       }
     },
-    [api.registry, source, t]
+    [source, t]
   );
 
   const onRemoveAbi = useCallback((): void => {

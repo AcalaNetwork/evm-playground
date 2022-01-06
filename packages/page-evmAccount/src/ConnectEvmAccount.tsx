@@ -158,7 +158,7 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
   };
 
   return (
-    <main className="upload--App">
+    <main className="upload--App" style={{ width: "720px" }}>
       <header>
         <h1>{t<string>("Setup EVM Account")}</h1>
         <div className="instructions">
@@ -202,13 +202,13 @@ export default React.memo(function EvmAccount({ navigateTo }: Props): React.Reac
             <div style={{ display: "flex", marginTop: "16px", alignItems: "center" }}>
               <div style={{ marginRight: "16px" }}>
                 {/* <a href="https://discord.gg/CmqXvMP" target="_blank"> */}
-                  <Button
-                    isLoading={isSendingFaucet}
-                    isDisabled={!accountId}
-                    isPrimary
-                    onClick={() => faucet()}
-                    label={t<string>("Faucet")}
-                  />
+                <Button
+                  isLoading={isSendingFaucet}
+                  isDisabled={!accountId}
+                  isPrimary
+                  onClick={() => faucet()}
+                  label={t<string>("Faucet")}
+                />
                 {/* </a> */}
               </div>
               <div>Fund the account by using the faucet</div>

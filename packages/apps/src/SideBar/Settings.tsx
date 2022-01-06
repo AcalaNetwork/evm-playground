@@ -33,7 +33,7 @@ function Settings({ className }: Props): React.ReactElement<Props> {
           Support Discord
         </a>
       </div>
-      <div className={`apps--SideBar-settings ${className || ""}`}>
+      {/* <div className={`apps--SideBar-settings ${className || ""}`}>
         <Dropdown
           className="chain-dropdown"
           defaultValue={url}
@@ -45,7 +45,7 @@ function Settings({ className }: Props): React.ReactElement<Props> {
           <Icon name="setting" />
         </NavLink>
         <Tooltip place="top" text={t<string>("Settings")} trigger="settings-link" />
-      </div>
+      </div> */}
     </div>
   );
 }

@@ -45,7 +45,7 @@ export default React.memo(function NewEvmAccount({ navigateTo }: Props): React.R
   };
 
   return (
-    <main className="upload--App">
+    <main className="upload--App" style={{ width: "720px" }}>
       <header>
         <h1>{t<string>("Generate a new evm account")}</h1>
         <div className="instructions">

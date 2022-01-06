@@ -20,4 +20,5 @@ yarn-error.log*
 env-config.js
 NOTES.md
 .vercel
+.next
 build/

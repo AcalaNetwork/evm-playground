@@ -12,7 +12,7 @@ import {
   KeyringOption$Type,
   KeyringOptions,
   KeyringSectionOption,
-  KeyringSectionOptions,
+  KeyringSectionOptions
 } from "@polkadot/ui-keyring/options/types";
 import { isNull, isUndefined } from "@polkadot/util";
 import { detect } from "detect-browser";
@@ -29,6 +29,9 @@ import createItem from "./createItem";
 import CopyButton from "../CopyButton";
 import { NoAccount } from "./KeyPair";
 import { Option } from "./types";
+import Button from "../Button/Button";
+import { ConnectMetamask } from "./ConnectMetamask";
+import { Input, Labelled } from "..";
 
 interface Props extends BareProps {
   defaultValue?: Uint8Array | string | null;
@@ -90,23 +93,23 @@ function getEvmOptions() {
     {
       key: "header-accounts",
       name: "Accounts",
-      value: null,
+      value: null
     },
     {
       key: "0x5FC7Ab607E91c02f896bC08AF0898b709d50E392",
       name: "evm",
-      value: "0x5FC7Ab607E91c02f896bC08AF0898b709d50E392",
+      value: "0x5FC7Ab607E91c02f896bC08AF0898b709d50E392"
     },
     {
       key: "header-development",
       name: "Development",
-      value: null,
+      value: null
     },
     {
       key: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
       name: "alice",
-      value: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY",
-    },
+      value: "5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY"
+    }
   ];
 }
 
@@ -189,7 +192,7 @@ function InputAddress({
   withEllipsis,
   withLabel,
   withoutEvm,
-  helpText,
+  helpText
 }: Props): React.ReactElement<Props> | null {
   const { t } = useTranslation();
   const { hasInjectedAccounts, evmProvider } = useApi();
@@ -197,6 +200,17 @@ function InputAddress({
     () => (options && options.length !== 0) || (optionsAll && Object.keys(optionsAll[type]).length !== 0),
     [options, optionsAll, type]
   );
+
+  const ethereum = (window as any).ethereum;
+  const [selectedAddress, setSelectedAddress] = useState((ethereum && ethereum.selectedAddress) || "");
+
+  useEffect(() => {
+    if (ethereum) {
+      ethereum.on("accountsChanged", () => {
+        setSelectedAddress(((window as any).ethereum && (window as any).ethereum.selectedAddress) || "");
+      });
+    }
+  }, [ethereum]);
 
   const value = useMemo((): string | undefined | (string | undefined)[] => {
     try {
@@ -297,7 +311,7 @@ function InputAddress({
   useEffect(() => {
     if (type !== "evm" && value && evmProvider && evmProvider.api) {
       evmProvider.api.isReady.then(() => {
-        evmProvider.api.query.evmAccounts.evmAddresses(value).then((result) => {
+        evmProvider.api.query.evmAccounts.evmAddresses(value).then(result => {
           if (result.isEmpty) {
             setEvmAddress("");
           } else {
@@ -333,92 +347,25 @@ function InputAddress({
   const _defaultValue = useMemo(() => (isMultiple || !isUndefined(value) ? undefined : actualValue), [
     actualValue,
     isMultiple,
-    value,
+    value
   ]);
 
-  if (!hasOptions) {
-    return (
-      <Dropdown
-        className={classes("ui--InputAddress", hideAddress && "hideAddress", className)}
-        defaultValue={_defaultValue}
-        help={help}
-        isDisabled
-        isError={isError}
-        isMultiple={isMultiple}
-        label={label}
-        labelExtra={labelExtra}
-        onSearch={onSearch}
-        options={[
-          {
-            key: "none",
-            name: "none",
-            text: <NoAccount />,
-            value: "none",
-          },
-        ]}
-        placeholder={placeholder}
-        renderLabel={isMultiple ? renderLabel : undefined}
-        value={"none"}
-        withEllipsis={withEllipsis}
-        withLabel={withLabel}
-      >
-        {!hasInjectedAccounts && browserName && isSupported && (
-          <InputStatus
-            text={
-              <>
-                {t("Please reload this app with the")}{" "}
-                <a href={availableExtensions[browserName][0].link} rel="noopener noreferrer" target="_blank">
-                  {t("Polkadot extension")}
-                </a>{" "}
-                {t("to show available accounts")}
-                {"."}
-              </>
-            }
-          />
-        )}
-      </Dropdown>
-    );
-  }
-
   return (
-    <Dropdown
-      className={classes("ui--InputAddress", hideAddress && "hideAddress", className)}
-      defaultValue={_defaultValue}
+    <Labelled
+      className={classes("ui--Dropdown", className)}
       help={help}
-      isDisabled={isDisabled || !hasOptions}
-      isError={isError}
-      isMultiple={isMultiple}
       label={label}
+      isFull={true}
       labelExtra={labelExtra}
-      onChange={isMultiple ? onChangeMulti : onChange}
-      onSearch={onSearch}
-      options={actualOptions}
-      placeholder={placeholder}
-      renderLabel={isMultiple ? renderLabel : undefined}
-      value={isMultiple && !value ? MULTI_DEFAULT : value}
       withEllipsis={withEllipsis}
       withLabel={withLabel}
+      style={{ width: "100%" }}
     >
-      {!hasInjectedAccounts && actualOptions.length === 0 && (
-        <InputStatus
-          text={<>{t("Please reload this app with the Polkadot extension to show available accounts.")}</>}
-        />
-      )}
+      <div>{selectedAddress || "No Address"}</div>
+      {/* <Input value={selectedAddress || "No Address"} isFull={true} /> */}
+      {!selectedAddress && <ConnectMetamask />}
       {helpText ? <InputStatus isError={isErrorStatus} text={helpText} /> : null}
-      {withoutEvm ? null : evmAddress ? (
-        <InputStatus
-          text={
-            <>
-              {t("EVM Address: ")}
-              {evmAddress}
-              <CopyButton style={{ position: "relative", top: "-3px" }} isAddress value={evmAddress} />
-            </>
-          }
-        />
-      ) : (
-        <Link to={"/evmAccount"}>{t<string>("Bind a evm account")}</Link>
-      )}
-    </Dropdown>
+    </Labelled>
   );
 }
 
@@ -478,7 +425,7 @@ const ExportedComponent = withMulti(
         );
 
         return result;
-      }, {}),
+      }, {})
   })
 ) as ExportedType;
 
