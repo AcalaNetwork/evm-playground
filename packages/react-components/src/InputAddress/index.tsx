@@ -194,12 +194,12 @@ function InputAddress({
   withoutEvm,
   helpText
 }: Props): React.ReactElement<Props> | null {
-  const { t } = useTranslation();
-  const { hasInjectedAccounts, evmProvider } = useApi();
-  const hasOptions = useMemo(
-    () => (options && options.length !== 0) || (optionsAll && Object.keys(optionsAll[type]).length !== 0),
-    [options, optionsAll, type]
-  );
+  // const { t } = useTranslation();
+  // const { hasInjectedAccounts, evmProvider } = useApi();
+  // const hasOptions = useMemo(
+  //   () => (options && options.length !== 0) || (optionsAll && Object.keys(optionsAll[type]).length !== 0),
+  //   [options, optionsAll, type]
+  // );
 
   const ethereum = (window as any).ethereum;
   const [selectedAddress, setSelectedAddress] = useState((ethereum && ethereum.selectedAddress) || "");
@@ -212,56 +212,56 @@ function InputAddress({
     }
   }, [ethereum]);
 
-  const value = useMemo((): string | undefined | (string | undefined)[] => {
-    try {
-      return Array.isArray(propsValue) ? propsValue.map(addressToAddress) : addressToAddress(propsValue) || undefined;
-    } catch (error) {
-      return undefined;
-    }
-  }, [propsValue]);
+  // const value = useMemo((): string | undefined | (string | undefined)[] => {
+  //   try {
+  //     return Array.isArray(propsValue) ? propsValue.map(addressToAddress) : addressToAddress(propsValue) || undefined;
+  //   } catch (error) {
+  //     return undefined;
+  //   }
+  // }, [propsValue]);
 
-  const filteredOptions = useMemo((): Option[] => {
-    return !optionsAll ? [] : optionsAll[type].filter(({ value }) => !filter || (!!value && filter.includes(value)));
-  }, [filter, optionsAll, type]);
+  // const filteredOptions = useMemo((): Option[] => {
+  //   return !optionsAll ? [] : optionsAll[type].filter(({ value }) => !filter || (!!value && filter.includes(value)));
+  // }, [filter, optionsAll, type]);
 
-  const lastValue = useMemo((): string => getLastValue(type), [type]);
+  // const lastValue = useMemo((): string => getLastValue(type), [type]);
 
-  const lastOption = useMemo((): KeyringSectionOption | undefined => {
-    return filteredOptions.length ? filteredOptions[filteredOptions.length - 1] : undefined;
-  }, [filteredOptions]);
+  // const lastOption = useMemo((): KeyringSectionOption | undefined => {
+  //   return filteredOptions.length ? filteredOptions[filteredOptions.length - 1] : undefined;
+  // }, [filteredOptions]);
 
-  const firstOption = useMemo((): KeyringSectionOption | undefined => {
-    return filteredOptions.length ? filteredOptions[0] : undefined;
-  }, [filteredOptions]);
+  // const firstOption = useMemo((): KeyringSectionOption | undefined => {
+  //   return filteredOptions.length ? filteredOptions[0] : undefined;
+  // }, [filteredOptions]);
 
-  const hasValue = useCallback(
-    (test?: Uint8Array | string | null): boolean => {
-      return filteredOptions.some(({ value }) => test === value);
-    },
-    [filteredOptions]
-  );
+  // const hasValue = useCallback(
+  //   (test?: Uint8Array | string | null): boolean => {
+  //     return filteredOptions.some(({ value }) => test === value);
+  //   },
+  //   [filteredOptions]
+  // );
 
-  const [evmAddress, setEvmAddress] = useState("");
-  const [isSending, setIsSending] = useState(false);
-  const showNotification = useNotification();
+  // const [evmAddress, setEvmAddress] = useState("");
+  // const [isSending, setIsSending] = useState(false);
+  // const showNotification = useNotification();
 
-  const onChange = useCallback(
-    (address: string): void => {
-      !filter && setLastValue(type, address);
+  // const onChange = useCallback(
+  //   (address: string): void => {
+  //     !filter && setLastValue(type, address);
 
-      _onChange && _onChange(transformToAccountId(address));
-    },
-    [filter, _onChange, type]
-  );
+  //     _onChange && _onChange(transformToAccountId(address));
+  //   },
+  //   [filter, _onChange, type]
+  // );
 
-  const onChangeMulti = useCallback(
-    (addresses: string[]): void => {
-      if (_onChangeMulti) {
-        _onChangeMulti(addresses.map(transformToAccountId).filter((address): string => address as string) as string[]);
-      }
-    },
-    [_onChangeMulti]
-  );
+  // const onChangeMulti = useCallback(
+  //   (addresses: string[]): void => {
+  //     if (_onChangeMulti) {
+  //       _onChangeMulti(addresses.map(transformToAccountId).filter((address): string => address as string) as string[]);
+  //     }
+  //   },
+  //   [_onChangeMulti]
+  // );
 
   // private getLastValue (): string {
   //   const { type } = this.props;
@@ -278,77 +278,77 @@ function InputAddress({
   //   return lastValue;
   // }
 
-  const onSearch = useCallback(
-    (filteredOptions: KeyringSectionOptions, _query: string): KeyringSectionOptions => {
-      const query = _query.trim();
-      const queryLower = query.toLowerCase();
-      const matches = filteredOptions.filter(
-        (item): boolean =>
-          !!item.value &&
-          ((item.name.toLowerCase && item.name.toLowerCase().includes(queryLower)) ||
-            item.value.toLowerCase().includes(queryLower))
-      );
+  // const onSearch = useCallback(
+  //   (filteredOptions: KeyringSectionOptions, _query: string): KeyringSectionOptions => {
+  //     const query = _query.trim();
+  //     const queryLower = query.toLowerCase();
+  //     const matches = filteredOptions.filter(
+  //       (item): boolean =>
+  //         !!item.value &&
+  //         ((item.name.toLowerCase && item.name.toLowerCase().includes(queryLower)) ||
+  //           item.value.toLowerCase().includes(queryLower))
+  //     );
 
-      if (isInput && matches.length === 0) {
-        const accountId = transformToAccountId(query);
+  //     if (isInput && matches.length === 0) {
+  //       const accountId = transformToAccountId(query);
 
-        if (accountId) {
-          matches.push(keyring.saveRecent(accountId.toString()).option);
-        }
-      }
+  //       if (accountId) {
+  //         matches.push(keyring.saveRecent(accountId.toString()).option);
+  //       }
+  //     }
 
-      return matches.filter((item, index): boolean => {
-        const isLast = index === matches.length - 1;
-        const nextItem = matches[index + 1];
-        const hasNext = nextItem && nextItem.value;
+  //     return matches.filter((item, index): boolean => {
+  //       const isLast = index === matches.length - 1;
+  //       const nextItem = matches[index + 1];
+  //       const hasNext = nextItem && nextItem.value;
 
-        return !(isNull(item.value) || isUndefined(item.value)) || (!isLast && !!hasNext);
-      });
-    },
-    [isInput]
-  );
+  //       return !(isNull(item.value) || isUndefined(item.value)) || (!isLast && !!hasNext);
+  //     });
+  //   },
+  //   [isInput]
+  // );
 
-  useEffect(() => {
-    if (type !== "evm" && value && evmProvider && evmProvider.api) {
-      evmProvider.api.isReady.then(() => {
-        evmProvider.api.query.evmAccounts.evmAddresses(value).then(result => {
-          if (result.isEmpty) {
-            setEvmAddress("");
-          } else {
-            setEvmAddress(result.toString());
-          }
-        });
-      });
-    } else {
-      setEvmAddress("");
-    }
-  }, [value]);
+  // useEffect(() => {
+  //   if (type !== "evm" && value && evmProvider && evmProvider.api) {
+  //     evmProvider.api.isReady.then(() => {
+  //       evmProvider.api.query.evmAccounts.evmAddresses(value).then(result => {
+  //         if (result.isEmpty) {
+  //           setEvmAddress("");
+  //         } else {
+  //           setEvmAddress(result.toString());
+  //         }
+  //       });
+  //     });
+  //   } else {
+  //     setEvmAddress("");
+  //   }
+  // }, [value]);
 
-  const actualValue = useMemo(
-    (): StringOrNull =>
-      transformToAddress(
-        isDisabled || (defaultValue && hasValue(defaultValue))
-          ? defaultValue
-          : hasValue(lastValue)
-          ? lastValue
-          : firstOption && firstOption.value
-      ),
-    [defaultValue, hasValue, isDisabled, firstOption, lastValue]
-  );
+  // const actualValue = useMemo(
+  //   (): StringOrNull =>
+  //     transformToAddress(
+  //       isDisabled || (defaultValue && hasValue(defaultValue))
+  //         ? defaultValue
+  //         : hasValue(lastValue)
+  //         ? lastValue
+  //         : firstOption && firstOption.value
+  //     ),
+  //   [defaultValue, hasValue, isDisabled, firstOption, lastValue]
+  // );
 
-  const actualOptions = useMemo((): Option[] => {
-    return options
-      ? options.map((o): Option => createItem(o))
-      : isDisabled && actualValue
-      ? [createOption(actualValue)]
-      : filteredOptions;
-  }, [actualValue, filteredOptions, isDisabled, options]);
+  // const actualOptions = useMemo((): Option[] => {
+  //   return options
+  //     ? options.map((o): Option => createItem(o))
+  //     : isDisabled && actualValue
+  //     ? [createOption(actualValue)]
+  //     : filteredOptions;
+  // }, [actualValue, filteredOptions, isDisabled, options]);
 
-  const _defaultValue = useMemo(() => (isMultiple || !isUndefined(value) ? undefined : actualValue), [
-    actualValue,
-    isMultiple,
-    value
-  ]);
+  // const _defaultValue = useMemo(() => (isMultiple || !isUndefined(value) ? undefined : actualValue), [
+  //   actualValue,
+  //   isMultiple,
+  //   value
+  // ]);
 
   return (
     <Labelled

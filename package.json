@@ -119,5 +119,9 @@
     "webpack-cli": "^3.3.11",
     "webpack-merge": "^4.2.2",
     "webpack-plugin-serve": "^1.0.1"
+  },
+  "dependencies": {
+    "ether.js": "^1.0.0",
+    "ethers": "^5.5.2"
   }
 }

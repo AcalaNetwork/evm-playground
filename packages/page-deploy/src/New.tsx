@@ -1,26 +1,22 @@
 // Copyright 2017-2020 @canvas-ui/app-execute authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { Signer as EvmSigner } from "@acala-network/bodhi";
 import { Code } from "@canvas-ui/apps/types";
 import { Button, ContractParams, InputAddress, InputName, InputNumber, Labelled } from "@canvas-ui/react-components";
 import { ELEV_2_CSS } from "@canvas-ui/react-components/styles/constants";
-import { useAbi, useAccountId, useApi, useIntegerBn, useNonEmptyString, useNotification } from "@canvas-ui/react-hooks";
+import { useAbi, useAccountId, useIntegerBn, useNonEmptyString, useNotification } from "@canvas-ui/react-hooks";
 import { useTxParams } from "@canvas-ui/react-params";
 import { truncate } from "@canvas-ui/react-util";
 import keyring from "@polkadot/ui-keyring";
-import { decodeAddress } from "@polkadot/util-crypto";
 import BN from "bn.js";
-import { ContractFactory } from "ethers";
+import { ContractFactory, providers } from "ethers";
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useTranslation } from "./translate";
 import { ComponentProps as Props } from "./types";
-import { TestingSigner } from "@canvas-ui/react-api/TestingSigner";
-
 const ENDOWMENT = new BN("0");
-const GASLIMIT = new BN("300000000");
+const GASLIMIT = new BN("5332001");
 
 function defaultContractName(name?: string) {
   return name ? `${name}` : "";
@@ -37,7 +33,6 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
   const [gasLimit, setGasLimit, isGasLimitValid] = useIntegerBn(GASLIMIT);
   const [name, setName, isNameValid, isNameError] = useNonEmptyString(t(defaultContractName(code?.name)));
   const { abi, bytecode } = useAbi(code);
-  const { evmProvider, accountSigner, api } = useApi();
   const [isSending, setIsSending] = useState(false);
   const showNotification = useNotification();
 
@@ -50,7 +45,7 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
   const [params, values = [], setValues] = useTxParams(args);
 
   const isValid = useMemo(
-    (): boolean => isNameValid && isEndowmentValid && !!accountId && values.every((v) => v.value !== ""),
+    (): boolean => isNameValid && isEndowmentValid && !!accountId && values.every(v => v.value !== ""),
     [accountId, isEndowmentValid, isNameValid, values]
   );
 
@@ -64,31 +59,20 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
     }
   }, [abi, navigateTo]);
 
+  const isNonPayable = abi?.find(item => item.type === "constructor")?.stateMutability === "nonpayable";
+
   const deploy = async () => {
     if (!accountId || !bytecode || !abi) return;
     setIsSending(true);
 
     try {
-      const pair = keyring.getPair(accountId);
+      const provider = new providers.Web3Provider((window as any).ethereum);
+      const signer = provider.getSigner();
 
-      const {
-        meta: { isInjected },
-      } = pair;
-
-      let signer: any;
-
-      if (isInjected) {
-        signer = accountSigner;
-      } else {
-        signer = new TestingSigner(api.registry, pair);
-      }
-
-      const wallet = new EvmSigner(evmProvider, accountId, signer);
-
-      const factory = new ContractFactory(abi, bytecode, wallet);
-      const contract = await factory.deploy(...values.map((x) => x.value), {
-        gasLimit: "3000000000",
-        value: endowment?.toString()
+      const factory = new ContractFactory(abi, bytecode, signer);
+      const contract = await factory.deploy(...values.map(x => x.value), {
+        gasLimit: BigInt(gasLimit?.toString() || "0"),
+        value: endowment ? (endowment.isZero() ? undefined : endowment) : undefined
       });
 
       await contract.deployed();
@@ -96,22 +80,22 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
       keyring.saveContract(contract.address, {
         contract: {
           abi: abi || undefined,
-          genesisHash: evmProvider.api.genesisHash.toHex(),
+          genesisHash: "0x0000000000000000000000000000000000000000"
         },
         name,
-        tags: [],
+        tags: []
       });
 
       showNotification({
-        action: 'Deploy Contract',
-        status: "success",
+        action: "Deploy Contract",
+        status: "success"
       });
 
       navigateTo.execute();
     } catch (error) {
       showNotification({
         action: typeof error === "string" ? error : error && error.message ? error.message : "",
-        status: "error",
+        status: "error"
       });
     } finally {
       setIsSending(false);
@@ -149,7 +133,15 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
           </div>
         </Labelled>
         <ContractParams onChange={setValues} params={params || []} values={values} />
-        <InputNumber bitLength={128} isError={!isEndowmentValid} label={t<string>("value")} onChange={setEndowment} value={endowment} />
+        {isNonPayable && (
+          <InputNumber
+            bitLength={128}
+            isError={!isEndowmentValid}
+            label={t<string>("value")}
+            onChange={setEndowment}
+            value={endowment}
+          />
+        )}
         <InputNumber isError={!isGasLimitValid} label={t<string>("gasLimit")} onChange={setGasLimit} value={gasLimit} />
         <Button.Group>
           <Button
