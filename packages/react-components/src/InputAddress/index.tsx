@@ -361,10 +361,12 @@ function InputAddress({
       withLabel={withLabel}
       style={{ width: "100%" }}
     >
-      <div>{selectedAddress || "No Address"}</div>
-      {/* <Input value={selectedAddress || "No Address"} isFull={true} /> */}
-      {!selectedAddress && <ConnectMetamask />}
-      {helpText ? <InputStatus isError={isErrorStatus} text={helpText} /> : null}
+      <div>
+        <div>{selectedAddress || "No Address"}</div>
+        {/* <Input value={selectedAddress || "No Address"} isFull={true} /> */}
+        {!selectedAddress && <ConnectMetamask />}
+        {helpText ? <InputStatus isError={isErrorStatus} text={helpText} /> : null}
+      </div>
     </Labelled>
   );
 }

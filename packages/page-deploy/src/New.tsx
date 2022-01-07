@@ -9,7 +9,7 @@ import { useTxParams } from "@canvas-ui/react-params";
 import { truncate } from "@canvas-ui/react-util";
 import keyring from "@polkadot/ui-keyring";
 import BN from "bn.js";
-import { ContractFactory, providers } from "ethers";
+import { BigNumber, ContractFactory, providers } from "ethers";
 import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -71,9 +71,12 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
 
       const factory = new ContractFactory(abi, bytecode, signer);
       const contract = await factory.deploy(...values.map(x => x.value), {
-        gasLimit: BigInt(gasLimit?.toString() || "0"),
-        value: endowment ? (endowment.isZero() ? undefined : endowment) : undefined
+        gasLimit: BigNumber.from(34132001n),
+        value: endowment ? (endowment.isZero() ? undefined : endowment) : undefined,
+        maxFeePerGas: BigNumber.from(200786445289n),
+        maxPriorityFeePerGas: BigNumber.from(2)
       });
+
 
       await contract.deployed();
 

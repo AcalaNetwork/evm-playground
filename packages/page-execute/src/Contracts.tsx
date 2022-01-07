@@ -29,6 +29,7 @@ function Contracts({
 }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
   const { api } = useApi();
+  
   const contracts = useMemo((): Contract[] | null => {
     return (
       accounts &&

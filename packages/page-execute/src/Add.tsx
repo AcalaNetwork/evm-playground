@@ -8,10 +8,9 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { useTranslation } from "./translate";
 import { ComponentProps as Props } from "./types";
-
+import { utils } from 'ethers'
 function Add({ className, isContract, navigateTo }: Props): React.ReactElement<Props> {
   const { t } = useTranslation();
-  const { api } = useApi();
   const showNotification = useNotification();
   const [address, setAddress, , , isAddressTouched] = useNonEmptyString();
   const [name, setName, isNameValid, isNameError] = useNonEmptyString("New Contract");
@@ -22,8 +21,7 @@ function Add({ className, isContract, navigateTo }: Props): React.ReactElement<P
 
   useEffect((): void => {
     try {
-      keyring.decodeAddress(address || "");
-      setIsAddress(true);
+      setIsAddress(utils.isAddress(address as string));
     } catch (error) {
       setIsAddress(false);
     } finally {
@@ -62,7 +60,7 @@ function Add({ className, isContract, navigateTo }: Props): React.ReactElement<P
       const json = {
         contract: {
           abi: abi,
-          genesisHash: api.genesisHash.toHex(),
+          genesisHash: "0x0000000000000000000000000000000000000000",
         },
         name,
         tags: [],
@@ -88,7 +86,7 @@ function Add({ className, isContract, navigateTo }: Props): React.ReactElement<P
         status: "error",
       });
     }
-  }, [abi, address, api, name, navigateTo, showNotification, t]);
+  }, [abi, address, name, navigateTo, showNotification, t]);
 
   return (
     <div className={className}>

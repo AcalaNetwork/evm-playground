@@ -26,6 +26,7 @@ export default function useContracts(): UseContracts {
     const subscription = contracts.subject.subscribe((contracts): void => {
       if (mountedRef.current) {
         const allContracts = contracts ? Object.keys(contracts) : [];
+
         const hasContracts = allContracts.length !== 0;
         const isContract = (address: string): boolean => allContracts.includes(address);
 

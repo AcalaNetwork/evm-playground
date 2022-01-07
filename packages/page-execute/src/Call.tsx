@@ -13,7 +13,7 @@ import {
   InputNumber,
   MessageArg,
   MessageSignature,
-  TxButton,
+  TxButton
 } from "@canvas-ui/react-components";
 import { useAccountId, useApi, useContractAccountInfo, useNotification, useIntegerBn } from "@canvas-ui/react-hooks";
 import { useTxParams } from "@canvas-ui/react-params";
@@ -22,7 +22,7 @@ import { getContractForAddress } from "@canvas-ui/react-util";
 import { TestingSigner } from "@canvas-ui/react-api/TestingSigner";
 import { isNull } from "@polkadot/util";
 import BN from "bn.js";
-import { Contract } from "ethers";
+import { BigNumber, Contract, providers } from "ethers";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
@@ -45,18 +45,18 @@ function getCallMessageOptions(callContract: Contract | null): Options {
         return {
           key,
           text: <MessageSignature message={message} registry={callContract.registry} />,
-          value: index,
+          value: index
         };
       })
     : emptyArray;
 }
 
 const PAYMENT = new BN(0);
-const GASLIMIT = new BN("300000000");
+const GASLIMIT = new BN("5332001");
 
 function Call({ className, navigateTo }: Props): React.ReactElement<Props> | null {
   const pageParams: { address?: string; messageIndex?: string } = useParams();
-  const { api, evmProvider, accountSigner } = useApi();
+  const { api } = useApi();
   const { t } = useTranslation();
   const { name } = useContractAccountInfo(pageParams.address?.toString() || null, true);
 
@@ -81,9 +81,9 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
         return contract?.interface.functions[x].inputs;
       }) || emptyArray
     ).map((params, index) =>
-      params?.map((values) => ({
+      params?.map(values => ({
         ...values,
-        messageIndex: index,
+        messageIndex: index
       }))
     );
 
@@ -97,6 +97,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
   const [gasLimit, setGasLimit, isGasLimitValid] = useIntegerBn(GASLIMIT);
 
   const [isLoading, setIsLoading] = useState(false);
+  const [isCallLoading, setIsCallLoading] = useState(false);
 
   const cmessage = useMemo(() => {
     const messages =
@@ -124,13 +125,15 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
   const _onSubmitRpc = useCallback(async () => {
     if (!accountId || !contract || !payment || !gasLimit) return;
 
-    const wallet = new EvmSigner(evmProvider, accountId, accountSigner);
+    setIsCallLoading(true);
+    const provider = new providers.Web3Provider((window as any).ethereum);
+    const signer = provider.getSigner();
 
     try {
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];
 
-      const result = await contract.connect(wallet as any)[messageName](
+      const result = await contract.connect(signer as any)[messageName](
         ...values.map((x, index) => {
           if (params[index] && (params as any)[index].baseType && (params as any)[index].baseType === "array") {
             try {
@@ -149,15 +152,17 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
           from: accountId,
           message: messages[messageName],
           params: extractValues(values),
-          when: new Date(),
+          when: new Date()
         } as any,
-        ...outcomes,
+        ...outcomes
       ]);
     } catch (error) {
       showNotification({
         action: typeof error === "string" ? error : error && error.message ? error.message : "",
-        status: "error",
+        status: "error"
       });
+    } finally {
+      setIsCallLoading(false);
     }
   }, [accountId, contract, messageIndex, payment, gasLimit, outcomes, values]);
 
@@ -165,26 +170,13 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
     if (!accountId || !contract || !payment || !gasLimit) return;
     setIsLoading(true);
     try {
-      const pair = keyring.getPair(accountId);
-
-      const {
-        meta: { isInjected },
-      } = pair;
-
-      let signer: any;
-
-      if (isInjected) {
-        signer = accountSigner;
-      } else {
-        signer = new TestingSigner(api.registry, pair);
-      }
-
-      const wallet = new EvmSigner(evmProvider, accountId, signer);
+      const provider = new providers.Web3Provider((window as any).ethereum);
+      const signer = provider.getSigner();
 
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];
 
-      await contract.connect(wallet as any)[messageName](
+      await contract.connect(signer as any)[messageName](
         ...values.map((x, index) => {
           if (params[index] && (params as any)[index].baseType && (params as any)[index].baseType === "array") {
             try {
@@ -196,19 +188,21 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
           return x.value;
         }),
         {
-          gasLimit: gasLimit.toString(),
-          value: payment.toString(),
+          gasLimit: BigNumber.from(34132001n),
+          value: payment ? (payment.isZero() ? undefined : payment) : undefined,
+          maxFeePerGas: BigNumber.from(200786445289n),
+          maxPriorityFeePerGas: BigNumber.from(2)
         }
       );
 
       showNotification({
         action: messageName,
-        status: "success",
+        status: "success"
       });
     } catch (error) {
       showNotification({
         action: typeof error === "string" ? error : error && error.message ? error.message : "",
-        status: "error",
+        status: "error"
       });
     } finally {
       setIsLoading(false);
@@ -285,7 +279,13 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
         <Button.Group>
           <Button label={t<string>("Cancel")} onClick={navigateTo.execute} />
           {useRpc ? (
-            <Button isDisabled={!isValid} isPrimary label={t<string>("Call")} onClick={_onSubmitRpc} />
+            <Button
+              isLoading={isCallLoading}
+              isDisabled={!isValid}
+              isPrimary
+              label={t<string>("Call")}
+              onClick={_onSubmitRpc}
+            />
           ) : (
             <Button
               isLoading={isLoading}

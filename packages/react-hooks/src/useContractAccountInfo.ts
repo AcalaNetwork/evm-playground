@@ -11,31 +11,11 @@ import useCall from "./useCall";
 import useToggle from "./useToggle";
 
 export default function useAccountInfo(value: string | null, isContract = false): any {
-  const { api } = useApi();
   const { isAccount } = useAccounts();
   const [accountIndex, setAccountIndex] = useState<string | undefined>(undefined);
   const [name, setName] = useState("");
   const [identity, setIdentity] = useState<AddressIdentity | undefined>();
   const [isEditingName, toggleIsEditingName] = useToggle();
-
-  useEffect((): void => {
-    let name;
-
-    if (api.query.identity && api.query.identity.identityOf) {
-      if (identity?.display) {
-        name = identity.display;
-      }
-    }
-
-    setName(name || "");
-  }, [accountIndex, api]);
-
-  useEffect((): void => {
-    if (value) {
-      const accountOrAddress = keyring.getAccount(value) || keyring.getAddress(value);
-      setName(accountOrAddress?.meta.name || "");
-    }
-  }, [identity, isAccount, value]);
 
   const onSaveName = useCallback((): void => {
     if (isEditingName) {
@@ -65,17 +45,17 @@ export default function useAccountInfo(value: string | null, isContract = false)
         if (pair) {
           keyring.saveAddress(value, meta);
         } else {
-          keyring.saveAddress(value, { genesisHash: api.genesisHash.toHex(), ...meta });
+          keyring.saveAddress(value, { genesisHash: "0x0000000000000000000000000000000000000000", ...meta });
         }
       }
     }
-  }, [api, isContract, isEditingName, name, toggleIsEditingName, value]);
+  }, [isContract, isEditingName, name, toggleIsEditingName, value]);
 
   return {
     isEditingName,
     name,
     onSaveName,
     setName,
-    toggleIsEditingName,
+    toggleIsEditingName
   };
 }
