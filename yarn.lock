@@ -44,6 +44,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@acala-network/eth-transactions@npm:^2.1.8":
+  version: 2.1.8
+  resolution: "@acala-network/eth-transactions@npm:2.1.8"
+  dependencies:
+    "@ethersproject/address": ~5.5.0
+    "@ethersproject/bignumber": ~5.5.0
+    "@ethersproject/bytes": ~5.5.0
+    "@ethersproject/constants": ~5.5.0
+    "@ethersproject/hash": ~5.5.0
+    "@ethersproject/keccak256": ~5.5.0
+    "@ethersproject/logger": ~5.5.0
+    "@ethersproject/properties": ~5.5.0
+    "@ethersproject/rlp": ~5.5.0
+    "@ethersproject/signing-key": ~5.5.0
+    "@ethersproject/transactions": ~5.5.0
+    "@ethersproject/wallet": ~5.5.0
+    "@polkadot/util-crypto": ~8.1.2
+  checksum: dd680c707f2a83a1614ca2c21891f5c578f8b5ecdbb096cbe88419f2d89ffb282feba151fc071cabecb4c7852c115d6b037f26c3b89da3524247b0cfd44e89f0
+  languageName: node
+  linkType: hard
+
 "@acala-network/type-definitions@npm:^0.7.1":
   version: 0.7.1
   resolution: "@acala-network/type-definitions@npm:0.7.1"
@@ -1921,6 +1942,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@canvas-ui/app-binding@workspace:packages/page-binding":
+  version: 0.0.0-use.local
+  resolution: "@canvas-ui/app-binding@workspace:packages/page-binding"
+  dependencies:
+    "@acala-network/eth-transactions": ^2.1.8
+    "@babel/runtime": ^7.10.2
+  languageName: unknown
+  linkType: soft
+
 "@canvas-ui/app-deploy@workspace:packages/page-deploy":
   version: 0.0.0-use.local
   resolution: "@canvas-ui/app-deploy@workspace:packages/page-deploy"
@@ -2292,7 +2322,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/address@npm:5.5.0, @ethersproject/address@npm:^5.5.0":
+"@ethersproject/address@npm:5.5.0, @ethersproject/address@npm:^5.5.0, @ethersproject/address@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/address@npm:5.5.0"
   dependencies:
@@ -2354,7 +2384,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/bignumber@npm:5.5.0, @ethersproject/bignumber@npm:^5.5.0":
+"@ethersproject/bignumber@npm:5.5.0, @ethersproject/bignumber@npm:^5.5.0, @ethersproject/bignumber@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/bignumber@npm:5.5.0"
   dependencies:
@@ -2374,7 +2404,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/bytes@npm:5.5.0, @ethersproject/bytes@npm:^5.5.0":
+"@ethersproject/bytes@npm:5.5.0, @ethersproject/bytes@npm:^5.5.0, @ethersproject/bytes@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/bytes@npm:5.5.0"
   dependencies:
@@ -2392,7 +2422,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/constants@npm:5.5.0, @ethersproject/constants@npm:^5.5.0":
+"@ethersproject/constants@npm:5.5.0, @ethersproject/constants@npm:^5.5.0, @ethersproject/constants@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/constants@npm:5.5.0"
   dependencies:
@@ -2452,7 +2482,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/hash@npm:5.5.0, @ethersproject/hash@npm:^5.5.0":
+"@ethersproject/hash@npm:5.5.0, @ethersproject/hash@npm:^5.5.0, @ethersproject/hash@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/hash@npm:5.5.0"
   dependencies:
@@ -2560,7 +2590,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/keccak256@npm:5.5.0, @ethersproject/keccak256@npm:^5.5.0":
+"@ethersproject/keccak256@npm:5.5.0, @ethersproject/keccak256@npm:^5.5.0, @ethersproject/keccak256@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/keccak256@npm:5.5.0"
   dependencies:
@@ -2577,7 +2607,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/logger@npm:5.5.0, @ethersproject/logger@npm:^5.5.0":
+"@ethersproject/logger@npm:5.5.0, @ethersproject/logger@npm:^5.5.0, @ethersproject/logger@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/logger@npm:5.5.0"
   checksum: 01d6f4a50ce668bfd89172ed6ad5cd7aa149f16742230696d4d793bebb800231997e6e3d7c893696484ea5c85a835715357171608b5996ea65f73302e74e1147
@@ -2631,7 +2661,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/properties@npm:5.5.0, @ethersproject/properties@npm:^5.5.0":
+"@ethersproject/properties@npm:5.5.0, @ethersproject/properties@npm:^5.5.0, @ethersproject/properties@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/properties@npm:5.5.0"
   dependencies:
@@ -2724,7 +2754,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/rlp@npm:5.5.0, @ethersproject/rlp@npm:^5.5.0":
+"@ethersproject/rlp@npm:5.5.0, @ethersproject/rlp@npm:^5.5.0, @ethersproject/rlp@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/rlp@npm:5.5.0"
   dependencies:
@@ -2768,7 +2798,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/signing-key@npm:5.5.0, @ethersproject/signing-key@npm:^5.5.0":
+"@ethersproject/signing-key@npm:5.5.0, @ethersproject/signing-key@npm:^5.5.0, @ethersproject/signing-key@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/signing-key@npm:5.5.0"
   dependencies:
@@ -2848,7 +2878,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/transactions@npm:5.5.0, @ethersproject/transactions@npm:^5.5.0":
+"@ethersproject/transactions@npm:5.5.0, @ethersproject/transactions@npm:^5.5.0, @ethersproject/transactions@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/transactions@npm:5.5.0"
   dependencies:
@@ -2910,7 +2940,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ethersproject/wallet@npm:5.5.0":
+"@ethersproject/wallet@npm:5.5.0, @ethersproject/wallet@npm:~5.5.0":
   version: 5.5.0
   resolution: "@ethersproject/wallet@npm:5.5.0"
   dependencies:

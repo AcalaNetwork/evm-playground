@@ -19,6 +19,7 @@ export default function useAppNavigation(): AppNavigation {
   );
 
   return {
+    bindAccount: navigator("/binding"),
     deploy: navigator("/deploy"),
     newEvmAccount: navigator("/evmAccount"),
     deployNew: useCallback(

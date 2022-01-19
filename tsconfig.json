@@ -25,6 +25,8 @@
       "@canvas-ui/app-settings/*": [ "packages/page-settings/src/*" ],
       "@canvas-ui/app-upload": [ "packages/page-upload/src" ],
       "@canvas-ui/app-upload/*": [ "packages/page-upload/src/*" ],
+      "@canvas-ui/app-binding": [ "packages/page-binding/src" ],
+      "@canvas-ui/app-binding/*": [ "packages/page-binding/src/*" ],
       "@canvas-ui/react-api": [ "packages/react-api/src" ],
       "@canvas-ui/react-api/*": [ "packages/react-api/src/*" ],
       "@canvas-ui/react-components": [ "packages/react-components/src" ],

@@ -1,0 +1,17 @@
+{
+  "name": "@canvas-ui/app-binding",
+  "private": true,
+  "version": "0.45.0-beta.33",
+  "description": "Upload interface for WASM code blobs",
+  "main": "index.js",
+  "scripts": {},
+  "author": "Keith Ingram <keith@parity.io>",
+  "maintainers": [
+    "Jaco Greeff <jacogr@gmail.com>"
+  ],
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@acala-network/eth-transactions": "^2.1.8",
+    "@babel/runtime": "^7.10.2"
+  }
+}

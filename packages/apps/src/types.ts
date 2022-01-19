@@ -7,6 +7,7 @@ import { VoidFn } from '@canvas-ui/react-util/types';
 import { AnyJson } from '@polkadot/types/types';
 
 export interface AppNavigation {
+  bindAccount: VoidFn;
   deploy: VoidFn;
   newEvmAccount: VoidFn;
   deployNew: (_: string, __?: number) => VoidFn;
