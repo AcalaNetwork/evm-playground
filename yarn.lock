@@ -44,9 +44,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@acala-network/eth-transactions@npm:^2.1.8":
-  version: 2.1.8
-  resolution: "@acala-network/eth-transactions@npm:2.1.8"
+"@acala-network/eth-transactions@npm:^2.1.9":
+  version: 2.1.9
+  resolution: "@acala-network/eth-transactions@npm:2.1.9"
   dependencies:
     "@ethersproject/address": ~5.5.0
     "@ethersproject/bignumber": ~5.5.0
@@ -61,7 +61,7 @@ __metadata:
     "@ethersproject/transactions": ~5.5.0
     "@ethersproject/wallet": ~5.5.0
     "@polkadot/util-crypto": ~8.1.2
-  checksum: dd680c707f2a83a1614ca2c21891f5c578f8b5ecdbb096cbe88419f2d89ffb282feba151fc071cabecb4c7852c115d6b037f26c3b89da3524247b0cfd44e89f0
+  checksum: b143cb013ebb1d8bea201278906b15ecdaaab8ce82e6b417414aa2c6a241fd3c22cd761947915313a5c7b426777672775fc6b3cd0f55f2f6797f71ba7bb6d2e5
   languageName: node
   linkType: hard
 
@@ -1946,7 +1946,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@canvas-ui/app-binding@workspace:packages/page-binding"
   dependencies:
-    "@acala-network/eth-transactions": ^2.1.8
+    "@acala-network/eth-transactions": ^2.1.9
     "@babel/runtime": ^7.10.2
   languageName: unknown
   linkType: soft

@@ -11,7 +11,7 @@
   ],
   "license": "Apache-2.0",
   "dependencies": {
-    "@acala-network/eth-transactions": "^2.1.8",
+    "@acala-network/eth-transactions": "^2.1.9",
     "@babel/runtime": "^7.10.2"
   }
 }
