@@ -189,9 +189,8 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
         }),
         {
           gasLimit: BigNumber.from(34132001n),
-          value: payment ? (payment.isZero() ? undefined : payment) : undefined,
-          maxFeePerGas: BigNumber.from(200786445289n),
-          maxPriorityFeePerGas: BigNumber.from(2)
+          gasPrice: BigNumber.from(200786445289n),
+          value: payment ? (payment.isZero() ? undefined : payment) : undefined
         }
       );
 
