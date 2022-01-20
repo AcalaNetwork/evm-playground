@@ -72,9 +72,8 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
       const factory = new ContractFactory(abi, bytecode, signer);
       const contract = await factory.deploy(...values.map(x => x.value), {
         gasLimit: BigNumber.from(34132001n),
+        gasPrice: BigNumber.from(200786445289n),
         value: endowment ? (endowment.isZero() ? undefined : endowment) : undefined,
-        maxFeePerGas: BigNumber.from(200786445289n),
-        maxPriorityFeePerGas: BigNumber.from(2)
       });
 
 
