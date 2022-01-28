@@ -15,8 +15,15 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import { useTranslation } from "./translate";
 import { ComponentProps as Props } from "./types";
+import { calcEthereumTransactionParams } from "./transactionHelper";
+
 const ENDOWMENT = new BN("0");
-const GASLIMIT = new BN("5332001");
+const GASLIMIT = new BN("2100000");
+const VALIDUNTIL = new BN("800000");
+const STORAGELIMIT = new BN("64000");
+
+const txFeePerGas = 199999946752n;
+const storageByteDeposit = 100000000000000n;
 
 function defaultContractName(name?: string) {
   return name ? `${name}` : "";
@@ -31,6 +38,8 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
   const [accountId, setAccountId] = useAccountId();
   const [endowment, setEndowment, isEndowmentValid] = useIntegerBn(ENDOWMENT);
   const [gasLimit, setGasLimit, isGasLimitValid] = useIntegerBn(GASLIMIT);
+  const [storageLimit, setStorageLimit, isStorageLimitValid] = useIntegerBn(STORAGELIMIT);
+  const [validUntil, setValidUntil, isValidUntil] = useIntegerBn(VALIDUNTIL);
   const [name, setName, isNameValid, isNameError] = useNonEmptyString(t(defaultContractName(code?.name)));
   const { abi, bytecode } = useAbi(code);
   const [isSending, setIsSending] = useState(false);
@@ -62,7 +71,7 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
   const isNonPayable = abi?.find(item => item.type === "constructor")?.stateMutability === "nonpayable";
 
   const deploy = async () => {
-    if (!accountId || !bytecode || !abi) return;
+    if (!accountId || !bytecode || !abi || !gasLimit || !storageLimit || !validUntil) return;
     setIsSending(true);
 
     try {
@@ -70,12 +79,24 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
       const signer = provider.getSigner();
 
       const factory = new ContractFactory(abi, bytecode, signer);
-      const contract = await factory.deploy(...values.map(x => x.value), {
-        gasLimit: BigNumber.from(34132001n),
-        gasPrice: BigNumber.from(200786445289n),
-        value: endowment ? (endowment.isZero() ? undefined : endowment) : undefined,
+
+      console.log(gasLimit.toNumber(), storageLimit.toNumber(), validUntil.toNumber());
+      
+      const { txGasLimit, txGasPrice } = calcEthereumTransactionParams({
+        gasLimit: gasLimit.toNumber(),
+        storageLimit: storageLimit.toNumber(),
+        validUntil: validUntil.toNumber(),
+        txFeePerGas,
+        storageByteDeposit
       });
 
+      console.log(txGasLimit.toBigInt(), txGasPrice.toBigInt());
+
+      const contract = await factory.deploy(...values.map(x => x.value), {
+        gasLimit: txGasLimit,
+        gasPrice: txGasPrice,
+        value: endowment ? (endowment.isZero() ? undefined : endowment) : undefined
+      });
 
       await contract.deployed();
 
@@ -144,7 +165,27 @@ function New({ allCodes, className, navigateTo }: Props): React.ReactElement<Pro
             value={endowment}
           />
         )}
-        <InputNumber isError={!isGasLimitValid} label={t<string>("gasLimit")} onChange={setGasLimit} value={gasLimit} />
+        <InputNumber
+          isError={!isGasLimitValid}
+          label={t<string>("gasLimit")}
+          onChange={setGasLimit}
+          value={gasLimit}
+          isZeroable={false}
+        />
+        <InputNumber
+          isError={!isStorageLimitValid}
+          label={t<string>("storageLimit")}
+          onChange={setStorageLimit}
+          value={storageLimit}
+          isZeroable={false}
+        />
+        <InputNumber
+          isError={!isValidUntil}
+          label={t<string>("validUntil")}
+          onChange={setValidUntil}
+          value={validUntil}
+          isZeroable={false}
+        />
         <Button.Group>
           <Button
             isLoading={isSending}
