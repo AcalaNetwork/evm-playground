@@ -29,10 +29,13 @@ import styled from "styled-components";
 import Outcome from "./Outcome";
 import { useTranslation } from "./translate";
 import { CallResult } from "./types";
-
+import { calcEthereumTransactionParams } from "./transactionHelper";
 type Options = { key: string; text: React.ReactNode; value: number }[];
 
 const emptyArray: any = [];
+
+const txFeePerGas = 199999946752n;
+const storageByteDeposit = 100000000000000n;
 
 function getCallMessageOptions(callContract: Contract | null): Options {
   return callContract
@@ -52,7 +55,9 @@ function getCallMessageOptions(callContract: Contract | null): Options {
 }
 
 const PAYMENT = new BN(0);
-const GASLIMIT = new BN("5332001");
+const GASLIMIT = new BN("2100000");
+const VALIDUNTIL = new BN("800000");
+const STORAGELIMIT = new BN("64000");
 
 function Call({ className, navigateTo }: Props): React.ReactElement<Props> | null {
   const pageParams: { address?: string; messageIndex?: string } = useParams();
@@ -95,6 +100,8 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
   const [accountId, setAccountId] = useAccountId();
   const [payment, setPayment, isPaymentValid] = useIntegerBn(PAYMENT);
   const [gasLimit, setGasLimit, isGasLimitValid] = useIntegerBn(GASLIMIT);
+  const [storageLimit, setStorageLimit, isStorageLimitValid] = useIntegerBn(STORAGELIMIT);
+  const [validUntil, setValidUntil, isValidUntilValid] = useIntegerBn(VALIDUNTIL);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isCallLoading, setIsCallLoading] = useState(false);
@@ -122,7 +129,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
     setOutcomes([]);
   }, [contract]);
 
-  const _onSubmitRpc = useCallback(async () => {
+  const _onSubmitRpc = async () => {
     if (!accountId || !contract || !payment || !gasLimit) return;
 
     setIsCallLoading(true);
@@ -164,10 +171,10 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
     } finally {
       setIsCallLoading(false);
     }
-  }, [accountId, contract, messageIndex, payment, gasLimit, outcomes, values]);
+  };
 
-  const _onSubmitExecute = useCallback(async () => {
-    if (!accountId || !contract || !payment || !gasLimit) return;
+  const _onSubmitExecute = async () => {
+    if (!accountId || !contract || !payment || !gasLimit || !storageLimit || !validUntil) return;
     setIsLoading(true);
     try {
       const provider = new providers.Web3Provider((window as any).ethereum);
@@ -175,6 +182,18 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
 
       const messages = contract.interface.functions;
       const messageName = Object.keys(messages)[messageIndex];
+
+      console.log(gasLimit.toNumber(), storageLimit.toNumber(), validUntil.toNumber());
+
+      const { txGasLimit, txGasPrice } = calcEthereumTransactionParams({
+        gasLimit: gasLimit.toNumber(),
+        storageLimit: storageLimit.toNumber(),
+        validUntil: validUntil.toNumber(),
+        txFeePerGas,
+        storageByteDeposit
+      });
+
+      console.log(txGasLimit.toBigInt(), txGasPrice.toBigInt());
 
       await contract.connect(signer as any)[messageName](
         ...values.map((x, index) => {
@@ -188,8 +207,8 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
           return x.value;
         }),
         {
-          gasLimit: BigNumber.from(34132001n),
-          gasPrice: BigNumber.from(200786445289n),
+          gasLimit: txGasLimit,
+          gasPrice: txGasPrice,
           value: payment ? (payment.isZero() ? undefined : payment) : undefined
         }
       );
@@ -206,7 +225,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
     } finally {
       setIsLoading(false);
     }
-  }, [accountId, contract, messageIndex, payment, gasLimit, outcomes, values]);
+  };
 
   const _onClearOutcome = useCallback(
     (outcomeIndex: number) => (): void => {
@@ -218,7 +237,7 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
   const isValid = useMemo(
     (): boolean =>
       !!accountId && !!contract && !!contract.address && !!contract.interface && isGasLimitValid && isPaymentValid,
-    [accountId, contract, isPaymentValid, isGasLimitValid]
+    [accountId, contract, isPaymentValid, isGasLimitValid, isStorageLimitValid, isValidUntilValid]
   );
 
   if (isNull(contract) || isNull(messageIndex) || !contract) {
@@ -272,6 +291,21 @@ function Call({ className, navigateTo }: Props): React.ReactElement<Props> | nul
               label={t<string>("gasLimit")}
               onChange={setGasLimit}
               value={gasLimit}
+              isZeroable={false}
+            />
+            <InputNumber
+              isError={!isStorageLimitValid}
+              label={t<string>("storageLimit")}
+              onChange={setStorageLimit}
+              value={storageLimit}
+              isZeroable={false}
+            />
+            <InputNumber
+              isError={!isValidUntilValid}
+              label={t<string>("validUntil")}
+              onChange={setValidUntil}
+              value={validUntil}
+              isZeroable={false}
             />
           </>
         )}
