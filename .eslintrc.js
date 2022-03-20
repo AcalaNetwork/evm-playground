@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['next', 'prettier', "next/core-web-vitals"],
+  extends: ['react-app', 'prettier'],
   rules: {
     'react/jsx-uses-react': 'off'
   }

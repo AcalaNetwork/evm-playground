@@ -1,4 +1,4 @@
-import { css } from '@emotion/react';
+import { css } from '@emotion/react/macro';
 
 export const globalCSS = css`
   * {
@@ -12,7 +12,7 @@ export const globalCSS = css`
   h1,
   input,
   select {
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Work Sans', sans-serif;
     height: 100%;
   }
 
@@ -21,11 +21,15 @@ export const globalCSS = css`
     font-weight: 400;
     position: relative;
     min-height: 100%;
-    height: 100%;
-    color: var(--colors-font-body);
-    background-color: var(--colors-body);
     min-width: fit-content;
-    line-height: var(--lineHeights-normal);
+    color: #33363C;
+    background-color: #fff;
+    line-height: 1.5;
+  }
+
+  #root {
+    min-height: 100%;
+    height: 100%;
   }
 
   ol,
@@ -133,5 +137,14 @@ export const globalCSS = css`
     padding: 0;
     border: 0;
     vertical-align: baseline;
+  }
+
+  /** chakra */
+  .chakra-toast .chakra-alert__icon {
+    height: 24px;
+    width: auto;
+  }
+  .chakra-toast .chakra-alert__title {
+    font-size: 16px;
   }
 `;

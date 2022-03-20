@@ -1,0 +1,18 @@
+<svg width="137" height="137"
+  xmlns="http://www.w3.org/2000/svg" fill="none">
+  <defs>
+    <linearGradient id="favicon_svg_paint0_linear_167_95" x1="0.5" y1="0.14815" x2="0.53682" y2="1.18446">
+      <stop stop-color="#5493F1"/>
+      <stop offset="1" stop-color="#0500F2"/>
+    </linearGradient>
+    <linearGradient id="favicon_svg_paint1_linear_167_95" x1="0.52084" y1="-0.25" x2="0.51816" y2="1.49998">
+      <stop stop-color="#F7FF00"/>
+      <stop offset="1" stop-color="#DB36A4"/>
+    </linearGradient>
+  </defs>
+  <g>
+    <title>Layer 1</title>
+    <path d="m69.4996,0l44.3294,76.781l-88.6591,0l44.3297,-76.781z" fill="url(#favicon_svg_paint0_linear_167_95)" id="svg_2"/>
+    <path d="m114,91c0,5.975 -1.177,11.892 -3.463,17.412c-2.287,5.52 -5.639,10.536 -9.864,14.761c-4.225,4.225 -9.241,7.577 -14.761,9.864c-5.52,2.286 -11.437,3.463 -17.412,3.463c-5.9751,0 -11.8918,-1.177 -17.4121,-3.463c-5.5203,-2.287 -10.5362,-5.639 -14.7613,-9.864c-4.225,-4.225 -7.5765,-9.241 -9.8631,-14.761c-2.2866,-5.52 -3.4635,-11.437 -3.4635,-17.412l91,0z" fill="url(#favicon_svg_paint1_linear_167_95)" id="svg_3"/>
+  </g>
+</svg>

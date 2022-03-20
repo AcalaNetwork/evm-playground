@@ -1,2 +1,1 @@
-export const ENDPOINTS = ['wss://karura.api.onfinality.io/public-ws'];
-export const TITLE = '';
+export const PRICE_API = 'https://api.polkawallet.io/price/price/latest';

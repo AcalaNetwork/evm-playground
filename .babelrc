@@ -1,16 +1,20 @@
 {
-  "presets": [
+  "plugins": [
+    "babel-plugin-macros",
     [
-      "next/babel",
+      "@emotion/babel-plugin-jsx-pragmatic",
       {
-        "preset-react": {
-          "runtime": "automatic",
-          "importSource": "@emotion/react"
-        }
+        "export": "jsx",
+        "import": "__cssprop",
+        "module": "@emotion/react"
+      }
+    ],
+    [
+      "@babel/plugin-transform-react-jsx",
+      {
+        "pragma": "__cssprop",
+        "pragmaFrag": "React.Fragment"
       }
     ]
-  ],
-  "plugins": [
-    "@emotion/babel-plugin"
   ]
 }

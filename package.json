@@ -1,73 +1,117 @@
 {
-  "name": "evm-playground",
-  "version": "1.0.0",
+  "name": "aquadao-app",
+  "version": "0.1.0",
   "private": true,
-  "author": "Acala Developers <hello@acala.network>",
-  "scripts": {
-    "dev": "next dev -p 3310",
-    "build": "next build",
-    "start": "next start -p 3310",
-    "lint": "eslint --fix ./src",
-    "storybook": "start-storybook -p 6008",
-    "build-storybook": "build-storybook",
-    "test": "jest"
-  },
-  "resolutions": {},
-  "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@mdx-js/react": "^1.6.22",
-    "@storybook/addon-actions": "^6.4.8",
-    "@storybook/addon-docs": "^6.4.8",
-    "@storybook/addon-essentials": "^6.4.8",
-    "@storybook/addon-links": "^6.4.8",
-    "@storybook/react": "^6.4.8",
-    "@types/jest": "^27.0.3",
-    "@types/numeral": "^2.0.2",
-    "@types/react": "^17.0.37",
-    "@types/react-table": "^7.7.9",
-    "babel-loader": "^8.2.3",
-    "eslint": "^8.4.1",
-    "eslint-config-next": "^12.0.7",
-    "eslint-config-prettier": "^8.3.0",
-    "husky": "^7.0.4",
-    "jest": "^27.4.3",
-    "pretty-quick": "^3.1.2",
-    "ts-jest": "^27.1.1",
-    "typescript": "^4.5.2"
+  "resolutions": {
+    "@polkadot/api": "^7.10.1",
+    "@polkadot/typegen": "^7.10.1",
+    "@polkadot/types": "^7.10.1"
   },
   "dependencies": {
-    "@acala-network/api": "^3.0.2",
-    "@chakra-ui/react": "^1.7.2",
-    "@emotion/core": "^11.0.0",
-    "@emotion/react": "^11.7.0",
-    "@emotion/styled": "^11.6.0",
+    "@acala-network/api": "^4.0.2-15",
+    "@acala-network/sdk": "^4.0.2-15",
+    "@chakra-ui/react": "^1.8.3",
+    "@emotion/babel-preset-css-prop": "^11.2.0",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
     "@ethersproject/bignumber": "^5.5.0",
-    "@metamask/detect-provider": "^1.2.0",
-    "@polkadot/api": "^6.11.1",
-    "@polkadot/extension-dapp": "^0.41.2",
-    "@polkadot/react-identicon": "^0.87.5",
-    "@polkadot/ui-keyring": "^0.87.5",
-    "@reduxjs/toolkit": "^1.6.2",
-    "@svgr/webpack": "^6.1.1",
-    "@types/react-grid-layout": "^1.3.0",
-    "axios": "^0.24.0",
-    "copy-to-clipboard": "^3.3.1",
-    "dayjs": "^1.10.7",
-    "ethers": "^5.5.2",
-    "framer-motion": "^5.4.4",
-    "memoize-one": "^6.0.0",
-    "next": "^12.0.7",
-    "next-i18next": "^10.0.1",
-    "numbro": "^2.3.5",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-grid-layout": "^1.3.0",
+    "@polkadot/api": "^7.10.1",
+    "@polkadot/api-derive": "^7.10.1",
+    "@polkadot/extension-dapp": "^0.42.7",
+    "@polkadot/extension-inject": "^0.42.7",
+    "@polkadot/react-identicon": "^1.0.1",
+    "@polkadot/types": "^7.10.1",
+    "@polkadot/types-codec": "^7.10.1",
+    "@polkadot/ui-keyring": "^1.1.1",
+    "@polkadot/util": "^8.4.1",
+    "@reach/dialog": "^0.16.2",
+    "@reach/portal": "^0.16.2",
+    "@reduxjs/toolkit": "^1.7.2",
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^12.20.45",
+    "@types/react": "^17.0.39",
+    "@types/react-dom": "^17.0.11",
+    "babel-plugin-module-extension-resolver": "^1.0.0-rc.2",
+    "dayjs": "^1.10.8",
+    "framer-motion": "^6.2.6",
+    "numbro": "^2.3.6",
+    "numeral": "^2.0.6",
+    "polished": "^4.1.4",
+    "react": "^18.0.0-rc.0",
+    "react-dom": "^18.0.0-rc.0",
     "react-redux": "^7.2.6",
-    "react-use": "^17.3.1"
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "5.0.0",
+    "react-spring": "^9.4.3",
+    "react-use-measure": "^2.1.1",
+    "react-virtualized": "^9.22.3",
+    "recharts": "^2.1.9",
+    "rxjs": "^7.5.4",
+    "store2": "^2.13.1",
+    "string-hash": "^1.1.3",
+    "stylis": "^4.0.13",
+    "typescript": "^4.5.5",
+    "web-vitals": "^0.2.4",
+    "workbox-background-sync": "^5.1.4",
+    "workbox-broadcast-update": "^5.1.4",
+    "workbox-cacheable-response": "^5.1.4",
+    "workbox-core": "^5.1.4",
+    "workbox-expiration": "^5.1.4",
+    "workbox-google-analytics": "^5.1.4",
+    "workbox-navigation-preload": "^5.1.4",
+    "workbox-precaching": "^5.1.4",
+    "workbox-range-requests": "^5.1.4",
+    "workbox-routing": "^5.1.4",
+    "workbox-strategies": "^5.1.4",
+    "workbox-streams": "^5.1.4"
+  },
+  "devDependencies": {
+    "@types/numeral": "^2.0.2",
+    "@types/react-virtualized": "^9.21.18",
+    "@types/stylis": "^4.0.2",
+    "customize-cra": "^1.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^12.3.4",
+    "prettier": "^2.5.1",
+    "react-app-rewired": "^2.1.11"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "pretty-quick --staged"
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ]
+  },
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "lint": "eslint"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      "last 2 chrome version",
+      "last 2 firefox version",
+      "last 2 safari version",
+      "last 2 edge version"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
