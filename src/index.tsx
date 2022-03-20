@@ -1,32 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './pages/App';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
-import reportWebVitals from './reportWebVitals';
-import { HashRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import store from './state';
-import { Updater as ApplicationUpdater, MarketPriceUpdater, DexOracleUpdater } from './state/application/updater';
-import { Updater as AccountUpdater } from './state/account/updater';
-import { ThemeProvider } from './theme';
-import '@polkadot/api-augment/polkadot';
-import '@reach/dialog/styles.css';
 import '@acala-network/types/interfaces/types-lookup';
+import '@polkadot/api-augment/polkadot';
 import { Api } from 'chain-api-provider/Api';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
+import App from './pages/App';
+import reportWebVitals from './reportWebVitals';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
+import store from './state';
+import { ThemeProvider } from './theme';
 
 dayjs.extend(utc);
 
 function Updaters() {
-  return (
-    <React.Fragment>
-      <DexOracleUpdater />
-      <MarketPriceUpdater />
-      <ApplicationUpdater />
-      <AccountUpdater />
-    </React.Fragment>
-  );
+  return null
 }
 
 // const endpoints = ['ws://127.0.0.1:9944'];

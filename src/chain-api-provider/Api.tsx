@@ -186,25 +186,27 @@ export const Api = React.memo(function Api({ children, store, endpoints }: Props
 
   // initial initialization
   useEffect((): void => {
-    const provider = new WsProvider(endpoints);
-
-    api = new ApiPromise(
-      acalaOptions({
-        provider,
-        registry,
-        types: {}
-      })
-    );
-
-    api.on('connected', () => setIsApiConnected(true));
-    api.on('disconnected', () => setIsApiConnected(false));
-    api.on('error', (error: Error) => setNetworkError(error));
-    api.on('ready', (): void => {
-      setIsReady(true);
-    });
-
-    setIsApiInitialized(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    if(endpoints?.length) {
+      const provider = new WsProvider(endpoints);
+  
+      api = new ApiPromise(
+        acalaOptions({
+          provider,
+          registry,
+          types: {}
+        })
+      );
+  
+      api.on('connected', () => setIsApiConnected(true));
+      api.on('disconnected', () => setIsApiConnected(false));
+      api.on('error', (error: Error) => setNetworkError(error));
+      api.on('ready', (): void => {
+        setIsReady(true);
+      });
+  
+      setIsApiInitialized(true);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }
   }, []);
 
   const loadExtension = useCallback(async () => {

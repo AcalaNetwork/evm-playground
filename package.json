@@ -24,8 +24,6 @@
     "@polkadot/types-codec": "^7.10.1",
     "@polkadot/ui-keyring": "^1.1.1",
     "@polkadot/util": "^8.4.1",
-    "@reach/dialog": "^0.16.2",
-    "@reach/portal": "^0.16.2",
     "@reduxjs/toolkit": "^1.7.2",
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^11.2.7",
