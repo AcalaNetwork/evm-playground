@@ -18,7 +18,6 @@ const AppWrapper = styled.div`
 const BodyWrapper = styled.div`
   width: 100%;
   flex: 1;
-  background: #ededf4;
 `;
 
 function App() {

@@ -5,6 +5,7 @@ import { Link } from 'components/link';
 import { PageNav } from './PageNav';
 
 const HeaderContainer = styled(Box)`
+  width: 100%;
   background-color: ${({ theme }) => theme.colors.header};
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor1};
 `;

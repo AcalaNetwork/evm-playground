@@ -22,10 +22,12 @@ export const globalCSS = css`
     position: relative;
     min-height: 100%;
     height: 100%;
-    color: var(--colors-font-body);
-    background-color: var(--colors-body);
     min-width: fit-content;
-    line-height: var(--lineHeights-normal);
+  }
+
+  #root {
+    min-height: 100%;
+    height: 100%;
   }
 
   ol,
