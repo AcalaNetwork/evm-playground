@@ -3,7 +3,7 @@ import { BaseButton } from './BaseButton';
 
 export const MainButton = styled(BaseButton)`
   border-radius: 12px;
-  color: var(--colors-font-button);
-  background: var(--colors-mainButton);
+  color: ${({ theme }) => theme.colors.font.button};
+  background: ${({ theme }) => theme.colors.mainButton};
   padding: 8px 16px;
 `;

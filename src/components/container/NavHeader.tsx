@@ -6,7 +6,7 @@ import { Container } from './Container';
 
 export const NavHeaderTitle = styled(Box)`
   font-size: 32px;
-  color: var(--colors-font-title);
+  color: ${({ theme }) => theme.colors.font.title};
 `;
 
 export const NavHeaderContent = styled(Container)`
@@ -16,7 +16,7 @@ export const NavHeaderContent = styled(Container)`
 `;
 
 export const NavHeaderWrapper = styled(Box)`
-  border-bottom: 1px solid var(--colors-borderColor2);
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor2};
 `;
 
 export const NavHeader = ({

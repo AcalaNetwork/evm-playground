@@ -5,13 +5,13 @@ import { Link } from 'components/link';
 import { PageNav } from './PageNav';
 
 const HeaderContainer = styled(Box)`
-  background-color: var(--colors-header);
-  border-bottom: 1px solid var(--colors-borderColor1);
+  background-color: ${({ theme }) => theme.colors.header};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.borderColor1};
 `;
 
 const HeaderContent = styled(Box)`
   height: 80px;
-  max-width: var(--sizes-container);
+  max-width: ${({ theme }) => theme.sizes.container};
   margin: 0 auto;
   display: flex;
   align-items: center;

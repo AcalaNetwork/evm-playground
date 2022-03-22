@@ -17,7 +17,7 @@ export const Modal = styled(ChakraModal)``;
 export const ModalOverlay = styled(ChakraModalOverlay)``;
 
 export const ModalContent = styled(ChakraModalContent)`
-  color: var(--colors-font-body);
+  color: ${({ theme }) => theme.colors.font.body};
   background: white;
   display: flex;
   flex-direction: column;
@@ -26,8 +26,8 @@ export const ModalContent = styled(ChakraModalContent)`
   outline: transparent solid 2px;
   outline-offset: 2px;
   border-radius: 12px;
-  border: 1px solid var(--colors-borderColor1);
-  background: var(--colors-card);
+  border: 1px solid ${({ theme }) => theme.colors.borderColor1};
+  background: ${({ theme }) => theme.colors.card};
   color: inherit;
   margin-top: 6.5rem;
   margin-bottom: 6.5rem;
@@ -38,7 +38,7 @@ export const ModalContent = styled(ChakraModalContent)`
 export const ModalHeader = styled(ChakraModalHeader)`
   padding: 20px;
   font-size: 16px;
-  color: var(--colors-font-title);
+  color: ${({ theme }) => theme.colors.font.title};
 `;
 
 export const ModalFooter = styled(ChakraModalFooter)``;
@@ -49,7 +49,7 @@ export const ModalBody = styled(ChakraModalBody)`
 
 export const ModalCloseButton = styled(ChakraModalCloseButton)`
   background: transparent;
-  color: var(--colors-font-body);
+  color: ${({ theme }) => theme.colors.font.body};
 
   outline: transparent solid 2px;
   outline-offset: 2px;

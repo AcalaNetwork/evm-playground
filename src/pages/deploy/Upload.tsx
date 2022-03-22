@@ -3,7 +3,7 @@ import { FormControl, FormLabel } from 'components/form';
 import { Box } from 'components/layout';
 
 const UploadInput = styled(Box)`
-  border: 2px solid var(--colors-borderColor2);
+  border: 2px solid ${({ theme }) => theme.colors.borderColor2};
   padding: 24px;
   border-radius: 8px;
   text-align: center;

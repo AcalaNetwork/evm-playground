@@ -10,15 +10,15 @@ import { useEnv, useEnvModal } from 'state/application/hooks';
 import { ENVIRONMENT } from 'state/application/slice';
 
 const OptionCard = styled(Box)`
-  background: var(--colors-modalCard);
-  color: var(--colors-font-title);
+  background: ${({ theme }) => theme.colors.modalCard};
+  color: ${({ theme }) => theme.colors.font.title};
   padding: 12px 20px;
   border-radius: 12px;
   font-size: 16px;
 `;
 
 const EnvWrapper = styled(Box)`
-  border-top: 1px solid var(--colors-borderColor2);
+  border-top: 1px solid ${({ theme }) => theme.colors.borderColor2};
   padding: 20px;
 
   ${OptionCard}:not(:last-child) {

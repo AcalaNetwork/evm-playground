@@ -20,7 +20,7 @@ export const BaseButton = styled(Button)`
 
   font-weight: 500;
   font-size: 14px;
-  color: var(--colors-font-button);
+  color: ${({ theme }) => theme.colors.font.button};
 
   :hover {
     filter: brightness(95%) saturate(90%);

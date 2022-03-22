@@ -10,7 +10,7 @@ const MainContainer = styled(Container)`
 
 const SettingContainer = styled(Box)`
   width: 400px;
-  border-right: 1px solid var(--colors-borderColor2);
+  border-right: 1px solid ${({ theme }) => theme.colors.borderColor2};
   margin-top: 32px;
   padding-right: 24px;
   padding-bottom: 24px;

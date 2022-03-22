@@ -14,9 +14,9 @@ const StyledSelectButton = styled(MainButton)`
   ${(props) =>
     props.variant === 'selected' &&
     css`
-      background: var(--colors-inputBg);
-      color: var(--colors-font-input);
-      border-color: var(--colors-borderColor1);
+      background: ${props.theme.colors.inputBg};
+      color: ${props.theme.colors.font.input};
+      border-color: ${props.theme.colors.borderColor1};
     `}
 `;
 

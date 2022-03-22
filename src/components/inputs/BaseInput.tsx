@@ -4,9 +4,9 @@ import styled from '@emotion/styled/macro';
 export type BaseInputProps = InputProps;
 
 export const BaseInput = styled(Input)`
-  background: var(--colors-inputBg);
-  color: var(--colors-font-input);
-  border-color: var(--colors-borderColor1);
+  background: ${({ theme }) => theme.colors.inputBg};
+  color: ${({ theme }) => theme.colors.font.input};
+  border-color: ${({ theme }) => theme.colors.borderColor1};
   border-radius: 8px;
   height: 32px;
   font-size: 14px;
@@ -23,7 +23,7 @@ export const BaseInput = styled(Input)`
   border-style: solid;
 
   &:focus {
-    border-color: var(--colors-borderFocus);
-    box-shadow: var(--colors-borderFocus) 0px 0px 0px 1px;
+    border-color: ${({ theme }) => theme.colors.borderFocus};
+    box-shadow: ${({ theme }) => theme.colors.borderFocus} 0px 0px 0px 1px;
   }
 `;

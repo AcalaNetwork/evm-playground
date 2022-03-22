@@ -20,13 +20,13 @@ const NavItem = styled(Link)`
   line-height: 40px;
   padding-left: 2px;
   padding-right: 2px;
-  color: var(--colors-font-nav);
+  color: ${({ theme }) => theme.colors.font.nav};
 
   ${(props) =>
     props.variant === 'isActive' &&
     css`
-      color: var(--colors-font-navActive);
-      text-shadow: 0px 0px 2px var(--colors-font-navActive);
+      color: ${props.theme.colors.font.navActive};
+      text-shadow: 0px 0px 2px ${props.theme.colors.font.navActive};
     `}
 `;
 
