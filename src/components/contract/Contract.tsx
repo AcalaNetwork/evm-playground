@@ -1,5 +1,5 @@
 import { Box, BoxProps } from '../layout';
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 
 const ContractContainer = styled(Box)`
   border-radius: 20px;

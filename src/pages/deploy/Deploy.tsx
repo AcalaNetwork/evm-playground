@@ -1,8 +1,9 @@
-import styled from '@emotion/styled';
-import { useTranslation } from 'next-i18next';
-import { Box, Container, NavHeader } from '../../components';
-import { Setting } from '../setting';
+import styled from '@emotion/styled/macro';
+import { Box } from 'components/layout';
+import { Container, NavHeader } from 'components/container';
+import { Setting } from 'pages/app/Setting';
 import { Upload } from './Upload';
+
 const MainContainer = styled(Container)`
   display: flex;
 `;
@@ -22,11 +23,9 @@ const ContentContainer = styled(Box)`
 `;
 
 export const Deploy = () => {
-  const { t } = useTranslation();
-
   return (
     <Box>
-      <NavHeader title={t('Deploy Contract')} />
+      <NavHeader title={'Deploy Contract'} />
       <MainContainer>
         <SettingContainer>
           <Setting />

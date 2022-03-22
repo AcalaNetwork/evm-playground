@@ -1,5 +1,5 @@
 import { Grid as CGrid } from '@chakra-ui/layout';
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 
 export const Grid = CGrid;
 

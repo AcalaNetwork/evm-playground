@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 import { BaseButton } from './BaseButton';
 
 export const MainButton = styled(BaseButton)`

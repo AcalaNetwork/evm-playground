@@ -1,11 +1,8 @@
-import { useExchangeRate } from 'hooks/useExchangeRate';
 import { useCallback } from 'react';
 import { AppState } from 'state';
 import { useAppDispatch, useAppSelector } from 'state/hooks';
-import { CurrencyId } from 'types';
-import { parseCurrency } from 'utils/token';
-import { selectCurrency, selectCurrencyPrice, walletSelector } from './selectors';
-import { ApplicationModal, setOpenModal } from './slice';
+import { envSelector } from './selectors';
+import { ApplicationModal, ENVIRONMENT, setEnv, setOpenModal } from './slice';
 
 export const useModalOpen = (modal: ApplicationModal): boolean => {
   const openModal = useAppSelector((state: AppState) => state.application.openModal);
@@ -21,6 +18,17 @@ export const useToggleModal = (modal: ApplicationModal) => {
   );
 };
 
+export const useEnv = () => {
+  const env = useAppSelector(envSelector);
+  const dispatch = useAppDispatch();
+
+  const setAppEnv = useCallback((env: ENVIRONMENT | null) => {
+    dispatch(setEnv(env));
+  }, []);
+
+  return [env, setAppEnv] as const;
+};
+
 export const useAccountModal = (): [boolean, (close?: boolean) => void] => {
   const showAccountModal = useModalOpen(ApplicationModal.ACCOUNT);
 
@@ -29,45 +37,10 @@ export const useAccountModal = (): [boolean, (close?: boolean) => void] => {
   return [showAccountModal, toggle];
 };
 
-export const useClaimModal = (): [boolean, (close?: boolean) => void] => {
-  const showClaimModal = useModalOpen(ApplicationModal.CLAIM);
+export const useEnvModal = (): [boolean, (close?: boolean) => void] => {
+  const isOpen = useModalOpen(ApplicationModal.ENV_SELECT);
 
-  const toggle = useToggleModal(ApplicationModal.CLAIM);
+  const toggle = useToggleModal(ApplicationModal.ENV_SELECT);
 
-  return [showClaimModal, toggle];
-};
-
-export const useWallet = () => {
-  const wallet = useAppSelector(walletSelector);
-
-  return wallet;
-};
-
-export const useCurrency = (id?: CurrencyId) => {
-  const selector = useCallback((state) => selectCurrency(state, id), [id]);
-  return useAppSelector(selector);
-};
-
-export const useCurrencyPrice = (id?: CurrencyId) => {
-  const exchangeRate = useExchangeRate();
-  const selector = useCallback(
-    (state) => {
-      try {
-        const { currencyId } = parseCurrency(id);
-        if (currencyId === 'SDAO') {
-          if (exchangeRate) {
-            return selectCurrencyPrice(state, 'ADAO')?.mulUnsafe(exchangeRate);
-          } else {
-            return;
-          }
-        }
-        return selectCurrencyPrice(state, id);
-      } catch {
-        return;
-      }
-    },
-    [id, exchangeRate]
-  );
-
-  return useAppSelector(selector);
+  return [isOpen, toggle];
 };

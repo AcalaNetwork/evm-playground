@@ -1,5 +1,5 @@
 import { Flex as CFlex } from '@chakra-ui/layout';
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 
 export const Flex = CFlex;
 

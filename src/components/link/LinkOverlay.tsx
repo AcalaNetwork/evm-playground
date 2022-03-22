@@ -1,6 +1,6 @@
 import { forwardRef } from '@chakra-ui/system';
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
+import { css } from '@emotion/react/macro';
+import styled from '@emotion/styled/macro';
 import React from 'react';
 import { Link, LinkProps } from './Link';
 

@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 import { Box } from '../layout';
 
 export const Container = styled(Box)`

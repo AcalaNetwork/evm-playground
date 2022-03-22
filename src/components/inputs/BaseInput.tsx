@@ -1,5 +1,5 @@
 import { Input, InputProps } from '@chakra-ui/react';
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 
 export type BaseInputProps = InputProps;
 

@@ -1,14 +1,12 @@
 import styled from '@emotion/styled/macro';
 import { ErrorBoundary } from 'components/ErrorBoundary';
-import { Footer, FooterWrapper } from 'components/Footer';
-import { Header, HeaderWrapper } from 'components/Header';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { Dashboard } from './dashboard';
+import { Route, Routes } from 'react-router-dom';
+import Custom404 from './404';
+import { Footer } from './app/Footer';
+import { Header } from './app/Header';
+import { Deploy } from './deploy/Deploy';
+import { Home } from './home/Home';
 import { Modals } from './Modals';
-import { Subscribe } from './subscribe';
-import { Subscription } from './subscribe/Subscription';
-import { Stake } from './stake';
-import { Staking } from './stake/Staking';
 
 const AppWrapper = styled.div`
   display: flex;
@@ -27,23 +25,16 @@ function App() {
   return (
     <ErrorBoundary>
       <AppWrapper>
-        <HeaderWrapper>
-          <Header />
-        </HeaderWrapper>
+        <Header />
         <BodyWrapper>
           <Modals />
           <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/subscribe" element={<Subscribe />} />
-            <Route path="/subscribe/:id" element={<Subscription />} />
-            <Route path="/stake" element={<Stake />} />
-            <Route path="/stake/:id" element={<Staking />} />
-            <Route path="*" element={<Navigate to={{ pathname: '/dashboard' }} />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/deploy" element={<Deploy />} />
+            <Route path="*" element={<Custom404 />} />
           </Routes>
         </BodyWrapper>
-        <FooterWrapper>
-          <Footer />
-        </FooterWrapper>
+        <Footer />
       </AppWrapper>
     </ErrorBoundary>
   );

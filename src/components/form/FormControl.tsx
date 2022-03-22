@@ -4,7 +4,7 @@ import {
   FormErrorMessage as ChakraFormErrorMessage,
   FormHelperText as ChakraFormHelperText
 } from '@chakra-ui/react';
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 
 export const FormControl = styled(ChakraFormControl)``;
 

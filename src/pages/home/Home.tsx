@@ -1,7 +1,8 @@
-import styled from '@emotion/styled';
-import { useTranslation } from 'next-i18next';
-import { Box, Flex, LinkButton, NavHeader, Container } from '../../components';
-import { Setting } from '../setting';
+import styled from '@emotion/styled/macro';
+import { LinkButton } from 'components/buttons';
+import { Container, NavHeader } from 'components/container';
+import { Box } from 'components/layout';
+import { Setting } from 'pages/app/Setting';
 
 const MainContainer = styled(Container)`
   display: flex;
@@ -16,13 +17,11 @@ const SettingContainer = styled(Box)`
 `;
 
 export const Home = () => {
-  const { t } = useTranslation();
-
   return (
     <Box>
-      <NavHeader title={t('Contracts')}>
-        <LinkButton href="/deploy">Deploy Contract</LinkButton>
-        <LinkButton href="/load">Load Contract</LinkButton>
+      <NavHeader title={'Contracts'}>
+        <LinkButton to="/deploy">Deploy Contract</LinkButton>
+        <LinkButton to="/load">Load Contract</LinkButton>
       </NavHeader>
       <MainContainer>
         <SettingContainer>

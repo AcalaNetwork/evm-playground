@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@chakra-ui/react';
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 
 export type BaseButtonProps = ButtonProps;
 

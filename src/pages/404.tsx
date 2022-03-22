@@ -1,5 +1,6 @@
-import { css } from '@emotion/react';
-import { Box } from '../components';
+import { css } from '@emotion/react/macro';
+import { Box } from 'components/layout';
+
 export default function Custom404() {
   return (
     <Box

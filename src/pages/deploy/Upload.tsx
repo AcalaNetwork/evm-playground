@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
-import { useTranslation } from 'next-i18next';
-import { BaseInput, Box, FormControl, FormLabel } from '../../components';
+import styled from '@emotion/styled/macro';
+import { FormControl, FormLabel } from 'components/form';
+import { Box } from 'components/layout';
 
 const UploadInput = styled(Box)`
   border: 2px solid var(--colors-borderColor2);
@@ -11,12 +11,10 @@ const UploadInput = styled(Box)`
 `;
 
 export const Upload = () => {
-  const { t } = useTranslation();
-
   return (
     <FormControl>
-      <FormLabel>{t('Contract abi')}</FormLabel>
-      <UploadInput>{t('Click to select or drag & drop to upload file.')}</UploadInput>
+      <FormLabel>{'Contract abi'}</FormLabel>
+      <UploadInput>{'Click to select or drag & drop to upload file.'}</UploadInput>
     </FormControl>
   );
 };

@@ -1,5 +1,5 @@
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
+import { css } from '@emotion/react/macro';
+import styled from '@emotion/styled/macro';
 import { BaseButtonProps } from '.';
 import { Box } from '../layout';
 import { MainButton } from './MainButton';

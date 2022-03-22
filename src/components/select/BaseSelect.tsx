@@ -1,6 +1,6 @@
 import { Select, SelectProps } from '@chakra-ui/react';
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
+import { css } from '@emotion/react/macro';
+import styled from '@emotion/styled/macro';
 
 export type BaseSelectProps = SelectProps;
 

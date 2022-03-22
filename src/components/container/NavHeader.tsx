@@ -1,7 +1,7 @@
-import styled from '@emotion/styled';
+import styled from '@emotion/styled/macro';
 import React from 'react';
 import { Box, Grid } from '../layout';
-import { css } from '@emotion/react';
+import { css } from '@emotion/react/macro';
 import { Container } from './Container';
 
 export const NavHeaderTitle = styled(Box)`
