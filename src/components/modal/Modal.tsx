@@ -65,8 +65,8 @@ export const ModalCloseButton = styled(ChakraModalCloseButton)`
   height: 32;
   font-size: 12px;
   position: absolute;
-  top: 24px;
-  right: 20px;
+  top: 14px;
+  right: 14px;
   cursor: pointer;
 
   &:focus {

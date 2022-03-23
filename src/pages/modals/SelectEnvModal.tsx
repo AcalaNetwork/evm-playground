@@ -1,7 +1,6 @@
 import { css } from '@emotion/react/macro';
 import styled from '@emotion/styled/macro';
 import { MainButton } from 'components/buttons';
-import { BaseInput } from 'components/inputs';
 import { Box, Flex } from 'components/layout';
 import { SelectModal } from 'components/modal';
 import { useState } from 'react';
@@ -23,10 +22,6 @@ const EnvWrapper = styled(Box)`
   ${OptionCard}:not(:last-child) {
     margin-bottom: 16px;
   }
-`;
-
-const CustomEndpointInput = styled(BaseInput)`
-  margin-top: 8px;
 `;
 
 export const SelectEnvModal = () => {
@@ -79,41 +74,7 @@ export const SelectEnvModal = () => {
               align-items: center;
             `}
           >
-            <Box>{'Polkadot Extension(testnet)'}</Box>
-            <MainButton
-              isLoading={isLoading}
-              onClick={() => {
-                setEnv(ENVIRONMENT.PolkadotExtension);
-                toggleEnv(false);
-              }}
-            >
-              {'Connect'}
-            </MainButton>
-          </Flex>
-        </OptionCard>
-        <OptionCard>
-          <Flex
-            css={css`
-              justify-content: space-between;
-              align-items: center;
-            `}
-          >
-            <Box
-              css={css`
-                width: 100%;
-                margin-right: 64px;
-              `}
-            >
-              <Box
-                css={css`
-                  font-size: 16px;
-                `}
-              >
-                {'Polkadot Extension(custom endpoint)'}
-              </Box>
-              <CustomEndpointInput placeholder="custom endpoint" />
-            </Box>
-
+            <Box>{'Polkadot Extension'}</Box>
             <MainButton
               isLoading={isLoading}
               onClick={() => {
