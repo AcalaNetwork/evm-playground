@@ -22,8 +22,13 @@ export const BaseInput = styled(Input)`
   border-width: 1px;
   border-style: solid;
 
+  &:hover {
+    border-color: ${({ theme }) => theme.colors.borderFocus};
+    box-shadow: none;
+  }
+
   &:focus {
     border-color: ${({ theme }) => theme.colors.borderFocus};
-    box-shadow: ${({ theme }) => theme.colors.borderFocus} 0px 0px 0px 1px;
+    box-shadow: none;
   }
 `;

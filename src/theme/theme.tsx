@@ -40,21 +40,21 @@ export const theme: CustomTheme = {
     lg: '1440px'
   },
   colors: {
-    header: '#171b21',
-    body: '#0d1117',
+    header: '#151515',
+    body: '#151515',
     inputBg: '#232426',
     modalCard: '#2c2f36',
-    borderFocus: '#1f6feb',
+    borderFocus: 'rgb(117, 117, 117)',
     borderColor1: '#30363d',
     borderColor2: '#3c3c3c',
     card: '#161b22',
     mainButton: '#1d69e0',
     font: {
-      input: '#c9d1d9',
+      input: '#e6e6e6',
       button: '#ffffff',
       title: '#ffffff',
-      card: '#c9d1d9',
-      body: '#c9d1d9',
+      card: '#e6e6e6',
+      body: '#e6e6e6',
       nav: '#8b949e',
       navActive: '#ffffff'
     }

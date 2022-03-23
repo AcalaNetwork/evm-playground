@@ -6,7 +6,7 @@ import { Footer } from './app/Footer';
 import { Header } from './app/Header';
 import { Deploy } from './deploy/Deploy';
 import { Home } from './home/Home';
-import { Modals } from './Modals';
+import { Modals } from './modals/Modals';
 
 const AppWrapper = styled.div`
   display: flex;

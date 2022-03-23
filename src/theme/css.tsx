@@ -25,6 +25,10 @@ export const globalCSS = css`
     min-width: fit-content;
   }
 
+  html {
+    background-color: #151515;
+  }
+  
   #root {
     min-height: 100%;
     height: 100%;

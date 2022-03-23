@@ -14,6 +14,10 @@ export type ModalProps = ChakraModalProps;
 
 export const Modal = styled(ChakraModal)``;
 
+Modal.defaultProps = {
+  autoFocus: false
+};
+
 export const ModalOverlay = styled(ChakraModalOverlay)``;
 
 export const ModalContent = styled(ChakraModalContent)`
@@ -64,4 +68,8 @@ export const ModalCloseButton = styled(ChakraModalCloseButton)`
   top: 24px;
   right: 20px;
   cursor: pointer;
+
+  &:focus {
+    box-shadow: none;
+  }
 `;
